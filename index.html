@@ -10,100 +10,132 @@
       background-color: black;
       color: #33ff33;
       font-family: "Courier New", monospace;
-      padding: 20px;
-    }
-    a {
-      color: #00ffff;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
+      font-size: 22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
     .terminal {
-      border: 2px solid #33ff33;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
+      border: 3px solid #33ff33;
+      padding: 40px;
+      width: 100%;
+      max-width: 750px;
+      text-align: left;
+      box-sizing: border-box;
+    }
+    h1 {
+      font-size: 30px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 22px;
+      margin: 5px 0;
     }
     .command-line {
       display: flex;
       align-items: center;
+      margin-top: 20px;
     }
     .prompt {
-      color: #ffcc00;
-      margin-right: 8px;
+      color: rgb(80, 0, 0);
+      margin-right: 10px;
+    }
+    .input-container {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      position: relative;
+    }
+    input[type="text"] {
+      background: transparent;
+      border: none;
+      color: #33ff33;
+      font-family: "Courier New", monospace;
+      font-size: 22px;
+      width: 100%;
+      outline: none;
+      caret-color: transparent; /* Hide default caret */
+    }
+    .custom-cursor {
+      width: 14px;
+      height: 28px;
+      background-color: #33ff33;
+      animation: blink 1s step-start infinite;
+      position: absolute;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
     }
   </style>
 </head>
 <body>
   <div class="terminal">
     <h1>Welcome to My Portfolio</h1>
-    <p>Type a command or select from the options below:</p>
+    <p>Enter a command number:</p>
+    <p>1 - Portfolio</p>
+    <p>2 - Blog</p>
+    <p>3 - About</p>
     <div class="command-line">
       <span class="prompt">$</span>
-      <a href="/portfolio/">open portfolio</a>
-    </div>
-    <div class="command-line">
-      <span class="prompt">$</span>
-      <a href="#" onclick="alert('Blog coming soon!')">open blog (coming soon)</a>
+      <div class="input-container">
+        <input type="text" id="commandInput" autofocus>
+        <div class="custom-cursor" id="customCursor"></div>
+      </div>
     </div>
   </div>
+
+  <script>
+    const commandInput = document.getElementById("commandInput");
+    const customCursor = document.getElementById("customCursor");
+
+    // Update cursor position as user types
+    function updateCursor() {
+      const textWidth = getTextWidth(commandInput.value, window.getComputedStyle(commandInput).font);
+      customCursor.style.left = `${textWidth + 2}px`;
+    }
+
+    // Function to measure text width
+    function getTextWidth(text, font) {
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+      context.font = font;
+      return context.measureText(text).width;
+    }
+
+    commandInput.addEventListener("input", updateCursor);
+
+    commandInput.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        const command = commandInput.value.trim();
+        commandInput.value = ""; // Clear input after pressing Enter
+        updateCursor();
+
+        switch (command) {
+          case "1":
+            window.location.href = "/portfolio/";
+            break;
+          case "2":
+            window.location.href = "/blog/";
+            break;
+          case "3":
+            window.location.href = "/about/";
+            break;
+          default:
+            alert("Unknown command. Please enter 1, 2, or 3.");
+        }
+      }
+    });
+
+    // Initialize cursor position
+    updateCursor();
+  </script>
 </body>
 </html>
 
-<!-- portfolio/index.html (Portfolio Projects Page) -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Portfolio - Projects</title>
-  <style>
-    body {
-      background-color: black;
-      color: #33ff33;
-      font-family: "Courier New", monospace;
-      padding: 20px;
-    }
-    a {
-      color: #00ffff;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    .terminal {
-      border: 2px solid #33ff33;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-    }
-    .command-line {
-      display: flex;
-      align-items: center;
-    }
-    .prompt {
-      color: #ffcc00;
-      margin-right: 8px;
-    }
-  </style>
-</head>
-<body>
-  <div class="terminal">
-    <h1>Portfolio Projects</h1>
-    <p>Select a project to view details:</p>
-    <div class="command-line">
-      <span class="prompt">$</span>
-      <a href="#">Project 1 (coming soon)</a>
-    </div>
-    <div class="command-line">
-      <span class="prompt">$</span>
-      <a href="#">Project 2 (coming soon)</a>
-    </div>
-    <div class="command-line">
-      <span class="prompt">$</span>
-      <a href="/">return home</a>
-    </div>
-  </div>
-</body>
-</html>
+
+
+
+
