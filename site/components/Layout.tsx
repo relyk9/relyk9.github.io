@@ -6,6 +6,7 @@ import EquationRain from './EquationRain';
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const [flickerKey, setFlickerKey] = useState(0);
+  const [currentTime, setCurrentTime] = useState(new Date());
   const audioCtxRef = useRef<AudioContext | null>(null);
 
   const playTransitionSound = () => {
@@ -41,6 +42,14 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     setFlickerKey(prev => prev + 1);
     playTransitionSound();
   }, [location.pathname]);
+
+  // Real-time clock update
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const navItems = [
     { label: '[HOME]', path: '/', color: 'hover:text-cyan-400' },
@@ -91,7 +100,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <div className="flex gap-4">
               <span className="text-blue-400">CPU_TEMP: <span className="text-white">42°C</span></span>
               <span className="text-red-400">LATENCY: <span className="text-white">12ms</span></span>
-              <span className="text-[#00FF41]">Local Time: <span className="text-white">{new Date().toLocaleTimeString()}</span></span>
+              <span className="text-[#00FF41]">Local Time: <span className="text-white">{currentTime.toLocaleTimeString()}</span></span>
             </div>
           </div>
         </div>

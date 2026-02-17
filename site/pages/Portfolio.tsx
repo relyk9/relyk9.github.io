@@ -99,12 +99,24 @@ const Portfolio: React.FC = () => {
                   
                   <div className="flex justify-between items-center pt-4 border-t border-white/10">
                     <span className="text-[10px] font-mono italic text-white/60">ROLE: {project.role}</span>
-                    <button 
-                      onClick={() => navigate(`/portfolio/${project.id}`)}
-                      className={`text-[10px] font-bold border ${style.border} ${style.text} px-4 py-1 hover:${style.bg} hover:text-black transition-all shadow-[0_0_5px_currentColor] uppercase`}
-                    >
-                      View_Project_Details
-                    </button>
+                    {project.detailsUrl ? (
+                      <a
+                        href={project.detailsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`text-[10px] font-bold border ${style.border} ${style.text} px-4 py-1 hover:${style.bg} hover:text-black transition-all shadow-[0_0_5px_currentColor] uppercase inline-block`}
+                      >
+                        VIEW_PROJECT_DETAILS
+                      </a>
+                    ) : (
+                      <button
+                        onClick={() => navigate(`/portfolio/${project.id}`)}
+                        className={`text-[10px] font-bold border ${style.border} ${style.text} px-4 py-1 hover:${style.bg} hover:text-black transition-all shadow-[0_0_5px_currentColor] uppercase`}
+                      >
+                        VIEW_PROJECT_DETAILS
+                      </button>
+                    )}
+
                   </div>
                 </div>
               </div>

@@ -8,6 +8,7 @@ export interface Project {
   imageUrl: string;
   date: string;
   role: string;
+  detailsUrl?: string
 }
 
 export interface ExperienceEntry {

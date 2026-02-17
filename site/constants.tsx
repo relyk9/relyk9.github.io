@@ -48,8 +48,23 @@ export const PROJECTS: Project[] = [
     ],
     imageUrl: 'https://picsum.photos/800/600?random=3'
   },
+    {
+    id: 'personal-project-1',
+    title: 'Angler\'s Logbook',
+    category: 'Personal',
+    role: 'Developer',
+    date: '2026',
+    description: 'Web-based logbook for recording the details of the fish you catch.',
+    technicalSpecs: [
+      'Region: Southern US',
+      'Supported Platforms: Desktop, mobile, tablet',
+      'Status: Fully Functional'
+    ],
+    imageUrl: '/images/anglers_logbook_titlepage.png',
+    detailsUrl: '/anglers-logbook/'
+  },
   {
-    id: 'placeholder-project-4',
+    id: 'placeholder-project-5',
     title: '[YOUR_ACADEMIC_PROJECT]',
     category: 'Academic',
     role: 'University Researcher',
@@ -61,7 +76,7 @@ export const PROJECTS: Project[] = [
       'Academic Result/Grade',
       'Publication: Yes/No'
     ],
-    imageUrl: 'https://picsum.photos/800/600?random=4'
+    imageUrl: 'https://picsum.photos/800/600?random=5'
   }
 ];
 
