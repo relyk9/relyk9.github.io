@@ -47,7 +47,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     { label: '[ABOUT]', path: '/about', color: 'hover:text-yellow-400' },
     { label: '[PORTFOLIO]', path: '/portfolio', color: 'hover:text-pink-400' },
     { label: '[EXPERIENCE]', path: '/experience', color: 'hover:text-blue-400' },
-    { label: '[TERMINAL_AI]', path: '/terminal', color: 'hover:text-red-400' },
+    { label: '[TYPING_TEST]', path: '/challenge', color: 'hover:text-red-400' },
   ];
 
   return (

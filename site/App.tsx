@@ -6,7 +6,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Portfolio from './pages/Portfolio';
 import Experience from './pages/Experience';
-import TerminalAI from './pages/TerminalAI';
+import TypingChallenge from './pages/TypingChallenge';
 import ProjectDetail from './pages/ProjectDetail';
 
 const App: React.FC = () => {
@@ -19,7 +19,7 @@ const App: React.FC = () => {
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/portfolio/:projectId" element={<ProjectDetail />} />
           <Route path="/experience" element={<Experience />} />
-          <Route path="/terminal" element={<TerminalAI />} />
+          <Route path="/challenge" element={<TypingChallenge />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </Layout>
