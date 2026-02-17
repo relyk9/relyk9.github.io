@@ -1,14 +1,16 @@
 
 import React from 'react';
-import { EXPERIENCE } from '../constants';
+import { EXPERIENCE, EXPERIENCE_DATA } from '../constants';
 
 const Experience: React.FC = () => {
   return (
     <div className="space-y-16 max-w-4xl mx-auto">
       <div className="text-center space-y-4">
-        <h2 className="text-3xl md:text-4xl font-bold glow-text tracking-tighter uppercase">OPERATIONAL_HISTORY / <span className="opacity-60">WORK EXPERIENCE</span></h2>
+        <h2 className="text-3xl md:text-4xl font-bold glow-text tracking-tighter uppercase">
+          {EXPERIENCE_DATA.header} / <span className="opacity-60">{EXPERIENCE_DATA.subHeader}</span>
+        </h2>
         <p className="text-sm opacity-60 max-w-lg mx-auto">
-          Timeline of professional deployments, career roles, and key engineering achievements.
+          {EXPERIENCE_DATA.description}
         </p>
       </div>
 
@@ -47,7 +49,7 @@ const Experience: React.FC = () => {
         <div className="inline-block border border-[#00FF41] p-1">
           <button className="bg-[#00FF41] text-black px-8 py-3 font-bold hover:bg-black hover:text-[#00FF41] transition-all flex items-center gap-4 text-sm tracking-widest">
             <span className="text-xl">⬇</span>
-            DOWNLOAD_FULL_RESUME.pdf
+            {EXPERIENCE_DATA.downloadLabel}
           </button>
         </div>
       </div>

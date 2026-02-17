@@ -11,6 +11,12 @@ const CATEGORY_STYLES: Record<string, { border: string, text: string, bg: string
   Academic: { border: 'border-pink-500', text: 'text-pink-400', bg: 'bg-pink-500', accent: 'text-pink-500' },
 };
 
+const STATUS_STYLES: Record<Project['status'], { border: string, text: string, dot: string }> = {
+  'Completed': { border: 'border-[#00FF41]', text: 'text-[#00FF41]', dot: 'bg-[#00FF41]' },
+  'In Progress': { border: 'border-yellow-500', text: 'text-yellow-400', dot: 'bg-yellow-500' },
+  'Concept': { border: 'border-cyan-500', text: 'text-cyan-400', dot: 'bg-cyan-500' },
+};
+
 const Portfolio: React.FC = () => {
   const navigate = useNavigate();
   const [filter, setFilter] = useState<'All' | Project['category']>('All');
@@ -45,6 +51,7 @@ const Portfolio: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {filteredProjects.map((project) => {
           const style = CATEGORY_STYLES[project.category];
+          const statusStyle = STATUS_STYLES[project.status];
           return (
             <div 
               key={project.id} 
@@ -59,8 +66,14 @@ const Portfolio: React.FC = () => {
                   alt={project.title} 
                   className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className={`absolute top-4 left-4 px-2 py-0.5 bg-black/80 text-[10px] border ${style.border} ${style.text}`}>
-                  {project.category.toUpperCase()}
+                <div className="absolute top-4 left-4 flex gap-2">
+                  <div className={`px-2 py-0.5 bg-black/80 text-[10px] border ${style.border} ${style.text}`}>
+                    {project.category.toUpperCase()}
+                  </div>
+                  <div className={`px-2 py-0.5 bg-black/80 text-[10px] border ${statusStyle.border} ${statusStyle.text} flex items-center gap-1.5`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${statusStyle.dot} animate-pulse`}></span>
+                    {project.status.toUpperCase()}
+                  </div>
                 </div>
                 {project.id.includes('placeholder') && (
                   <div className="absolute top-4 right-4 px-2 py-0.5 bg-yellow-500 text-black text-[10px] font-bold animate-pulse border border-black">
@@ -99,24 +112,12 @@ const Portfolio: React.FC = () => {
                   
                   <div className="flex justify-between items-center pt-4 border-t border-white/10">
                     <span className="text-[10px] font-mono italic text-white/60">ROLE: {project.role}</span>
-                    {project.detailsUrl ? (
-                      <a
-                        href={project.detailsUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`text-[10px] font-bold border ${style.border} ${style.text} px-4 py-1 hover:${style.bg} hover:text-black transition-all shadow-[0_0_5px_currentColor] uppercase inline-block`}
-                      >
-                        VIEW_PROJECT_DETAILS
-                      </a>
-                    ) : (
-                      <button
-                        onClick={() => navigate(`/portfolio/${project.id}`)}
-                        className={`text-[10px] font-bold border ${style.border} ${style.text} px-4 py-1 hover:${style.bg} hover:text-black transition-all shadow-[0_0_5px_currentColor] uppercase`}
-                      >
-                        VIEW_PROJECT_DETAILS
-                      </button>
-                    )}
-
+                    <button
+                      onClick={() => navigate(`/portfolio/${project.id}`)}
+                      className={`text-[10px] font-bold border ${style.border} ${style.text} px-4 py-1 hover:${style.bg} hover:text-black transition-all shadow-[0_0_5px_currentColor] uppercase`}
+                    >
+                      VIEW_PROJECT_DETAILS
+                    </button>
                   </div>
                 </div>
               </div>

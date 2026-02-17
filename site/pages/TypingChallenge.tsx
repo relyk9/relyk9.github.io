@@ -1,5 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
+import { TYPING_CHALLENGE_DATA } from '../constants';
+import { ScoreEntry } from '../types';
 
 const CHALLENGE_POOL = [
   "Science is about knowing; engineering is about doing. - Henry Petroski",
@@ -84,14 +86,6 @@ const CHALLENGE_POOL = [
   "The Kelvin scale is an absolute thermodynamic temperature scale."
 ];
 
-interface ScoreEntry {
-  initials: string;
-  wpm: number;
-  accuracy: number;
-  score: number;
-  timestamp: number;
-}
-
 const TypingChallenge: React.FC = () => {
   const [shuffledPhrases, setShuffledPhrases] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -104,21 +98,22 @@ const TypingChallenge: React.FC = () => {
   const [isFinished, setIsFinished] = useState(false);
   const [history, setHistory] = useState<{phrase: string, wpm: number, accuracy: number}[]>([]);
   const [initials, setInitials] = useState('');
-  const [highScores, setHighScores] = useState<ScoreEntry[]>([]);
+  const [personalHistory, setPersonalHistory] = useState<ScoreEntry[]>([]);
   const [showScoreEntry, setShowScoreEntry] = useState(false);
-  const [expandScoreboard, setExpandScoreboard] = useState(false);
   const [isCheating, setIsCheating] = useState(false);
   
   const inputRef = useRef<HTMLInputElement>(null);
   const timerRef = useRef<number | null>(null);
 
+  // Initialize Leaderboard: Only local storage for personal history
   useEffect(() => {
     const saved = localStorage.getItem('mech_high_scores_registry');
     if (saved) {
       try {
-        setHighScores(JSON.parse(saved));
+        const localScores: ScoreEntry[] = JSON.parse(saved);
+        setPersonalHistory(localScores.sort((a, b) => b.score - a.score).slice(0, 20));
       } catch (e) {
-        console.error("Failed to parse registry logs", e);
+        console.error("Failed to parse local registry logs", e);
       }
     }
   }, []);
@@ -128,7 +123,6 @@ const TypingChallenge: React.FC = () => {
     setShuffledPhrases(shuffled.slice(0, 5));
   }, []);
 
-  // Split current target into Quote and Author
   const fullRawPhrase = shuffledPhrases[currentIndex] || "";
   const parts = fullRawPhrase.split(' - ');
   const targetQuote = parts[0];
@@ -170,7 +164,6 @@ const TypingChallenge: React.FC = () => {
     
     setHistory(prev => [...prev, { phrase: targetQuote, wpm: finalWpm, accuracy: finalAccuracy }]);
     
-    // Explicitly clear state before moving forward
     setUserInput('');
     setStartTime(null);
     setMistakes(0);
@@ -190,7 +183,6 @@ const TypingChallenge: React.FC = () => {
     if (isCheating) return;
     const val = e.target.value;
     
-    // Cheat detection: Excessive spaces
     const spaceCount = (val.match(/ /g) || []).length;
     const consecutiveSpaces = val.match(/ {3,}/);
     if (spaceCount > val.length * 0.7 || consecutiveSpaces) {
@@ -198,7 +190,6 @@ const TypingChallenge: React.FC = () => {
       return;
     }
 
-    // Cheat detection: Repeated same character spamming
     if (val.length > 6) {
       const lastChars = val.slice(-6).split('');
       if (lastChars.every(char => char === lastChars[0])) {
@@ -253,9 +244,18 @@ const TypingChallenge: React.FC = () => {
       timestamp: Date.now()
     };
 
-    const updated = [...highScores, newEntry].sort((a, b) => b.score - a.score);
-    setHighScores(updated);
-    localStorage.setItem('mech_high_scores_registry', JSON.stringify(updated));
+    const saved = localStorage.getItem('mech_high_scores_registry');
+    let localHistory: ScoreEntry[] = [];
+    if (saved) {
+      try {
+        localHistory = JSON.parse(saved);
+      } catch (e) {}
+    }
+    localHistory.push(newEntry);
+    const sorted = localHistory.sort((a, b) => b.score - a.score).slice(0, 50);
+    localStorage.setItem('mech_high_scores_registry', JSON.stringify(sorted));
+    setPersonalHistory(sorted.slice(0, 20));
+    
     setShowScoreEntry(false);
   };
 
@@ -274,6 +274,16 @@ const TypingChallenge: React.FC = () => {
     setMistakes(0);
     setTotalKeys(0);
     setHistory([]);
+  };
+
+  const downloadRegistry = () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(personalHistory, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href",     dataStr);
+    downloadAnchorNode.setAttribute("download", "personal_score_history.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
   };
 
   const renderTargetQuote = () => {
@@ -303,22 +313,22 @@ const TypingChallenge: React.FC = () => {
     );
   };
 
-  const topScores = highScores.slice(0, 10);
-  const otherScores = highScores.slice(10);
-
   return (
     <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in duration-700">
       
-      {/* GLOBAL_LEADERBOARD */}
+      {/* PERSONAL_SCORE_HISTORY */}
       <div className="border border-white/10 bg-black/40 p-4 space-y-3">
         <div className="flex justify-between items-center border-b border-white/10 pb-2">
-          <h3 className="text-xs font-bold text-cyan-400 uppercase tracking-widest">GLOBAL_LEADERBOARD</h3>
-          <button 
-            onClick={() => setExpandScoreboard(!expandScoreboard)}
-            className="text-[10px] text-white/40 hover:text-white transition-colors uppercase font-bold"
-          >
-            {expandScoreboard ? 'Collapse_Logs ▲' : `View_Full_Archive (${highScores.length}) ▼`}
-          </button>
+          <h3 className="text-xs font-bold text-cyan-400 uppercase tracking-widest">PERSONAL_SCORE_HISTORY / LOCAL_LOGS</h3>
+          <div className="flex gap-2">
+            <button 
+              onClick={downloadRegistry}
+              className="text-[10px] px-3 py-1 border border-cyan-500/40 text-cyan-400 transition-all uppercase font-bold hover:bg-cyan-500 hover:text-black flex items-center gap-2"
+              title="Export your personal scores"
+            >
+              <span className="text-sm">💾</span> [EXPORT_LOGS]
+            </button>
+          </div>
         </div>
         
         <div className="grid grid-cols-5 gap-2 text-[9px] uppercase font-bold text-white/30 px-2">
@@ -329,9 +339,9 @@ const TypingChallenge: React.FC = () => {
           <span>Score</span>
         </div>
         
-        <div className="space-y-1 max-h-48 overflow-y-auto pr-1">
-          {topScores.map((s, i) => (
-            <div key={i} className="grid grid-cols-5 gap-2 p-1.5 text-[10px] border-b border-white/5 items-center bg-white/5 font-mono">
+        <div className="space-y-1 max-h-40 overflow-y-auto pr-1">
+          {personalHistory.map((s, i) => (
+            <div key={`${s.timestamp}-${i}`} className="grid grid-cols-5 gap-2 p-1.5 text-[10px] border-b border-white/5 items-center font-mono bg-white/5">
               <span className="text-cyan-500">#{i + 1}</span>
               <span className="text-yellow-400 font-bold">{s.initials}</span>
               <span className="text-white/80">{s.wpm}</span>
@@ -339,22 +349,15 @@ const TypingChallenge: React.FC = () => {
               <span className="text-[#00FF41] font-bold">{s.score}</span>
             </div>
           ))}
-          {expandScoreboard && otherScores.map((s, i) => (
-            <div key={i + 10} className="grid grid-cols-5 gap-2 p-1.5 text-[10px] border-b border-white/5 items-center font-mono opacity-60">
-              <span className="text-white/40">#{i + 11}</span>
-              <span className="text-yellow-400">{s.initials}</span>
-              <span className="text-white/80">{s.wpm}</span>
-              <span className="text-pink-400/80">{s.accuracy}%</span>
-              <span className="text-[#00FF41]">{s.score}</span>
-            </div>
-          ))}
-          {highScores.length === 0 && <div className="text-center py-4 text-white/20 italic text-xs uppercase">Registry_Empty...</div>}
+          {personalHistory.length === 0 && (
+            <div className="text-center py-4 text-white/20 italic text-xs uppercase">No operational history detected.</div>
+          )}
         </div>
       </div>
 
       <div className="text-center space-y-4">
         <h2 className="text-2xl md:text-3xl font-bold glow-text tracking-tighter uppercase">
-          TYPING_TEST / <span className="opacity-60">SCTR_{currentIndex + 1}</span>
+          {TYPING_CHALLENGE_DATA.header} / <span className="opacity-60">{TYPING_CHALLENGE_DATA.subHeaderPrefix}{currentIndex + 1}</span>
         </h2>
       </div>
 
@@ -384,7 +387,6 @@ const TypingChallenge: React.FC = () => {
             </div>
 
             <div className="relative max-w-2xl mx-auto flex flex-col items-center group">
-              {/* Refined Mirrored text area with robust wrapping cursor */}
               <div className="w-full relative py-2 text-center border-b-2 border-[#00FF41] group-focus-within:shadow-[0_4px_12px_-4px_#00FF41]">
                 <div className="text-xl font-mono min-h-[1.5em] text-center pointer-events-none break-all whitespace-pre-wrap px-4">
                   <span className="text-white inline">
@@ -398,7 +400,6 @@ const TypingChallenge: React.FC = () => {
                   )}
                 </div>
                 
-                {/* Hidden Input field */}
                 <input
                   ref={inputRef}
                   type="text"
@@ -479,11 +480,11 @@ const TypingChallenge: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="border border-white/10 p-8 bg-black/40">
-          <h4 className="text-xs font-bold text-white/40 mb-5 uppercase tracking-widest border-b border-white/10 pb-2">Operational_Guidelines</h4>
+          <h4 className="text-xs font-bold text-white/40 mb-5 uppercase tracking-widest border-b border-white/10 pb-2">{TYPING_CHALLENGE_DATA.guidelinesTitle}</h4>
           <div className="space-y-4 font-mono text-[11px] leading-relaxed">
             <div className="p-3 bg-[#00FF41]/5 border-l-2 border-[#00FF41] mb-2">
-              <p className="text-[#00FF41] font-bold text-[9px] mb-1">SCORE_ALGORITHM_V2.0:</p>
-              <p className="text-white text-[12px]">SCORE = WPM * (ACCURACY / 100) * 10</p>
+              <p className="text-[#00FF41] font-bold text-[9px] mb-1">{TYPING_CHALLENGE_DATA.scoreAlgorithmLabel}:</p>
+              <p className="text-white text-[12px]">{TYPING_CHALLENGE_DATA.scoreFormula}</p>
             </div>
             <p className="text-white/70">Efficiency is measured by the algorithm which penalizes typos and rewards raw data throughput.</p>
             <p className="text-cyan-400">NOTE: Cursor is optimized to follow text flow across multiple lines. Excessive character repetition triggers security protocols.</p>
@@ -496,7 +497,7 @@ const TypingChallenge: React.FC = () => {
             <span className="text-[#00FF41] text-2xl font-bold font-mono">λ</span>
           </div>
           <p className="text-[10px] text-white/40 leading-relaxed uppercase tracking-widest max-w-[280px]">
-            Benchmark protocols synchronized. Sequence integrity monitoring enabled. Text wrapping support for high-throughput operational streams.
+            {TYPING_CHALLENGE_DATA.benchmarkNote}
           </p>
         </div>
       </div>
