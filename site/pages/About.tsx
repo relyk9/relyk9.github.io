@@ -74,7 +74,7 @@ const About: React.FC = () => {
               
               <div className="bg-cyan-500/10 p-4 border-l-2 border-cyan-500 mt-8 group hover:bg-cyan-500/20 transition-all">
                 <h4 className="text-xs font-bold mb-2 text-cyan-400 uppercase tracking-widest">
-                  {ABOUT_DATA.missionTitle} / {ABOUT_DATA.missionHeader}:
+                  {ABOUT_DATA.missionTitle}
                 </h4>
                 <p className="italic text-xs text-white/90 leading-relaxed">
                   "{ABOUT_DATA.missionStatement}"

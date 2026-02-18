@@ -4,17 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import { PROJECTS } from '../constants';
 import { Project } from '../types';
 
-const CATEGORY_STYLES: Record<string, { border: string, text: string, bg: string, accent: string }> = {
-  All: { border: 'border-[#00FF41]', text: 'text-[#00FF41]', bg: 'bg-[#00FF41]', accent: 'text-[#00FF41]' },
-  Professional: { border: 'border-cyan-500', text: 'text-cyan-400', bg: 'bg-cyan-500', accent: 'text-cyan-500' },
-  Personal: { border: 'border-yellow-500', text: 'text-yellow-400', bg: 'bg-yellow-500', accent: 'text-yellow-500' },
-  Academic: { border: 'border-pink-500', text: 'text-pink-400', bg: 'bg-pink-500', accent: 'text-pink-500' },
+const CATEGORY_STYLES: Record<string, { border: string, text: string, bg: string, accent: string, hex: string }> = {
+  All: { border: 'border-[#00FF41]', text: 'text-[#00FF41]', bg: 'bg-[#00FF41]', accent: 'text-[#00FF41]', hex: '#00FF41' },
+  Professional: { border: 'border-cyan-500', text: 'text-cyan-400', bg: 'bg-cyan-500', accent: 'text-cyan-500', hex: '#06b6d4' },
+  Personal: { border: 'border-yellow-500', text: 'text-yellow-400', bg: 'bg-yellow-500', accent: 'text-yellow-500', hex: '#eab308' },
+  Academic: { border: 'border-pink-500', text: 'text-pink-400', bg: 'bg-pink-500', accent: 'text-pink-500', hex: '#ec4899' },
 };
 
-const STATUS_STYLES: Record<Project['status'], { border: string, text: string, dot: string }> = {
-  'Completed': { border: 'border-[#00FF41]', text: 'text-[#00FF41]', dot: 'bg-[#00FF41]' },
-  'In Progress': { border: 'border-yellow-500', text: 'text-yellow-400', dot: 'bg-yellow-500' },
-  'Concept': { border: 'border-cyan-500', text: 'text-cyan-400', dot: 'bg-cyan-500' },
+const STATUS_STYLES: Record<Project['status'], { border: string, text: string, dot: string, bg: string }> = {
+  'Completed': { border: 'border-[#00FF41]', text: 'text-[#00FF41]', dot: 'bg-[#00FF41]', bg: 'bg-[#00FF41]' },
+  'In Progress': { border: 'border-orange-500', text: 'text-orange-400', dot: 'bg-orange-500', bg: 'bg-orange-500' },
+  'Concept': { border: 'border-red-500', text: 'text-red-400', dot: 'bg-red-500', bg: 'bg-red-500' },
 };
 
 const Portfolio: React.FC = () => {
@@ -22,12 +22,24 @@ const Portfolio: React.FC = () => {
   const [filter, setFilter] = useState<'All' | Project['category']>('All');
   const [statusFilter, setStatusFilter] = useState<'All' | Project['status']>('All');
   const [interactedProjects, setInteractedProjects] = useState<Set<string>>(new Set());
+  const [projectImageIndices, setProjectImageIndices] = useState<Record<string, number>>({});
 
   const handleInteraction = (id: string) => {
     setInteractedProjects(prev => {
       const next = new Set(prev);
       next.add(id);
       return next;
+    });
+  };
+
+  const handleImageNav = (e: React.MouseEvent, projectId: string, direction: 'prev' | 'next', max: number) => {
+    e.stopPropagation(); // Don't navigate to detail page
+    setProjectImageIndices(prev => {
+      const current = prev[projectId] || 0;
+      let next = direction === 'next' ? current + 1 : current - 1;
+      if (next < 0) next = max - 1;
+      if (next >= max) next = 0;
+      return { ...prev, [projectId]: next };
     });
   };
 
@@ -67,19 +79,24 @@ const Portfolio: React.FC = () => {
           <div className="flex flex-wrap items-center gap-4">
             <span className="text-[10px] font-bold opacity-40 tracking-[0.2em] uppercase">Status:</span>
             <div className="flex flex-wrap gap-3">
-              {['All', 'Completed', 'In Progress', 'Concept'].map((stat) => (
-                <button
-                  key={stat}
-                  onClick={() => setStatusFilter(stat as any)}
-                  className={`px-3 py-1 transition-all duration-300 border text-[10px] ${
-                    statusFilter === stat 
-                      ? `bg-white text-black font-bold shadow-[0_0_10px_white]` 
-                      : `border-white/20 text-white hover:border-white/60 opacity-60`
-                  }`}
-                >
-                  {stat.toUpperCase()}
-                </button>
-              ))}
+              {['All', 'Completed', 'In Progress', 'Concept'].map((stat) => {
+                const isSelected = statusFilter === stat;
+                const style = stat === 'All' ? null : STATUS_STYLES[stat as Project['status']];
+                
+                return (
+                  <button
+                    key={stat}
+                    onClick={() => setStatusFilter(stat as any)}
+                    className={`px-3 py-1 transition-all duration-300 border text-[10px] uppercase ${
+                      isSelected
+                        ? stat === 'All' ? 'bg-white text-black shadow-[0_0_10px_white]' : `${style?.bg} text-black font-bold shadow-[0_0_10px_currentColor]`
+                        : stat === 'All' ? 'border-white/20 text-white hover:border-white/60 opacity-60' : `${style?.border} ${style?.text} hover:opacity-100 opacity-60`
+                    }`}
+                  >
+                    {stat.toUpperCase()}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -90,6 +107,8 @@ const Portfolio: React.FC = () => {
           const style = CATEGORY_STYLES[project.category];
           const statusStyle = STATUS_STYLES[project.status];
           const hasInteracted = interactedProjects.has(project.id);
+          const projectImages = project.images || (project.imageUrl ? [project.imageUrl] : []);
+          const currentImgIndex = projectImageIndices[project.id] || 0;
           
           return (
             <div 
@@ -105,14 +124,38 @@ const Portfolio: React.FC = () => {
                 }}
               >
                 <img 
-                  src={project.imageUrl} 
+                  key={currentImgIndex}
+                  src={projectImages[currentImgIndex]} 
                   alt={project.title} 
-                  className={`w-full h-full object-cover transform group-hover:scale-110 transition-all duration-700 ${
+                  className={`w-full h-full object-cover transform group-hover:scale-105 transition-all duration-700 page-flicker ${
                     hasInteracted 
                     ? 'grayscale-0 brightness-100' 
                     : 'grayscale group-hover:grayscale-0'
                   }`}
                 />
+                
+                {/* Scanline Overlay */}
+                <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(transparent_0%,rgba(0,255,65,0.02)_50%,transparent_100%)] bg-[size:100%_10px] opacity-30"></div>
+
+                {/* Minimal Gallery Navigation Controls */}
+                {projectImages.length > 1 && (
+                  <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    <button
+                      onClick={(e) => handleImageNav(e, project.id, 'prev', projectImages.length)}
+                      className={`pointer-events-auto bg-black/60 border ${style.border}/40 ${style.text} w-10 h-10 flex items-center justify-center hover:${style.bg} hover:text-black transition-all z-20 font-bold text-lg`}
+                    >
+                      &lt;
+                    </button>
+                    <button
+                      onClick={(e) => handleImageNav(e, project.id, 'next', projectImages.length)}
+                      className={`pointer-events-auto bg-black/60 border ${style.border}/40 ${style.text} w-10 h-10 flex items-center justify-center hover:${style.bg} hover:text-black transition-all z-20 font-bold text-lg`}
+                    >
+                      &gt;
+                    </button>
+                  </div>
+                )}
+
+                {/* Status and Category Badges */}
                 <div className="absolute top-4 left-4 flex gap-2">
                   <div className={`px-2 py-0.5 bg-black/80 text-[10px] border ${style.border} ${style.text}`}>
                     {project.category.toUpperCase()}
@@ -122,6 +165,16 @@ const Portfolio: React.FC = () => {
                     {project.status.toUpperCase()}
                   </div>
                 </div>
+
+                {/* Simplified Counter Overlay */}
+                {projectImages.length > 1 && (
+                  <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className={`bg-black/80 border ${style.border}/30 px-2 py-0.5 text-[10px] font-mono ${style.text}`}>
+                      {currentImgIndex + 1} / {projectImages.length}
+                    </div>
+                  </div>
+                )}
+
                 {!hasInteracted && (
                   <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
                 )}

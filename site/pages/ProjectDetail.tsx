@@ -7,6 +7,9 @@ const ProjectDetail: React.FC = () => {
   const { projectId } = useParams();
   const navigate = useNavigate();
   const project = PROJECTS.find(p => p.id === projectId);
+  
+  const images = project?.images || (project?.imageUrl ? [project.imageUrl] : []);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imageInteracted, setImageInteracted] = useState(false);
 
   useEffect(() => {
@@ -25,6 +28,25 @@ const ProjectDetail: React.FC = () => {
     );
   }
 
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case 'Professional': return 'cyan';
+      case 'Personal': return 'yellow';
+      case 'Academic': return 'pink';
+      default: return '[#00FF41]';
+    }
+  };
+
+  const categoryColor = getCategoryColor(project.category);
+
   const getCategoryNote = (category: string) => {
     switch (category) {
       case 'Professional':
@@ -41,11 +63,13 @@ const ProjectDetail: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Completed': return 'text-[#00FF41] border-[#00FF41] bg-[#00FF41]/10';
-      case 'In Progress': return 'text-yellow-400 border-yellow-400 bg-yellow-400/10';
-      case 'Concept': return 'text-cyan-400 border-cyan-400 bg-cyan-400/10';
+      case 'In Progress': return 'text-orange-400 border-orange-500 bg-orange-500/10';
+      case 'Concept': return 'text-red-400 border-red-500 bg-red-500/10';
       default: return 'text-white border-white bg-white/10';
     }
   };
+
+  const statusColorClass = getStatusColor(project.status);
 
   const constraints = project.metrics?.constraints || [
     'Factor of Safety Threshold: > 2.0',
@@ -67,13 +91,13 @@ const ProjectDetail: React.FC = () => {
   };
 
   return (
-    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-12">
       <div className="flex flex-col md:flex-row justify-between items-start border-b border-white/20 pb-6 gap-6">
         <div className="space-y-2">
           <div className="flex items-center gap-4">
             <span className="bg-cyan-500 text-black px-2 py-0.5 text-[10px] font-bold">PROJECT_ID: {project.id.toUpperCase()}</span>
             <span className="text-[10px] text-white/40">{project.date}</span>
-            <span className={`px-2 py-0.5 text-[10px] font-bold border ${getStatusColor(project.status)} uppercase tracking-widest`}>
+            <span className={`px-2 py-0.5 text-[10px] font-bold border ${statusColorClass} uppercase tracking-widest`}>
               STATUS: {project.status}
             </span>
           </div>
@@ -86,24 +110,74 @@ const ProjectDetail: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        <div className="lg:col-span-2 space-y-12">
-          <div 
-            className="aspect-video border border-white/10 bg-black/40 overflow-hidden relative group cursor-pointer"
-            onMouseEnter={() => setImageInteracted(true)}
-            onClick={() => setImageInteracted(true)}
-          >
-            <img 
-              src={project.imageUrl} 
-              alt={project.title} 
-              className={`w-full h-full object-cover transition-all duration-1000 ${
-                imageInteracted 
-                ? 'grayscale-0 brightness-100' 
-                : 'grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100'
-              }`}
-            />
-            {project.id.includes('placeholder') && (
-              <div className="absolute top-4 left-4 bg-yellow-500 text-black px-3 py-1 text-[10px] font-bold z-20">
-                PLACEHOLDER_VISUAL
+        <div className="lg:col-span-2 space-y-8">
+          
+          {/* Enhanced Image Gallery Component */}
+          <div className="space-y-4">
+            <div 
+              className={`relative aspect-video border-2 border-${categoryColor}-500/30 hover:border-${categoryColor}-500 bg-black/40 overflow-hidden group shadow-[0_0_30px_rgba(0,0,0,0.8)]`}
+              onMouseEnter={() => setImageInteracted(true)}
+            >
+              {/* Main Image */}
+              <img 
+                key={currentImageIndex}
+                src={images[currentImageIndex]} 
+                alt={`${project.title} Visual ${currentImageIndex + 1}`} 
+                className={`w-full h-full object-cover transition-all duration-700 page-flicker ${
+                  imageInteracted 
+                  ? 'grayscale-0 brightness-100' 
+                  : 'grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100'
+                }`}
+              />
+              
+              {/* Scanline Overlay */}
+              <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(transparent_0%,rgba(0,255,65,0.02)_50%,transparent_100%)] bg-[size:100%_10px] opacity-30"></div>
+
+              {/* Minimal Navigation Arrows */}
+              {images.length > 1 && (
+                <>
+                  <button 
+                    onClick={handlePrevImage}
+                    className={`absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 border border-${categoryColor}-500/40 text-${categoryColor}-400 w-12 h-12 flex items-center justify-center hover:bg-${categoryColor}-500 hover:text-black transition-all z-20 font-bold text-xl`}
+                  >
+                    &lt;
+                  </button>
+                  <button 
+                    onClick={handleNextImage}
+                    className={`absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 border border-${categoryColor}-500/40 text-${categoryColor}-400 w-12 h-12 flex items-center justify-center hover:bg-${categoryColor}-500 hover:text-black transition-all z-20 font-bold text-xl`}
+                  >
+                    &gt;
+                  </button>
+                </>
+              )}
+
+              {/* Simple Index Indicator */}
+              {images.length > 1 && (
+                <div className={`absolute bottom-4 right-4 bg-black/80 border border-${categoryColor}-500/30 px-3 py-1 text-[11px] font-mono text-${categoryColor}-400 z-20`}>
+                  {currentImageIndex + 1} / {images.length}
+                </div>
+              )}
+            </div>
+
+            {/* Thumbnails */}
+            {images.length > 1 && (
+              <div className="flex gap-4 overflow-x-auto pb-4 custom-scrollbar">
+                {images.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentImageIndex(idx)}
+                    className={`relative w-24 h-16 flex-shrink-0 border transition-all duration-300 ${
+                      currentImageIndex === idx 
+                      ? `border-${categoryColor}-500 shadow-[0_0_10px_rgba(0,255,65,0.3)]` 
+                      : 'border-white/10 grayscale hover:grayscale-0 hover:border-white/30'
+                    }`}
+                  >
+                    <img src={img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                    {currentImageIndex === idx && (
+                      <div className={`absolute inset-0 border-2 border-dashed border-${categoryColor}-500 animate-pulse`}></div>
+                    )}
+                  </button>
+                ))}
               </div>
             )}
           </div>
@@ -118,7 +192,7 @@ const ProjectDetail: React.FC = () => {
             </p>
           </div>
 
-          <div className="bg-cyan-900/10 border border-cyan-500/30 p-8 space-y-6">
+          <div className="bg-cyan-900/10 border border-cyan-500/30 p-8 space-y-6 shadow-[inset_0_0_20px_rgba(6,182,212,0.05)]">
             <h3 className="text-xl font-bold text-cyan-400 uppercase tracking-tighter">Operational_Metrics / <span className="opacity-60 text-white">Project Details</span></h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-4">
@@ -165,7 +239,7 @@ const ProjectDetail: React.FC = () => {
 
           <button 
             onClick={handleActionClick}
-            className="w-full bg-white text-black py-4 font-bold text-xs hover:bg-[#00FF41] transition-all flex justify-center items-center gap-2 group uppercase tracking-widest"
+            className="w-full bg-white text-black py-4 font-bold text-xs hover:bg-[#00FF41] transition-all flex justify-center items-center gap-2 group uppercase tracking-widest shadow-[0_4px_15px_rgba(0,0,0,0.5)]"
           >
             {project.actionButton?.label || 'Request_Detailed_Docs'}
             <span className="group-hover:translate-x-2 transition-transform">→</span>

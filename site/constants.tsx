@@ -17,6 +17,11 @@ export const PROJECTS: Project[] = [
       'UX: Responsive Terminal Design'
     ],
     imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000',
+    images: [
+      'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000',
+      'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1000',
+      'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1000'
+    ],
     metrics: {
       constraints: [
         'Deterministic layout across sectors',
@@ -49,6 +54,9 @@ export const PROJECTS: Project[] = [
       'UX: Offline-ready'
     ],
     imageUrl: '/images/anglers_logbook_titlepage.png',
+    images: [
+      '/images/anglers_logbook_titlepage.png'
+    ],
     metrics: {
       constraints: [
         'Minimal latency in low-signal areas',
@@ -119,7 +127,7 @@ export const ABOUT_DATA = {
     'I work at the intersection of mechanical design, process optimization, and real-world execution.',
     'Outside of work, I enjoy getting outdoors to kayak and hike, traveling when I can, and working on astrophotography projects. I also spend a lot of time reading and learning about history.'
   ],
-  missionTitle: "MISSION_OBJECTIVE",
+  missionTitle: "MISSION_OBJECTIVE / CORE_GOAL",
   missionHeader: "CORE GOAL",
   missionStatement: "To build smarter manufacturing systems by combining mechanical engineering, automation, and continuous improvement.",
   educationTitle: "EDUCATION_ARCHIVE",
@@ -288,6 +296,6 @@ export const LOG_POOL: LogEntryPool[] = [
   { text: "INFO: Simulation complete. Accuracy: 50% math, 50% vibes.", color: "text-blue-400" },
   { text: "SW_ERR: Circular reference detected. You are your own father.", color: "text-red-500" },
   { text: "VS_INFO: Hello World printed 1,000,000 times. System stable.", color: "text-green-500" },
-  { text: "NOTICE: Tolerances so tight they've formed a singularity.", color: "text-yellow-400" },
+  { text: "NOTICE: Tolerances so_tight they've formed a singularity.", color: "text-yellow-400" },
   { text: "SW_CRITICAL: SolidWorks is not responding. It is however, staring at you intensely.", color: "text-red-600" }
 ];

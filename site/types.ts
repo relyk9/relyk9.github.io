@@ -7,6 +7,7 @@ export interface Project {
   description: string;
   technicalSpecs: string[];
   imageUrl: string;
+  images?: string[];
   date: string;
   role: string;
   detailsUrl?: string;
