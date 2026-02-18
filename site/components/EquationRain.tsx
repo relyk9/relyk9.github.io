@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 
 const EQUATIONS = [
-  // --- FLUID DYNAMICS ---
+  // --- FLUID DYNAMICS & CFD ---
   "\\rho\\left(\\frac{\\partial \\mathbf{u}}{\\partial t} + \\mathbf{u} \\cdot \\nabla \\mathbf{u}\\right) = -\\nabla p + \\mu \\nabla^2 \\mathbf{u} + \\mathbf{f}",
   "P + \\frac{1}{2}\\rho v^2 + \\rho gh = C",
   "Re = \\frac{\\rho vL}{\\mu}",
@@ -13,8 +13,16 @@ const EQUATIONS = [
   "h_L = f \\frac{L}{D} \\frac{v^2}{2g}",
   "C_D = \\frac{F_d}{\\frac{1}{2}\\rho v^2 A}",
   "\\nabla \\cdot \\mathbf{u} = 0",
+  "\\frac{\\partial \\rho}{\\partial t} + \\nabla \\cdot (\\rho \\mathbf{u}) = 0",
+  "\\tau_{ij} = \\mu \\left( \\frac{\\partial u_i}{\\partial x_j} + \\frac{\\partial u_j}{\\partial x_i} \\right)",
+  "St = \\frac{fL}{U}",
+  "We = \\frac{\\rho v^2 L}{\\sigma}",
+  "\\frac{P}{\\rho} + \\frac{v^2}{2} + gz = \\text{constant}",
+  "\\nabla^2 \\phi = 0",
+  "k - \\epsilon \\text{ turbulence model}",
+  "Y^+ = \\frac{u_\\tau y}{\\nu}",
 
-  // --- THERMODYNAMICS & HEAT TRANSFER ---
+  // --- THERMODYNAMICS & ADVANCED HEAT TRANSFER ---
   "PV = nRT",
   "\\Delta U = Q - W",
   "dS = \\frac{dQ}{T}",
@@ -27,8 +35,19 @@ const EQUATIONS = [
   "\\gamma = \\frac{C_p}{C_v}",
   "\\text{COP}_{hp} = \\frac{Q_H}{W_{in}}",
   "\\frac{\\partial T}{\\partial t} = \\alpha \\nabla^2 T",
+  "G = H - TS",
+  "A = U - TS",
+  "\\left(\\frac{\\partial T}{\\partial V}\\right)_S = -\\left(\\frac{\\partial P}{\\partial S}\\right)_V",
+  "\\mu_i = \\left(\\frac{\\partial G}{\\partial n_i}\\right)_{T,P,n_j}",
+  "\\oint \\frac{dQ}{T} \\leq 0",
+  "x = \\frac{m_{vap}}{m_{tot}}",
+  "v = (1-x)v_f + xv_g",
+  "\\ln\\frac{P_2}{P_1} = \\frac{\\Delta H_{vap}}{R}\\left(\\frac{1}{T_1} - \\frac{1}{T_2}\\right)",
+  "Tds = dh - vdP",
+  "P_v = P_{sat}(T)",
+  "v_{rms} = \\sqrt{\\frac{3RT}{M}}",
 
-  // --- SOLID MECHANICS & STATICS ---
+  // --- SOLID MECHANICS & MATERIAL SCIENCE ---
   "\\mathbf{F} = m\\mathbf{a}",
   "\\sigma = E\\epsilon",
   "\\tau = G\\gamma",
@@ -42,6 +61,47 @@ const EQUATIONS = [
   "\\sigma_{avg} = \\frac{\\sigma_x + \\sigma_y}{2}",
   "R_{Mohr} = \\sqrt{(\\frac{\\sigma_x - \\sigma_y}{2})^2 + \\tau_{xy}^2}",
   "\\delta_{max} = \\frac{5wL^4}{384EI}",
+  "n\\lambda = 2d \\sin\\theta",
+  "K_{IC} = Y \\sigma \\sqrt{\\pi a}",
+  "\\sigma_{ij} = C_{ijkl} \\epsilon_{kl}",
+  "\\sigma_y = \\sigma_0 + k_y d^{-1/2}",
+  "\\frac{\\partial C}{\\partial t} = D \\frac{\\partial^2 C}{\\partial x^2}",
+  "\\sigma_t = \\sigma(1 + \\epsilon)",
+  "\\epsilon_t = \\ln(1 + \\epsilon)",
+  "E = 2G(1 + \\nu)",
+  "\\sigma_{vM} = \\sqrt{\\frac{(\\sigma_1-\\sigma_2)^2 + (\\sigma_2-\\sigma_3)^2 + (\\sigma_3-\\sigma_1)^2}{2}}",
+  "U = \\int \\frac{\\sigma^2}{2E} dV",
+  "\\text{Brinell: } HB = \\frac{2P}{\\pi D (D-\\sqrt{D^2-d^2})}",
+
+  // --- ROBOTICS & KINEMATICS ---
+  "T = A_1 A_2 \\dots A_n",
+  "\\mathbf{v} = \\mathbf{J}\\dot{\\mathbf{q}}",
+  "M(q)\\ddot{q} + C(q, \\dot{q})\\dot{q} + g(q) = \\tau",
+  "\\frac{d}{dt}\\left(\\frac{\\partial L}{\\partial \\dot{q}}\\right) - \\frac{\\partial L}{\\partial q} = Q",
+  "q = w + xi + yj + zk",
+  "\\mathbf{x}_{k+1} = \\mathbf{f}(\\mathbf{x}_k, \\mathbf{u}_k) + \\mathbf{w}_k",
+  "^A P = ^A T_B ^B P",
+  "\\omega_{skew} = \\begin{bmatrix} 0 & -\\omega_z & \\omega_y \\\\ \\omega_z & 0 & -\\omega_x \\\\ -\\omega_y & \\omega_x & 0 \\end{bmatrix}",
+  "\\tau = \\mathbf{J}^T \\mathbf{F}",
+  "L = T - V",
+  "\\xi = [v, \\omega]^T",
+  "\\text{Ad}_T \\xi",
+  "\\mathbf{p} = \\exp(\\hat{\\xi}\\theta) \\mathbf{p}_0",
+
+  // --- CONTROL SYSTEMS ---
+  "G(s) = \\frac{\\omega_n^2}{s^2 + 2\\zeta\\omega_n s + \\omega_n^2}",
+  "u(t) = K_p e(t) + K_i \\int e(t)dt + K_d \\frac{de}{dt}",
+  "\\dot{\\mathbf{x}} = \\mathbf{Ax} + \\mathbf{Bu}",
+  "\\mathbf{y} = \\mathbf{Cx} + \\mathbf{Du}",
+  "H(s) = \\mathbf{C}(s\\mathbf{I}-\\mathbf{A})^{-1}\\mathbf{B} + \\mathbf{D}",
+  "\\det(s\\mathbf{I} - \\mathbf{A}) = 0",
+  "K = P C^T (C P C^T + R)^{-1}",
+  "GM = 20 \\log_{10} \\frac{1}{|KG(j\\omega_{180})|}",
+  "PM = 180^\\circ + \\angle KG(j\\omega_{gc})",
+  "s = \\sigma + j\\omega",
+  "S = (I + L)^{-1}",
+  "T = L(I + L)^{-1}",
+  "J = \\int_0^\\infty (x^T Q x + u^T R u) dt",
 
   // --- DYNAMICS & VIBRATIONS ---
   "\\omega_n = \\sqrt{\\frac{k}{m}}",
@@ -52,56 +112,29 @@ const EQUATIONS = [
   "f_n = \\frac{1}{2\\pi}\\sqrt{\\frac{k}{m}}",
   "c_c = 2\\sqrt{km}",
   "m\\ddot{x} + c\\dot{x} + kx = F_0\\sin(\\omega t)",
+  "I = \\int r^2 dm",
+  "\\vec{L} = \\vec{r} \\times \\vec{p}",
+  "\\delta = \\ln(x_1/x_2)",
 
-  // --- ELECTRICAL CIRCUITS & SIGNALS ---
-  "V = IR",
-  "P = VI = I^2 R",
-  "V(t) = L\\frac{di}{dt}",
-  "i(t) = C\\frac{dv}{dt}",
-  "Z = R + j(X_L - X_C)",
-  "f_r = \\frac{1}{2\\pi \\sqrt{LC}}",
-  "\\tau = RC",
-  "\\tau = L/R",
-  "H(s) = \\frac{Y(s)}{X(s)}",
-  "V_{out} = V_{in} \\frac{R_2}{R_1 + R_2}",
-  "P_{3\\phi} = \\sqrt{3}V_L I_L \\cos \\theta",
+  // --- MANUFACTURING & MACHINING ---
+  "VT^n = C",
+  "\\tan \\phi = \\frac{r \\cos \\alpha}{1 - r \\sin \\alpha}",
+  "P_c = F_c v",
+  "MRR = v f d",
+  "R_a = \\frac{f^2}{32R}",
+  "H = \\frac{2P}{\\pi D (D - \\sqrt{D^2 - d^2})}",
+  "\\lambda_{pulse} = \\frac{c}{f}",
+  "\\sigma_f = \\frac{3FL}{2bh^2}",
+  "\\text{Merchant's Circle}",
 
-  // --- ELECTROMAGNETICS (MAXWELL'S) ---
-  "\\nabla \\cdot \\mathbf{E} = \\frac{\\rho}{\\epsilon_0}",
-  "\\nabla \\cdot \\mathbf{B} = 0",
-  "\\nabla \\times \\mathbf{E} = -\\frac{\\partial \\mathbf{B}}{\\partial t}",
-  "\\nabla \\times \\mathbf{B} = \\mu_0\\mathbf{J} + \\mu_0\\epsilon_0\\frac{\\partial \\mathbf{E}}{\\partial t}",
-  "\\mathbf{F} = q(\\mathbf{E} + \\mathbf{v} \\times \\mathbf{B})",
-  "\\phi = \\int \\mathbf{B} \\cdot d\\mathbf{A}",
-  "e = -N\\frac{d\\phi}{dt}",
-
-  // --- CALCULUS & DIFFERENTIAL EQUATIONS ---
-  "\\int_a^b f(x)dx = F(b) - F(a)",
-  "f(x) = \\sum_{n=0}^{\\infty} \\frac{f^{(n)}(a)}{n!}(x-a)^n",
-  "\\frac{df}{dx} = \\lim_{h \\to 0} \\frac{f(x+h)-f(x)}{h}",
-  "\\frac{\\partial^2 u}{\\partial t^2} = c^2 \\nabla^2 u",
-  "x^2 y'' + xy' + (x^2 - n^2)y = 0",
+  // --- MATHEMATICAL FOUNDATIONS ---
+  "\\nabla^2 \\psi + k^2 \\psi = 0",
   "\\mathcal{L}\\{f(t)\\} = \\int_0^\\infty e^{-st}f(t)dt",
-  "\\oint_C \\mathbf{F} \\cdot d\\mathbf{r} = \\iint_S (\\nabla \\times \\mathbf{F}) \\cdot d\\mathbf{S}",
-  "\\iint_S \\mathbf{F} \\cdot d\\mathbf{S} = \\iiint_V (\\nabla \\cdot \\mathbf{F}) dV",
-  "y_p = \\frac{1}{P(D)}f(x)",
-  "W[y_1, y_2] = y_1 y_2' - y_2 y_1'",
-  "\\delta \\int L(q, \\dot{q}, t) dt = 0",
-
-  // --- GEOMETRY & MATH ---
-  "a^2 + b^2 = c^2",
   "e^{i\\theta} = \\cos \\theta + i\\sin \\theta",
-  "V = \\frac{4}{3}\\pi r^3",
-  "A = 4\\pi r^2",
-  "\\kappa = \\frac{|\\mathbf{r}' \\times \\mathbf{r}''|}{|\\mathbf{r}'|^3}",
-  "\\cos(A) = \\frac{b^2 + c^2 - a^2}{2bc}",
-  "\\det(A - \\lambda I) = 0",
-  "e^{i\\pi} + 1 = 0",
-
-  // --- CONTROL SYSTEMS ---
-  "G(s) = \\frac{\\omega_n^2}{s^2 + 2\\zeta\\omega_n s + \\omega_n^2}",
-  "u(t) = K_p e(t) + K_i \\int e(t)dt + K_d \\frac{de}{dt}",
-  "\\dot{\\mathbf{x}} = \\mathbf{Ax} + \\mathbf{Bu}"
+  "\\oint_C \\mathbf{F} \\cdot d\\mathbf{r} = \\iint_S (\\nabla \\times \\mathbf{F}) \\cdot d\\mathbf{S}",
+  "\\frac{df}{dx} = \\lim_{h \\to 0} \\frac{f(x+h)-f(x)}{h}",
+  "f(x) = \\sum_{n=0}^{\\infty} \\frac{f^{(n)}(a)}{n!}(x-a)^n",
+  "\\delta(x) = \\begin{cases} \\infty, & x=0 \\\\ 0, & x \\neq 0 \\end{cases}"
 ];
 
 const COLORS = [
@@ -132,14 +165,14 @@ const EquationRain: React.FC = () => {
       const container = containerRef.current;
       container.innerHTML = ''; 
       
-      // Slightly increased density as requested (from 12 to 18)
-      const count = 18; 
+      // Density for the rain
+      const count = 35; 
       const drops: { el: HTMLElement; y: number; speed: number }[] = [];
 
       for (let i = 0; i < count; i++) {
         const dropEl = document.createElement('div');
         dropEl.className = 'absolute whitespace-nowrap pointer-events-none select-none';
-        dropEl.style.fontSize = '14px'; 
+        dropEl.style.fontSize = '12px'; 
         dropEl.style.willChange = 'transform';
         
         const latex = EQUATIONS[Math.floor(Math.random() * EQUATIONS.length)];
@@ -157,13 +190,12 @@ const EquationRain: React.FC = () => {
 
         dropEl.style.color = color;
         dropEl.style.opacity = '0.22'; 
-        dropEl.style.textShadow = `0 0 10px ${color}, 0 0 15px ${color}aa, 0 0 20px ${color}66`;
-        dropEl.style.left = `${Math.random() * 90}%`;
+        dropEl.style.textShadow = `0 0 8px ${color}, 0 0 12px ${color}88`;
+        dropEl.style.left = `${Math.random() * 95}%`;
         
-        // Initial spread
-        const y = Math.random() * -height * 3;
-        // Slightly increased speed (from 0.1-0.3 to 0.15-0.4)
-        const speed = 0.15 + Math.random() * 0.25;
+        // Spread the initial vertical position
+        const y = Math.random() * -height * 2;
+        const speed = 0.2 + Math.random() * 0.45;
         
         dropEl.style.transform = `translate3d(0, ${y}px, 0)`;
         container.appendChild(dropEl);
@@ -178,9 +210,9 @@ const EquationRain: React.FC = () => {
           const drop = drops[i];
           drop.y += drop.speed;
           
-          if (drop.y > height + 250) {
-            drop.y = -400;
-            drop.el.style.left = `${Math.random() * 90}%`;
+          if (drop.y > height + 200) {
+            drop.y = -300;
+            drop.el.style.left = `${Math.random() * 95}%`;
             
             const newLatex = EQUATIONS[Math.floor(Math.random() * EQUATIONS.length)];
             const newColor = COLORS[Math.floor(Math.random() * COLORS.length)];
@@ -188,7 +220,7 @@ const EquationRain: React.FC = () => {
               const html = katex.renderToString(newLatex, { throwOnError: false });
               drop.el.innerHTML = html;
               drop.el.style.color = newColor;
-              drop.el.style.textShadow = `0 0 10px ${newColor}, 0 0 15px ${newColor}aa, 0 0 20px ${newColor}66`;
+              drop.el.style.textShadow = `0 0 8px ${newColor}, 0 0 12px ${newColor}88`;
             } catch (e) {}
           }
           

@@ -17,6 +17,7 @@ const ProjectDetail: React.FC = () => {
       <div className="text-center py-20 space-y-6">
         <h2 className="text-4xl font-bold text-red-500">404: DATA_NOT_FOUND</h2>
         <p>The requested project archive does not exist in the current sector.</p>
+        {/* Fix: Changed lowercase link to uppercase Link component from react-router-dom */}
         <Link to="/portfolio" className="inline-block border border-[#00FF41] px-6 py-2 hover:bg-[#00FF41] hover:text-black transition-all">
           RETURN_TO_ARCHIVES
         </Link>
@@ -160,16 +161,6 @@ const ProjectDetail: React.FC = () => {
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-
-          <div className="border border-pink-500/30 p-6 bg-black/40 space-y-4">
-            <h4 className="text-sm font-bold text-pink-400 uppercase tracking-widest">Diagnostic_Log</h4>
-            <div className="text-[10px] font-mono space-y-2 opacity-60">
-              <p>[08:42:12] Initializing FEA mesh...</p>
-              <p>[08:45:01] Loading project data: {project.id}</p>
-              <p>[08:48:33] Validating structural parameters...</p>
-              <p className="text-pink-400 animate-pulse">[READY] Project summary loaded successfully.</p>
             </div>
           </div>
 

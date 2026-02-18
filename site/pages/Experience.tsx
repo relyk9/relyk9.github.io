@@ -24,7 +24,12 @@ const Experience: React.FC = () => {
               <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
                 <div>
                   <h3 className="text-xl font-bold glow-text">{exp.role}</h3>
-                  <p className="text-[#00FF41] text-sm font-bold uppercase">{exp.company}</p>
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                    <p className="text-[#00FF41] text-sm font-bold uppercase">{exp.company}</p>
+                    <span className="text-[10px] text-white/40 font-mono flex items-center gap-1">
+                      <span className="text-pink-500">📍</span> {exp.location}
+                    </span>
+                  </div>
                 </div>
                 <div className="bg-[#00FF41] text-black px-3 py-1 text-[10px] font-bold self-start">
                   {exp.period}
@@ -33,9 +38,9 @@ const Experience: React.FC = () => {
               
               <ul className="space-y-3">
                 {exp.description.map((item, i) => (
-                  <li key={i} className="text-xs flex gap-3 leading-relaxed">
-                    <span className="text-[#00FF41]/60">_</span>
-                    <span>{item}</span>
+                  <li key={i} className="text-xs flex items-start gap-3 leading-relaxed">
+                    <span className="text-[#00FF41] opacity-70 font-bold mt-0.5 shrink-0 select-none">{">"}</span>
+                    <span className="text-white/90">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -46,12 +51,19 @@ const Experience: React.FC = () => {
 
       {/* Download Section */}
       <div className="text-center pt-8">
-        <div className="inline-block border border-[#00FF41] p-1">
-          <button className="bg-[#00FF41] text-black px-8 py-3 font-bold hover:bg-black hover:text-[#00FF41] transition-all flex items-center gap-4 text-sm tracking-widest">
-            <span className="text-xl">⬇</span>
-            {EXPERIENCE_DATA.downloadLabel}
+        <div className="inline-block border border-gray-700 p-1 opacity-50 grayscale">
+          <button 
+            disabled 
+            className="bg-gray-800 text-gray-500 px-8 py-3 font-bold flex items-center gap-4 text-sm tracking-widest cursor-not-allowed border border-transparent"
+            title="Download currently restricted"
+          >
+            <span className="text-xl">🔒</span>
+            {EXPERIENCE_DATA.downloadLabel} [UNAVAILABLE]
           </button>
         </div>
+        <p className="text-[10px] text-red-400 font-bold mt-4 tracking-widest uppercase animate-pulse">
+          NOTICE: SYSTEM_SECURITY_RESTRICTION_IN_EFFECT // ARCHIVE_LOCKED
+        </p>
       </div>
     </div>
   );

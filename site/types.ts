@@ -24,6 +24,7 @@ export interface ExperienceEntry {
   company: string;
   role: string;
   period: string;
+  location: string;
   description: string[];
 }
 
@@ -67,13 +68,15 @@ export interface StatEntry {
 export interface EducationEntry {
   degree: string;
   institution: string;
+  location: string;
   period: string;
   focus: string;
 }
 
 export interface ProficiencyEntry {
   label: string;
-  level: number;
+  level: 1 | 2 | 3;
+  category: 'Software' | 'Engineering' | 'Languages' | 'Professional';
   color: string;
   glow: string;
 }

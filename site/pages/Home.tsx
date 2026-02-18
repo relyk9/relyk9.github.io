@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { HOME_DATA, LOG_POOL } from '../constants';
+import { HOME_DATA, LOG_POOL, ABOUT_DATA } from '../constants';
 
 interface LogEntry {
   text: string;
@@ -13,6 +13,7 @@ const Home: React.FC = () => {
   const [typedText, setTypedText] = useState('');
   const [activeLogs, setActiveLogs] = useState<LogEntry[]>([]);
   const fullText = HOME_DATA.typedText;
+  const logContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let i = 0;
@@ -24,47 +25,53 @@ const Home: React.FC = () => {
     return () => clearInterval(interval);
   }, [fullText]);
 
-  // Initialize logs and stream them over time
+  // Scroll to bottom when logs are added
   useEffect(() => {
-    const getTime = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    
-    // Initial trickle
-    const shuffled = [...LOG_POOL].sort(() => 0.5 - Math.random()).slice(0, 3);
-    setActiveLogs(shuffled.map(log => ({ ...log, time: getTime() })));
+    if (logContainerRef.current) {
+      logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
+    }
+  }, [activeLogs]);
 
-    let timeoutId: number;
-    const streamLogs = () => {
-      const nextLogTime = Math.random() * 5000 + 2000; // 2-7 seconds for organic feel
-      timeoutId = window.setTimeout(() => {
-        const randomLog = LOG_POOL[Math.floor(Math.random() * LOG_POOL.length)];
-        setActiveLogs(prev => {
-          const newLogs = [{ ...randomLog, time: getTime() }, ...prev];
-          return newLogs.slice(0, 5); // Keep visible history brief and focused
-        });
-        streamLogs();
-      }, nextLogTime);
-    };
-
-    streamLogs();
-    return () => clearTimeout(timeoutId);
-  }, []);
+  const addManualLog = () => {
+    const getTime = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    const randomLog = LOG_POOL[Math.floor(Math.random() * LOG_POOL.length)];
+    setActiveLogs(prev => {
+      const newLogs = [...prev, { ...randomLog, time: getTime() }];
+      return newLogs.slice(-100); // Keep a larger history but manage memory
+    });
+  };
 
   return (
     <div className="space-y-16 animate-in fade-in duration-1000">
       <section className="bg-black/60 border border-[#00FF41] p-8 md:p-12 rounded shadow-[0_0_40px_rgba(0,255,65,0.05)] relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
-          <div className="text-[100px] font-bold text-cyan-500 rotate-12">MECH</div>
-        </div>
         
         <div className="flex flex-col md:flex-row gap-12 items-center relative z-10">
           <div className="flex-1 space-y-6">
-            <div className="inline-block px-3 py-1 bg-cyan-500 text-black text-xs font-bold mb-2 shadow-[0_0_10px_rgba(6,182,212,0.5)]">
-              USER_ID: {HOME_DATA.userId}
+            <div className="flex items-center gap-4 mb-2">
+              <div className="px-3 py-1 bg-cyan-500 text-black text-xs font-bold shadow-[0_0_10px_rgba(6,182,212,0.5)] uppercase">
+                {HOME_DATA.userId}
+              </div>
+              <div className="px-3 py-1 border border-[#00FF41]/40 text-[#00FF41] text-[10px] font-bold tracking-[0.3em] uppercase">
+                STATUS: WORKING
+              </div>
             </div>
+            
             <h2 className="text-4xl md:text-6xl font-bold glow-text leading-tight">
               {HOME_DATA.heroTitle[0]} <br /> <span className="text-cyan-400">{HOME_DATA.heroTitle[1]}</span>
             </h2>
-            <pre className="text-sm md:text-base leading-relaxed h-32 whitespace-pre-wrap font-mono text-yellow-400/90">
+
+            {/* Hero Line Area */}
+            <div className="border-l-2 border-pink-500 pl-4 py-2 bg-pink-500/5 my-4">
+              <p className="text-xs text-pink-400 font-bold tracking-widest uppercase mb-1">
+                {ABOUT_DATA.missionTitle} / {ABOUT_DATA.missionHeader}
+              </p>
+              <p className="text-sm text-white/90 italic mb-4">"{ABOUT_DATA.missionStatement}"</p>
+              <Link to="/about" className="text-yellow-400 underline underline-offset-4 hover:text-white transition-colors text-xs font-bold tracking-widest uppercase">
+                READ_BIO
+              </Link>
+            </div>
+
+            <pre className="text-sm md:text-base leading-relaxed h-28 whitespace-pre-wrap font-mono text-yellow-400/90">
               {typedText}
               <span className="animate-pulse text-[#00FF41]">|</span>
             </pre>
@@ -72,19 +79,21 @@ const Home: React.FC = () => {
               <Link to="/portfolio" className="border border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-black px-6 py-2 transition-all duration-300 shadow-[0_0_10px_rgba(236,72,153,0.3)] font-bold text-sm tracking-widest">
                 VIEW_PORTFOLIO
               </Link>
-              <Link to="/about" className="text-yellow-400 underline underline-offset-4 hover:text-white transition-colors text-sm font-bold tracking-widest">
-                READ_BIO
-              </Link>
             </div>
           </div>
-          <div className="w-64 h-64 border border-cyan-500 p-2 relative group">
-            <div className="absolute inset-0 border border-cyan-500 animate-pulse"></div>
-            <div className="absolute -top-4 -right-4 bg-red-500 text-black px-2 py-1 text-[10px] font-bold">LIVE_FEED</div>
-            <img 
-              src={HOME_DATA.avatarUrl} 
-              alt="System Avatar" 
-              className="w-full h-full object-cover grayscale brightness-50 group-hover:brightness-100 group-hover:grayscale-0 transition-all duration-500"
-            />
+          <div className="flex flex-col items-center gap-4 md:self-center">
+            <div className="w-64 h-64 border border-cyan-500 p-2 relative group">
+              <div className="absolute inset-0 border border-cyan-500 animate-pulse"></div>
+              <img 
+                src={HOME_DATA.avatarUrl} 
+                alt="System Avatar" 
+                className="w-full h-full object-cover grayscale brightness-50 group-hover:brightness-100 group-hover:grayscale-0 transition-all duration-500"
+              />
+            </div>
+            <div className="text-center">
+              <p className="text-[10px] text-cyan-500/60 font-mono tracking-[0.2em] mb-1">[IDENT_NAME]</p>
+              <p className="text-xl font-bold text-cyan-400 tracking-widest glow-text uppercase">{HOME_DATA.userName}</p>
+            </div>
           </div>
         </div>
       </section>
@@ -103,21 +112,28 @@ const Home: React.FC = () => {
       </div>
 
       {/* Simulation Log */}
-      <section className="bg-black/40 border border-white/10 p-4 rounded-lg overflow-hidden h-44">
-        <h3 className="text-xs mb-2 text-white/40 flex justify-between uppercase tracking-widest">
+      <section className="bg-black/40 border border-white/10 p-6 rounded-lg overflow-hidden flex flex-col h-64">
+        <h3 className="text-xs mb-4 text-white/40 flex justify-between items-center uppercase tracking-widest">
           <span>{HOME_DATA.logSectionTitle}</span>
-          <span className="animate-pulse text-red-500 font-bold flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-red-500"></span>
-            RECORDING
-          </span>
+          <button 
+            onClick={addManualLog}
+            className="px-4 py-1 border border-[#00FF41] text-[#00FF41] text-[10px] font-bold hover:bg-[#00FF41] hover:text-black transition-all active:scale-95 shadow-[0_0_10px_rgba(0,255,65,0.2)]"
+          >
+            [RUN_DIAGNOSTICS]
+          </button>
         </h3>
-        <div className="space-y-1 overflow-hidden">
+        <div ref={logContainerRef} className="flex-1 space-y-1 overflow-y-auto scroll-smooth pr-2 custom-scrollbar">
           {activeLogs.map((log, i) => (
-            <p key={`${log.text}-${i}`} className={`text-[10px] font-mono ${log.color} opacity-90 animate-in slide-in-from-left-2 fade-in duration-300`}>
+            <p key={`${log.text}-${i}`} className={`text-xs font-mono ${log.color} opacity-90 animate-in slide-in-from-left-2 fade-in duration-300`}>
               [ {log.time} ] {log.text}
             </p>
           ))}
-          {activeLogs.length === 0 && <p className="text-[10px] text-white/20 italic font-mono">Initializing data stream...</p>}
+          {activeLogs.length === 0 && (
+            <div className="h-full flex flex-col items-center justify-center space-y-4 opacity-20">
+              <p className="text-xs italic font-mono uppercase tracking-[0.3em]">System IDLE. Waiting for diagnostic trigger...</p>
+              <div className="w-48 h-px bg-gradient-to-r from-transparent via-[#00FF41] to-transparent"></div>
+            </div>
+          )}
         </div>
       </section>
     </div>
