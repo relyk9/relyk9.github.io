@@ -12,6 +12,7 @@ interface LogEntry {
 const Home: React.FC = () => {
   const [typedText, setTypedText] = useState('');
   const [activeLogs, setActiveLogs] = useState<LogEntry[]>([]);
+  const [avatarInteracted, setAvatarInteracted] = useState(false);
   const fullText = HOME_DATA.typedText;
   const logContainerRef = useRef<HTMLDivElement>(null);
 
@@ -25,7 +26,6 @@ const Home: React.FC = () => {
     return () => clearInterval(interval);
   }, [fullText]);
 
-  // Scroll to bottom when logs are added
   useEffect(() => {
     if (logContainerRef.current) {
       logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
@@ -37,7 +37,7 @@ const Home: React.FC = () => {
     const randomLog = LOG_POOL[Math.floor(Math.random() * LOG_POOL.length)];
     setActiveLogs(prev => {
       const newLogs = [...prev, { ...randomLog, time: getTime() }];
-      return newLogs.slice(-100); // Keep a larger history but manage memory
+      return newLogs.slice(-100);
     });
   };
 
@@ -60,7 +60,6 @@ const Home: React.FC = () => {
               {HOME_DATA.heroTitle[0]} <br /> <span className="text-cyan-400">{HOME_DATA.heroTitle[1]}</span>
             </h2>
 
-            {/* Hero Line Area */}
             <div className="border-l-2 border-pink-500 pl-4 py-2 bg-pink-500/5 my-4">
               <p className="text-xs text-pink-400 font-bold tracking-widest uppercase mb-1">
                 {ABOUT_DATA.missionTitle} / {ABOUT_DATA.missionHeader}
@@ -82,23 +81,29 @@ const Home: React.FC = () => {
             </div>
           </div>
           <div className="flex flex-col items-center gap-4 md:self-center">
-            <div className="w-64 h-64 border border-cyan-500 p-2 relative group">
+            <div 
+              className="w-64 h-64 border border-cyan-500 p-2 relative group cursor-pointer"
+              onMouseEnter={() => setAvatarInteracted(true)}
+              onClick={() => setAvatarInteracted(true)}
+            >
               <div className="absolute inset-0 border border-cyan-500 animate-pulse"></div>
               <img 
                 src={HOME_DATA.avatarUrl} 
                 alt="System Avatar" 
-                className="w-full h-full object-cover grayscale brightness-50 group-hover:brightness-100 group-hover:grayscale-0 transition-all duration-500"
+                className={`w-full h-full object-cover transition-all duration-700 ${
+                  avatarInteracted 
+                  ? 'grayscale-0 brightness-100' 
+                  : 'grayscale brightness-50 group-hover:brightness-100 group-hover:grayscale-0'
+                }`}
               />
             </div>
             <div className="text-center">
-              <p className="text-[10px] text-cyan-500/60 font-mono tracking-[0.2em] mb-1">[IDENT_NAME]</p>
               <p className="text-xl font-bold text-cyan-400 tracking-widest glow-text uppercase">{HOME_DATA.userName}</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* System Stats Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {HOME_DATA.stats.map((stat, idx) => (
           <div key={idx} className={`border ${stat.border} p-6 flex items-center gap-6 hover:border-white transition-all bg-black/40 group`}>
@@ -111,7 +116,6 @@ const Home: React.FC = () => {
         ))}
       </div>
 
-      {/* Simulation Log */}
       <section className="bg-black/40 border border-white/10 p-6 rounded-lg overflow-hidden flex flex-col h-64">
         <h3 className="text-xs mb-4 text-white/40 flex justify-between items-center uppercase tracking-widest">
           <span>{HOME_DATA.logSectionTitle}</span>

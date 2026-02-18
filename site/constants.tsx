@@ -3,7 +3,39 @@ import { Project, ExperienceEntry, StatEntry, EducationEntry, ProficiencyEntry, 
 
 export const PROJECTS: Project[] = [
   {
-    id: 'personal-project-1',
+    id: 'meta-portfolio',
+    title: 'Mechanical Matrix Portfolio',
+    category: 'Personal',
+    status: 'In Progress',
+    role: 'Architect / Engineer',
+    date: '2026',
+    description: 'A high-end, terminal-inspired digital portfolio engineered to showcase technical proficiency. Built with a "Matrix" aesthetic, featuring a custom KaTeX-based equation rain system and a terminal-driven performance challenge.',
+    technicalSpecs: [
+      'Engine: React 19 + TypeScript',
+      'UI: Tailwind CSS + CRT Filters',
+      'Math: KaTeX Render Engine',
+      'UX: Responsive Terminal Design'
+    ],
+    imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000',
+    metrics: {
+      constraints: [
+        'Deterministic layout across sectors',
+        'Optimized math-rain performance',
+        'Seamless hardware-accelerated transitions'
+      ],
+      tools: [
+        'React / TypeScript',
+        'KaTeX',
+        'Tailwind CSS'
+      ]
+    },
+    actionButton: {
+      label: 'VIEW_SOURCE',
+      url: 'https://github.com/relyk9'
+    }
+  },
+  {
+    id: 'ANGLER-LOGBOOK',
     title: 'Angler\'s Logbook',
     category: 'Personal',
     status: 'Completed',
@@ -71,7 +103,7 @@ export const HOME_DATA = {
   heroTitle: ["HELPING ENGINEER", "THE FUTURE."],
   typedText: "> LOADING SYSTEMS... \n> AUTHENTICATING USER... \n> ACCESS GRANTED. \n> STATUS: READY_FOR_INSPECTION.",
   stats: [
-    { label: "PROJECTS_COMPLETED", value: "1+", icon: "◈", color: "text-cyan-400", border: "border-cyan-500/40" },
+    { label: "PROJECTS_COMPLETED", value: "2+", icon: "◈", color: "text-cyan-400", border: "border-cyan-500/40" },
     { label: "EXPERIENCE", value: `${EXP_YEARS} YRS`, icon: "⌬", color: "text-yellow-400", border: "border-yellow-500/40" },
     { label: "DESIGN_INTENT", value: "RELIABILITY > COMPLEXITY", icon: "⚙", color: "text-pink-400", border: "border-pink-500/40" },
   ] as StatEntry[],
@@ -117,7 +149,7 @@ export const ABOUT_DATA = {
 
     // ENGINEERING & MANUFACTURING (Green)
     { label: "3D Printing (SLA/FDM)", level: 3, category: 'Engineering', color: "bg-[#00FF41]", glow: "shadow-[0_0_10px_rgba(0,255,65,0.8)]" },
-    { label: "DFM/DFA", level: 3, category: 'Engineering', color: "bg-[#00FF41]", glow: "shadow-[0_0_10px_rgba(0,255,65,0.8)]" },
+    { label: "DFM/DFA", level: 3, category: 'Engineering', color: "bg-[#00FF41]", glow: "shadow-[0_0_10_px_rgba(0,255,65,0.8)]" },
     { label: "FEA/CFD", level: 2, category: 'Engineering', color: "bg-[#00FF41]", glow: "shadow-[0_0_10px_rgba(0,255,65,0.8)]" },
     { label: "GD&T", level: 1, category: 'Engineering', color: "bg-[#00FF41]", glow: "shadow-[0_0_10px_rgba(0,255,65,0.8)]" },
     { label: "CNC Programming", level: 1, category: 'Engineering', color: "bg-[#00FF41]", glow: "shadow-[0_0_10px_rgba(0,255,65,0.8)]" },
@@ -152,10 +184,6 @@ export const TYPING_CHALLENGE_DATA: TypingChallengeData = {
   benchmarkNote: "Benchmark protocols synchronized. Sequence integrity monitoring enabled. Text wrapping support for high-throughput operational streams."
 };
 
-/**
- * DEFAULT_HIGH_SCORES: The primary persistent storage for the leaderboard.
- * To update the website's global high scores, edit this list.
- */
 export const DEFAULT_HIGH_SCORES: ScoreEntry[] = [
   { initials: "KM", wpm: 92, accuracy: 98, score: 901, timestamp: 1700000000000 },
   { initials: "JD", wpm: 85, accuracy: 95, score: 807, timestamp: 1699000000000 },

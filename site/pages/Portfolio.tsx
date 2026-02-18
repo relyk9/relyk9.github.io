@@ -20,31 +20,68 @@ const STATUS_STYLES: Record<Project['status'], { border: string, text: string, d
 const Portfolio: React.FC = () => {
   const navigate = useNavigate();
   const [filter, setFilter] = useState<'All' | Project['category']>('All');
+  const [statusFilter, setStatusFilter] = useState<'All' | Project['status']>('All');
+  const [interactedProjects, setInteractedProjects] = useState<Set<string>>(new Set());
 
-  const filteredProjects = filter === 'All' 
-    ? PROJECTS 
-    : PROJECTS.filter(p => p.category === filter);
+  const handleInteraction = (id: string) => {
+    setInteractedProjects(prev => {
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
+  };
+
+  const filteredProjects = PROJECTS.filter(p => {
+    const categoryMatch = filter === 'All' || p.category === filter;
+    const statusMatch = statusFilter === 'All' || p.status === statusFilter;
+    return categoryMatch && statusMatch;
+  });
 
   return (
     <div className="space-y-12">
-      <div className="flex flex-col md:flex-row justify-between items-end border-b border-[#00FF41]/40 pb-4 gap-4">
-        <h2 className={`text-2xl md:text-3xl font-bold uppercase tracking-widest ${CATEGORY_STYLES[filter].text} transition-colors duration-500`}>
+      <div className="space-y-6 border-b border-[#00FF41]/40 pb-6">
+        <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-widest text-[#00FF41]">
           Project_Archives / <span className="text-white opacity-80">Portfolio</span>
         </h2>
-        <div className="flex gap-4 text-xs">
-          {['All', 'Professional', 'Personal', 'Academic'].map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setFilter(cat as any)}
-              className={`px-3 py-1 transition-all duration-300 border ${
-                filter === cat 
-                  ? `${CATEGORY_STYLES[cat].bg} text-black font-bold shadow-[0_0_10px_currentColor]` 
-                  : `${CATEGORY_STYLES[cat].border} ${CATEGORY_STYLES[cat].text} hover:opacity-100 opacity-60`
-              }`}
-            >
-              {cat.toUpperCase()}
-            </button>
-          ))}
+        
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <span className="text-[10px] font-bold opacity-40 tracking-[0.2em] uppercase">Category:</span>
+            <div className="flex flex-wrap gap-3">
+              {['All', 'Professional', 'Personal', 'Academic'].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setFilter(cat as any)}
+                  className={`px-3 py-1 transition-all duration-300 border text-[10px] ${
+                    filter === cat 
+                      ? `${CATEGORY_STYLES[cat].bg} text-black font-bold shadow-[0_0_10px_currentColor]` 
+                      : `${CATEGORY_STYLES[cat].border} ${CATEGORY_STYLES[cat].text} hover:opacity-100 opacity-60`
+                  }`}
+                >
+                  {cat.toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4">
+            <span className="text-[10px] font-bold opacity-40 tracking-[0.2em] uppercase">Status:</span>
+            <div className="flex flex-wrap gap-3">
+              {['All', 'Completed', 'In Progress', 'Concept'].map((stat) => (
+                <button
+                  key={stat}
+                  onClick={() => setStatusFilter(stat as any)}
+                  className={`px-3 py-1 transition-all duration-300 border text-[10px] ${
+                    statusFilter === stat 
+                      ? `bg-white text-black font-bold shadow-[0_0_10px_white]` 
+                      : `border-white/20 text-white hover:border-white/60 opacity-60`
+                  }`}
+                >
+                  {stat.toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -52,19 +89,29 @@ const Portfolio: React.FC = () => {
         {filteredProjects.map((project) => {
           const style = CATEGORY_STYLES[project.category];
           const statusStyle = STATUS_STYLES[project.status];
+          const hasInteracted = interactedProjects.has(project.id);
+          
           return (
             <div 
               key={project.id} 
               className={`group border ${style.border}/30 hover:${style.border} bg-black/40 transition-all duration-500 overflow-hidden flex flex-col shadow-[0_0_20px_rgba(0,0,0,0.5)]`}
+              onMouseEnter={() => handleInteraction(project.id)}
             >
               <div 
-                className="relative h-64 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700 cursor-pointer"
-                onClick={() => navigate(`/portfolio/${project.id}`)}
+                className="relative h-64 overflow-hidden transition-all duration-700 cursor-pointer"
+                onClick={() => {
+                  handleInteraction(project.id);
+                  navigate(`/portfolio/${project.id}`);
+                }}
               >
                 <img 
                   src={project.imageUrl} 
                   alt={project.title} 
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                  className={`w-full h-full object-cover transform group-hover:scale-110 transition-all duration-700 ${
+                    hasInteracted 
+                    ? 'grayscale-0 brightness-100' 
+                    : 'grayscale group-hover:grayscale-0'
+                  }`}
                 />
                 <div className="absolute top-4 left-4 flex gap-2">
                   <div className={`px-2 py-0.5 bg-black/80 text-[10px] border ${style.border} ${style.text}`}>
@@ -75,12 +122,9 @@ const Portfolio: React.FC = () => {
                     {project.status.toUpperCase()}
                   </div>
                 </div>
-                {project.id.includes('placeholder') && (
-                  <div className="absolute top-4 right-4 px-2 py-0.5 bg-yellow-500 text-black text-[10px] font-bold animate-pulse border border-black">
-                    PLACEHOLDER
-                  </div>
+                {!hasInteracted && (
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
                 )}
-                <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
               </div>
 
               <div className="p-6 flex-1 flex flex-col">
@@ -124,6 +168,11 @@ const Portfolio: React.FC = () => {
             </div>
           );
         })}
+        {filteredProjects.length === 0 && (
+          <div className="col-span-full py-20 text-center border border-dashed border-white/20">
+            <p className="text-white/40 font-mono text-sm uppercase tracking-widest">No matching archives found in this sector.</p>
+          </div>
+        )}
       </div>
     </div>
   );

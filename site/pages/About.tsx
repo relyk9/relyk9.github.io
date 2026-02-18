@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { SKILLS, ABOUT_DATA, HOME_DATA } from '../constants';
 import { ProficiencyEntry } from '../types';
 
 const About: React.FC = () => {
-  // Helper to parse custom tags for color highlighting
+  const [avatarInteracted, setAvatarInteracted] = useState(false);
+
   const parseHighlights = (text: string) => {
     const parts = text.split(/(<highlight[1-3]>.*?<\/highlight[1-3]>)/g);
     return parts.map((part, i) => {
@@ -46,7 +47,6 @@ const About: React.FC = () => {
     { id: 'Professional', label: 'PROFESSIONAL SKILLS', color: 'text-pink-400', bar: 'bg-pink-500', border: 'border-pink-500' },
   ];
 
-  // Map skills to their category colors for the tags
   const getSkillTagColor = (skillName: string) => {
     const foundSkill = ABOUT_DATA.proficiency.find(s => 
       s.label.toLowerCase().trim() === skillName.toLowerCase().trim()
@@ -84,16 +84,23 @@ const About: React.FC = () => {
           </div>
 
           <div className="flex flex-col items-center gap-4 w-full md:w-auto md:shrink-0 pt-4">
-            <div className="w-56 h-56 border border-cyan-500 p-2 relative group">
+            <div 
+              className="w-56 h-56 border border-cyan-500 p-2 relative group cursor-pointer"
+              onMouseEnter={() => setAvatarInteracted(true)}
+              onClick={() => setAvatarInteracted(true)}
+            >
               <div className="absolute inset-0 border border-cyan-500 animate-pulse"></div>
               <img 
                 src={HOME_DATA.avatarUrl} 
                 alt="System Avatar" 
-                className="w-full h-full object-cover grayscale brightness-50 group-hover:brightness-100 group-hover:grayscale-0 transition-all duration-500"
+                className={`w-full h-full object-cover transition-all duration-700 ${
+                  avatarInteracted 
+                  ? 'grayscale-0 brightness-100' 
+                  : 'grayscale brightness-50 group-hover:brightness-100 group-hover:grayscale-0'
+                }`}
               />
             </div>
             <div className="text-center">
-              <p className="text-[9px] text-cyan-500/60 font-mono tracking-[0.2em] mb-1">[IDENT_NAME]</p>
               <p className="text-lg font-bold text-cyan-400 tracking-widest glow-text uppercase">{HOME_DATA.userName}</p>
             </div>
           </div>
@@ -129,10 +136,8 @@ const About: React.FC = () => {
         </div>
       </section>
 
-      {/* Skill Levels Section */}
       <section className="group bg-black/60 border border-white/10 hover:border-white/40 hover:bg-white/[0.04] p-8 space-y-12 shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:shadow-[0_0_50px_rgba(0,255,65,0.05)] relative overflow-hidden transition-all duration-500">
         
-        {/* Header and Legend */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-white/10 pb-6">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <h3 className="text-xl md:text-2xl font-bold text-white uppercase tracking-tighter leading-none">
@@ -154,7 +159,6 @@ const About: React.FC = () => {
           </div>
         </div>
 
-        {/* Categories Grid */}
         <div className="space-y-12">
           {categories.map((cat) => {
             const categorySkills = ABOUT_DATA.proficiency.filter((s: any) => s.category === cat.id);
@@ -175,13 +179,11 @@ const About: React.FC = () => {
                         </span>
                       </div>
                       <div className="relative h-1.5 bg-white/5 w-full overflow-hidden border border-white/5">
-                        {/* 3-Step Divisions Background */}
                         <div className="absolute inset-0 flex pointer-events-none">
                            <div className="w-1/3 border-r border-white/10 h-full"></div>
                            <div className="w-1/3 border-r border-white/10 h-full"></div>
                            <div className="w-1/3 h-full"></div>
                         </div>
-                        {/* Progress Fill */}
                         <div 
                           className={`h-full ${cat.bar} ${skill.glow} transition-all duration-1000 ease-out relative z-10`} 
                           style={{ width: getLevelWidth(skill.level) }}
@@ -197,7 +199,6 @@ const About: React.FC = () => {
           })}
         </div>
 
-        {/* Global Legend Footer */}
         <div className="pt-8 border-t border-white/5 flex flex-wrap justify-center gap-x-8 gap-y-2 text-[9px] font-bold opacity-30 tracking-widest uppercase text-center">
           <div className="flex items-center gap-2">33% - Fundamental Knowledge</div>
           <div className="flex items-center gap-2">66% - Production Ready</div>

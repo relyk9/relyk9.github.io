@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { PROJECTS } from '../constants';
 
@@ -7,6 +7,7 @@ const ProjectDetail: React.FC = () => {
   const { projectId } = useParams();
   const navigate = useNavigate();
   const project = PROJECTS.find(p => p.id === projectId);
+  const [imageInteracted, setImageInteracted] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -17,7 +18,6 @@ const ProjectDetail: React.FC = () => {
       <div className="text-center py-20 space-y-6">
         <h2 className="text-4xl font-bold text-red-500">404: DATA_NOT_FOUND</h2>
         <p>The requested project archive does not exist in the current sector.</p>
-        {/* Fix: Changed lowercase link to uppercase Link component from react-router-dom */}
         <Link to="/portfolio" className="inline-block border border-[#00FF41] px-6 py-2 hover:bg-[#00FF41] hover:text-black transition-all">
           RETURN_TO_ARCHIVES
         </Link>
@@ -47,20 +47,16 @@ const ProjectDetail: React.FC = () => {
     }
   };
 
-  // Default Metrics if not provided in constants
-  const defaultConstraints = [
+  const constraints = project.metrics?.constraints || [
     'Factor of Safety Threshold: > 2.0',
     'Industry Standard Compliance',
     'Optimized Load Tolerance'
   ];
-  const defaultTools = [
+  const tools = project.metrics?.tools || [
     'Professional CAD Software',
     'Simulation & Analysis Suites',
     'Manufacturing Specifications'
   ];
-
-  const constraints = project.metrics?.constraints || defaultConstraints;
-  const tools = project.metrics?.tools || defaultTools;
 
   const handleActionClick = () => {
     if (project.actionButton?.url) {
@@ -91,21 +87,25 @@ const ProjectDetail: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2 space-y-12">
-          {/* Main Content Area */}
-          <div className="aspect-video border border-white/10 bg-black/40 overflow-hidden relative group">
+          <div 
+            className="aspect-video border border-white/10 bg-black/40 overflow-hidden relative group cursor-pointer"
+            onMouseEnter={() => setImageInteracted(true)}
+            onClick={() => setImageInteracted(true)}
+          >
             <img 
               src={project.imageUrl} 
               alt={project.title} 
-              className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000"
+              className={`w-full h-full object-cover transition-all duration-1000 ${
+                imageInteracted 
+                ? 'grayscale-0 brightness-100' 
+                : 'grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100'
+              }`}
             />
             {project.id.includes('placeholder') && (
               <div className="absolute top-4 left-4 bg-yellow-500 text-black px-3 py-1 text-[10px] font-bold z-20">
                 PLACEHOLDER_VISUAL
               </div>
             )}
-            <div className="absolute top-4 right-4 bg-black/80 border border-red-500 text-red-500 px-3 py-1 text-[10px] animate-pulse">
-              ENCRYPTED_VISUAL_FEED
-            </div>
           </div>
 
           <div className="space-y-6">
@@ -146,7 +146,6 @@ const ProjectDetail: React.FC = () => {
         </div>
 
         <div className="space-y-8">
-          {/* Sidebar Area */}
           <div className="border border-white/10 p-6 bg-black/40 space-y-6">
             <h4 className="text-sm font-bold text-yellow-500 uppercase tracking-widest border-b border-yellow-500/30 pb-2">Technical_Manifest / <span className="opacity-60 text-white">Specs</span></h4>
             <div className="space-y-4">

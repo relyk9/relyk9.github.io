@@ -47,7 +47,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     playTransitionSound();
   }, [location.pathname]);
 
-  // Real-time clock, CPU Jitter, Latency Jitter, and Location Detection
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -64,7 +63,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       });
     }, 1000);
 
-    // Approximate location based on timezone
     try {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
       if (tz.includes('New_York') || tz.includes('Detroit') || tz.includes('Miami')) setNodeId('US_EAST');
@@ -146,7 +144,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <a href="https://www.linkedin.com/in/kyler-m-b830aa17a" target="_blank" rel="noopener noreferrer" className="text-pink-500 hover:text-white transition-colors uppercase tracking-widest">LINKEDIN</a>
             <a href="mailto:kylermof@gmail.com" className="text-yellow-500 hover:text-white transition-colors uppercase tracking-widest">EMAIL</a>
           </div>
-          <p>© {new Date().getFullYear()} MECHANICAL_SYSTEMS_PORTFOLIO // <span className="text-blue-400 font-bold uppercase">Authorized_Access_Only</span></p>
+          <p>© {new Date().getFullYear()} KYLER MOFFAT // <span className="text-blue-400 font-bold uppercase">Digital_Interface_v1.0</span></p>
           <p className="mt-2 font-mono text-[#00FF41]/40 tracking-widest uppercase">INIT_PROTOCOL_COMPLETE // END_OF_LINE</p>
         </footer>
       </div>
