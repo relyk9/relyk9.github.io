@@ -6,6 +6,7 @@ import EquationRain from './EquationRain';
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [nodeId, setNodeId] = useState('REMOTE');
   const [flickerKey, setFlickerKey] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [cpuTemp, setCpuTemp] = useState(42.5);
@@ -13,10 +14,33 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
 
-  // Determine actual server/location for "NODE"
-  const nodeId = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-    ? 'LOCAL_HOST' 
-    : window.location.hostname.toUpperCase() || 'REMOTE_NODE';
+  useEffect(() => {
+    const hostname = window.location.hostname.toUpperCase();
+    let initialNode = 'REMOTE';
+    
+    if (hostname === 'LOCALHOST' || hostname === '127.0.0.1') {
+      initialNode = 'LOCAL_HOST';
+    } else {
+      const match = hostname.match(/(US-[A-Z0-9]+)/);
+      if (match) {
+        initialNode = match[1].replace('-', '_');
+      }
+    }
+    setNodeId(initialNode);
+
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        () => {
+          // Permission granted, keep the detected node
+        },
+        (error) => {
+          if (error.code === error.PERMISSION_DENIED) {
+            setNodeId('REMOTE');
+          }
+        }
+      );
+    }
+  }, []);
 
   const playTransitionSound = () => {
     try {
@@ -173,7 +197,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               <span className="text-cyan-400">NODE: <span className="text-white">{nodeId}</span></span>
             </div>
             <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-              <span className="text-blue-400">TEMP: <span className="text-white">{cpuTemp.toFixed(1)}°C</span></span>
+              <span className="text-blue-400">CPU_TEMP: <span className="text-white">{cpuTemp.toFixed(1)}°C</span></span>
               <span className="text-red-400">LAT: <span className="text-white">{latency}ms</span></span>
               <span className="text-[#00FF41]">TIME: <span className="text-white">{currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</span></span>
             </div>
