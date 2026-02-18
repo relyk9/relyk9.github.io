@@ -140,9 +140,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
         <footer className="border-t border-[#00FF41]/30 bg-black/40 backdrop-blur-sm py-8 px-6 text-center text-xs opacity-60">
           <div className="flex justify-center gap-4 mb-2">
-            <a href="https://github.com/relyk9" target="_blank" rel="noopener noreferrer" className="text-cyan-500 hover:text-white transition-colors uppercase tracking-widest">GITHUB</a>
-            <a href="https://www.linkedin.com/in/kyler-m-b830aa17a" target="_blank" rel="noopener noreferrer" className="text-pink-500 hover:text-white transition-colors uppercase tracking-widest">LINKEDIN</a>
+            <a href="https://www.linkedin.com/in/kyler-m-b830aa17a" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-white transition-colors uppercase tracking-widest">LINKEDIN</a>
             <a href="mailto:kylermof@gmail.com" className="text-yellow-500 hover:text-white transition-colors uppercase tracking-widest">EMAIL</a>
+            <a href="https://github.com/relyk9" target="_blank" rel="noopener noreferrer" className="text-[#00FF41] hover:text-white transition-colors uppercase tracking-widest">GITHUB</a>
           </div>
           <p>© {new Date().getFullYear()} KYLER MOFFAT // <span className="text-blue-400 font-bold uppercase">Digital_Interface_v1.0</span></p>
           <p className="mt-2 font-mono text-[#00FF41]/40 tracking-widest uppercase">INIT_PROTOCOL_COMPLETE // END_OF_LINE</p>
