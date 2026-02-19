@@ -338,7 +338,7 @@ const TypingChallenge: React.FC = () => {
         )}
       </div>
 
-      <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 transition-opacity duration-300 ${isInputFocused ? 'opacity-60 md:opacity-100 pointer-events-none md:pointer-events-auto' : 'opacity-100'}`}>
+      <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 transition-opacity duration-300 ${isInputFocused ? 'opacity-0 md:opacity-100 pointer-events-none md:pointer-events-auto' : 'opacity-100'}`}>
         <div className="border border-white/10 bg-black/60 p-5 rounded">
           <h4 className="text-[10px] font-bold text-white/40 mb-3 uppercase tracking-widest border-b border-white/10 pb-2">PERSONAL_BESTS</h4>
           <div className="space-y-2 max-h-32 overflow-y-auto custom-scrollbar">

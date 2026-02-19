@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { HOME_DATA, LOG_POOL, ABOUT_DATA } from '../constants';
-import NewsFeed from '../components/NewsFeed';
 
 interface LogEntry {
   text: string;
@@ -129,38 +128,35 @@ const Home: React.FC = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <NewsFeed />
-        <section className="bg-black/80 border border-white/10 p-5 md:p-6 rounded flex flex-col h-[400px] md:h-[450px] shadow-lg">
-          <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6 border-b border-white/5 pb-4">
-            <h3 className="text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-[0.2em] leading-relaxed">
-              {HOME_DATA.logSectionTitle}
-            </h3>
-            <button 
-              onClick={addManualLog}
-              className="w-full lg:w-auto px-5 py-2 border border-[#00FF41] text-[#00FF41] text-[9px] md:text-[10px] font-bold hover:bg-[#00FF41] hover:text-black transition-all active:scale-95 shadow-[0_0_15px_rgba(0,255,65,0.1)] uppercase tracking-widest"
-            >
-              [RUN_DIAGNOSTICS]
-            </button>
-          </header>
-          <div ref={logContainerRef} className="flex-1 space-y-1.5 overflow-y-auto scroll-smooth pr-2 custom-scrollbar font-mono">
-            {activeLogs.map((log, i) => (
-              <div key={`${log.text}-${i}`} className="flex gap-2 animate-in slide-in-from-left-2 fade-in duration-300">
-                 <span className="text-[9px] md:text-[10px] text-white/20 shrink-0">[{log.time}]</span>
-                 <p className={`text-[10px] md:text-xs ${log.color} opacity-90 break-words`}>
-                  {log.text}
-                </p>
-              </div>
-            ))}
-            {activeLogs.length === 0 && (
-              <div className="h-full flex flex-col items-center justify-center space-y-4 opacity-20 text-center px-4">
-                <p className="text-[10px] md:text-xs italic uppercase tracking-[0.3em]">System IDLE. Waiting for diagnostic trigger...</p>
-                <div className="w-full max-w-[200px] h-px bg-gradient-to-r from-transparent via-[#00FF41] to-transparent"></div>
-              </div>
-            )}
-          </div>
-        </section>
-      </div>
+      <section className="bg-black/80 border border-white/10 p-5 md:p-6 rounded flex flex-col h-[350px] md:h-80 shadow-lg">
+        <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6 border-b border-white/5 pb-4">
+          <h3 className="text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-[0.2em] leading-relaxed">
+            {HOME_DATA.logSectionTitle}
+          </h3>
+          <button 
+            onClick={addManualLog}
+            className="w-full lg:w-auto px-5 py-2 border border-[#00FF41] text-[#00FF41] text-[9px] md:text-[10px] font-bold hover:bg-[#00FF41] hover:text-black transition-all active:scale-95 shadow-[0_0_15px_rgba(0,255,65,0.1)] uppercase tracking-widest"
+          >
+            [RUN_DIAGNOSTICS]
+          </button>
+        </header>
+        <div ref={logContainerRef} className="flex-1 space-y-1.5 overflow-y-auto scroll-smooth pr-2 custom-scrollbar font-mono">
+          {activeLogs.map((log, i) => (
+            <div key={`${log.text}-${i}`} className="flex gap-2 animate-in slide-in-from-left-2 fade-in duration-300">
+               <span className="text-[9px] md:text-[10px] text-white/20 shrink-0">[{log.time}]</span>
+               <p className={`text-[10px] md:text-xs ${log.color} opacity-90 break-words`}>
+                {log.text}
+              </p>
+            </div>
+          ))}
+          {activeLogs.length === 0 && (
+            <div className="h-full flex flex-col items-center justify-center space-y-4 opacity-20 text-center px-4">
+              <p className="text-[10px] md:text-xs italic uppercase tracking-[0.3em]">System IDLE. Waiting for diagnostic trigger...</p>
+              <div className="w-full max-w-[200px] h-px bg-gradient-to-r from-transparent via-[#00FF41] to-transparent"></div>
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 };
