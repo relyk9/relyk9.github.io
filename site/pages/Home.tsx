@@ -12,7 +12,6 @@ interface LogEntry {
 const Home: React.FC = () => {
   const [typedText, setTypedText] = useState('');
   const [activeLogs, setActiveLogs] = useState<LogEntry[]>([]);
-  const [avatarInteracted, setAvatarInteracted] = useState(false);
   const fullText = HOME_DATA.typedText;
   const logContainerRef = useRef<HTMLDivElement>(null);
 
@@ -91,18 +90,12 @@ const Home: React.FC = () => {
           <div className="flex flex-col items-center gap-4 w-full md:w-auto md:shrink-0 order-first md:order-last">
             <div 
               className="w-48 h-48 md:w-64 md:h-64 border border-teal-500 p-2 relative group cursor-pointer"
-              onMouseEnter={() => setAvatarInteracted(true)}
-              onClick={() => setAvatarInteracted(true)}
             >
               <div className="absolute inset-0 border border-teal-500 animate-pulse"></div>
               <img 
                 src={HOME_DATA.avatarUrl} 
                 alt="System Avatar" 
-                className={`w-full h-full object-cover transition-all duration-700 ${
-                  avatarInteracted 
-                  ? 'brightness-100' 
-                  : 'brightness-50 group-hover:brightness-100'
-                }`}
+                className="w-full h-full object-cover"
               />
             </div>
             <div className="text-center">

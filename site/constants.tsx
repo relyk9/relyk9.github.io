@@ -83,7 +83,10 @@ export const EXPERIENCE: ExperienceEntry[] = [
     period: 'FEB 2024 - Present',
     location: 'The Woodlands, TX.',
     description: [
-      'Develop and optimize liquid handling methods for biotech customers.',
+      'Led end-to-end development of manufacturing automation systems, from design and prototyping through implementation.',
+      'Applied software development and data analysis to improve automation reliability and process performance.',
+      'Developed and supported liquid handling automation methods and technical roadmaps.',
+      'Contributed to engineering program planning, execution, and reporting.'
     ]
   },
   {
@@ -92,6 +95,9 @@ export const EXPERIENCE: ExperienceEntry[] = [
     period: 'JUN 2022 - FEB 2024',
     location: 'The Woodlands, TX.',
     description: [
+      'Led safety, automation, and design improvements for biotech manufacturing equipment, from risk assessment through installation.',
+      'Resolved system-level issues in automated DNA synthesis platforms, deploying firmware/software updates fleet-wide and reducing production losses.',
+      'Supported equipment lifecycle activities including assembly, testing, commissioning, and onsite technical support, working closely with vendors and cross-functional teams.'
     ]
   }
 ];
@@ -124,9 +130,9 @@ export const ABOUT_DATA = {
   profileHeader: "BIO",
   avatarUrl: '/images/profile_pic_about.jpg',
   paragraphs: [
-    'I’m a <highlight1>mechanical engineer</highlight1> currently in <highlight2>manufacturing</highlight2>, focused on automation and the design of production systems that are reliable, scalable, and data-driven.',
-    'I work at the intersection of mechanical design, process optimization, and real-world execution.',
-    'Outside of work, I enjoy getting outdoors to kayak and hike, traveling when I can, and working on astrophotography projects. I also spend a lot of time reading and learning about history.'
+    'I’m a <highlight1>Mechanical Engineer</highlight1> working in <highlight2>biotech manufacturing</highlight2> with a focus on automation, machine design, and process improvement.',
+    'My work focuses on developing practical solutions and carrying them from concept through implementation in manufacturing settings.',
+    'Outside of work, I enjoy kayaking and hiking, traveling when I can, astrophotography, and reading about history.'
   ],
   missionTitle: "MISSION_OBJECTIVE / CORE_GOAL",
   missionHeader: "CORE GOAL",
