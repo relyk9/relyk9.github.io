@@ -120,6 +120,7 @@ export const HOME_DATA = {
 };
 
 export const ABOUT_DATA = {
+  avatarUrl: '/images/profile_pic_about.jpg',
   profileTitle: "SYSTEM_LEVELS",
   profileHeader: "BIO",
   paragraphs: [

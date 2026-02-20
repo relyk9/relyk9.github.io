@@ -91,7 +91,7 @@ const About: React.FC = () => {
             >
               <div className="absolute inset-0 border border-cyan-500 animate-pulse"></div>
               <img 
-                src={HOME_DATA.avatarUrl} 
+                src={ABOUT_DATA.avatarUrl} 
                 alt="System Avatar" 
                 className={`w-full h-full object-cover transition-all duration-700 ${
                   avatarInteracted 
