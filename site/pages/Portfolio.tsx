@@ -5,16 +5,16 @@ import { PROJECTS } from '../constants';
 import { Project } from '../types';
 
 const CATEGORY_STYLES: Record<string, { border: string, text: string, bg: string, accent: string, hex: string }> = {
-  All: { border: 'border-[#00FF41]', text: 'text-[#00FF41]', bg: 'bg-[#00FF41]', accent: 'text-[#00FF41]', hex: '#00FF41' },
-  Professional: { border: 'border-cyan-500', text: 'text-cyan-400', bg: 'bg-cyan-500', accent: 'text-cyan-500', hex: '#06b6d4' },
-  Personal: { border: 'border-yellow-500', text: 'text-yellow-400', bg: 'bg-yellow-500', accent: 'text-yellow-500', hex: '#eab308' },
-  Academic: { border: 'border-pink-500', text: 'text-pink-400', bg: 'bg-pink-500', accent: 'text-pink-500', hex: '#ec4899' },
+  All: { border: 'border-emerald-500', text: 'text-emerald-500', bg: 'bg-emerald-500', accent: 'text-emerald-500', hex: '#10b981' },
+  Professional: { border: 'border-sky-500', text: 'text-sky-400', bg: 'bg-sky-500', accent: 'text-sky-500', hex: '#0ea5e9' },
+  Personal: { border: 'border-amber-500', text: 'text-amber-400', bg: 'bg-amber-500', accent: 'text-amber-500', hex: '#f59e0b' },
+  Academic: { border: 'border-rose-500', text: 'text-rose-400', bg: 'bg-rose-500', accent: 'text-rose-500', hex: '#f43f5e' },
 };
 
 const STATUS_STYLES: Record<Project['status'], { border: string, text: string, dot: string, bg: string }> = {
-  'Completed': { border: 'border-[#00FF41]', text: 'text-[#00FF41]', dot: 'bg-[#00FF41]', bg: 'bg-[#00FF41]' },
-  'In Progress': { border: 'border-orange-500', text: 'text-orange-400', dot: 'bg-orange-500', bg: 'bg-orange-500' },
-  'Concept': { border: 'border-red-500', text: 'text-red-400', dot: 'bg-red-500', bg: 'bg-red-500' },
+  'Completed': { border: 'border-emerald-500', text: 'text-emerald-500', dot: 'bg-emerald-500', bg: 'bg-emerald-500' },
+  'In Progress': { border: 'border-amber-600', text: 'text-amber-500', dot: 'bg-amber-600', bg: 'bg-amber-600' },
+  'Concept': { border: 'border-rose-500', text: 'text-rose-400', dot: 'bg-rose-500', bg: 'bg-rose-500' },
 };
 
 const Portfolio: React.FC = () => {
@@ -51,8 +51,8 @@ const Portfolio: React.FC = () => {
 
   return (
     <div className="space-y-12">
-      <div className="space-y-6 border-b border-[#00FF41]/40 pb-6">
-        <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-widest text-[#00FF41]">
+      <div className="space-y-6 border-b border-emerald-500/40 pb-6">
+        <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-widest text-emerald-500">
           Project_Archives / <span className="text-white opacity-80">Portfolio</span>
         </h2>
         
@@ -135,7 +135,7 @@ const Portfolio: React.FC = () => {
                 />
                 
                 {/* Scanline Overlay */}
-                <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(transparent_0%,rgba(0,255,65,0.02)_50%,transparent_100%)] bg-[size:100%_10px] opacity-30"></div>
+                <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(transparent_0%,rgba(16,185,129,0.02)_50%,transparent_100%)] bg-[size:100%_10px] opacity-30"></div>
 
                 {/* Minimal Gallery Navigation Controls */}
                 {projectImages.length > 1 && (

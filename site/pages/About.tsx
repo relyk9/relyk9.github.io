@@ -10,13 +10,13 @@ const About: React.FC = () => {
     const parts = text.split(/(<highlight[1-3]>.*?<\/highlight[1-3]>)/g);
     return parts.map((part, i) => {
       if (part.startsWith('<highlight1>')) {
-        return <span key={i} className="text-yellow-400 font-bold">{part.replace(/<\/?highlight1>/g, '')}</span>;
+        return <span key={i} className="text-amber-400 font-bold">{part.replace(/<\/?highlight1>/g, '')}</span>;
       }
       if (part.startsWith('<highlight2>')) {
-        return <span key={i} className="text-pink-400 font-bold">{part.replace(/<\/?highlight2>/g, '')}</span>;
+        return <span key={i} className="text-rose-400 font-bold">{part.replace(/<\/?highlight2>/g, '')}</span>;
       }
       if (part.startsWith('<highlight3>')) {
-        return <span key={i} className="text-cyan-400 font-bold">{part.replace(/<\/?highlight3>/g, '')}</span>;
+        return <span key={i} className="text-sky-400 font-bold">{part.replace(/<\/?highlight3>/g, '')}</span>;
       }
       return part;
     });
@@ -41,10 +41,10 @@ const About: React.FC = () => {
   };
 
   const categories = [
-    { id: 'Software', label: 'DESIGN SOFTWARE', color: 'text-cyan-400', bar: 'bg-cyan-500', border: 'border-cyan-500' },
-    { id: 'Engineering', label: 'ENGINEERING & MFG', color: 'text-[#00FF41]', bar: 'bg-[#00FF41]', border: 'border-[#00FF41]' },
-    { id: 'Languages', label: 'PROGRAMMING & DEV', color: 'text-yellow-400', bar: 'bg-yellow-500', border: 'border-yellow-500' },
-    { id: 'Professional', label: 'PROFESSIONAL SKILLS', color: 'text-pink-400', bar: 'bg-pink-500', border: 'border-pink-500' },
+    { id: 'Software', label: 'DESIGN SOFTWARE', color: 'text-sky-400', bar: 'bg-sky-500', border: 'border-sky-500' },
+    { id: 'Engineering', label: 'ENGINEERING & MFG', color: 'text-emerald-500', bar: 'bg-emerald-500', border: 'border-emerald-500' },
+    { id: 'Languages', label: 'PROGRAMMING & DEV', color: 'text-amber-400', bar: 'bg-amber-500', border: 'border-amber-500' },
+    { id: 'Professional', label: 'PROFESSIONAL SKILLS', color: 'text-rose-400', bar: 'bg-rose-500', border: 'border-rose-500' },
   ];
 
   const getSkillTagColor = (skillName: string) => {
@@ -62,7 +62,7 @@ const About: React.FC = () => {
       <section className="space-y-8">
         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
           <div className="flex-1 space-y-8">
-            <h2 className="text-2xl md:text-3xl font-bold border-b border-cyan-500 pb-2 text-cyan-400 inline-block shadow-[0_4px_10px_-5px_rgba(6,182,212,0.5)] uppercase tracking-widest">
+            <h2 className="text-2xl md:text-3xl font-bold border-b border-sky-500 pb-2 text-sky-400 inline-block shadow-[0_4px_10px_-5px_rgba(14,165,233,0.5)] uppercase tracking-widest">
               ENGINEER_PROFILE / <span className="text-white opacity-80">BIO</span>
             </h2>
             <div className="space-y-4 text-sm leading-loose">
@@ -72,8 +72,8 @@ const About: React.FC = () => {
                 </p>
               ))}
               
-              <div className="bg-cyan-500/10 p-4 border-l-2 border-cyan-500 mt-8 group hover:bg-cyan-500/20 transition-all">
-                <h4 className="text-xs font-bold mb-2 text-cyan-400 uppercase tracking-widest">
+              <div className="bg-sky-500/10 p-4 border-l-2 border-sky-500 mt-8 group hover:bg-sky-500/20 transition-all">
+                <h4 className="text-xs font-bold mb-2 text-sky-400 uppercase tracking-widest">
                   {ABOUT_DATA.missionTitle}
                 </h4>
                 <p className="italic text-xs text-white/90 leading-relaxed">
@@ -85,30 +85,26 @@ const About: React.FC = () => {
 
           <div className="flex flex-col items-center gap-4 w-full md:w-auto md:shrink-0 pt-4">
             <div 
-              className="w-56 h-56 border border-cyan-500 p-2 relative group cursor-pointer"
+              className="w-56 h-56 border border-sky-500 p-2 relative group cursor-pointer"
               onMouseEnter={() => setAvatarInteracted(true)}
               onClick={() => setAvatarInteracted(true)}
             >
-              <div className="absolute inset-0 border border-cyan-500 animate-pulse"></div>
+              <div className="absolute inset-0 border border-sky-500 animate-pulse"></div>
               <img 
                 src={ABOUT_DATA.avatarUrl} 
                 alt="System Avatar" 
-                className={`w-full h-full object-cover transition-all duration-700 ${
-                  avatarInteracted 
-                  ? 'grayscale-0 brightness-100' 
-                  : 'grayscale brightness-50 group-hover:brightness-100 group-hover:grayscale-0'
-                }`}
+                className="w-full h-full object-cover transition-all duration-700"
               />
             </div>
             <div className="text-center">
-              <p className="text-lg font-bold text-cyan-400 tracking-widest glow-text uppercase">{HOME_DATA.userName}</p>
+              <p className="text-lg font-bold text-sky-400 tracking-widest glow-text uppercase">{HOME_DATA.userName}</p>
             </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="space-y-6">
-            <h3 className="text-lg font-bold text-yellow-400 uppercase tracking-tighter">CORE_STACK / SKILLS</h3>
+            <h3 className="text-lg font-bold text-amber-400 uppercase tracking-tighter">CORE_STACK / SKILLS</h3>
             <div className="flex flex-wrap gap-2">
               {SKILLS.map((skill) => (
                 <span key={skill} className={`px-3 py-1 border-2 ${getSkillTagColor(skill)} text-[10px] hover:bg-white hover:text-black transition-all cursor-default font-bold uppercase tracking-tight`}>
@@ -119,13 +115,13 @@ const About: React.FC = () => {
           </div>
           
           <div className="space-y-6">
-            <h3 className="text-lg font-bold text-pink-400 uppercase tracking-tighter">{ABOUT_DATA.educationTitle} / {ABOUT_DATA.educationHeader}</h3>
+            <h3 className="text-lg font-bold text-rose-400 uppercase tracking-tighter">{ABOUT_DATA.educationTitle} / {ABOUT_DATA.educationHeader}</h3>
             {ABOUT_DATA.education.map((edu, idx) => (
-              <div key={idx} className="border border-white/10 p-4 bg-black/40 hover:border-pink-500/50 transition-all">
+              <div key={idx} className="border border-white/10 p-4 bg-black/40 hover:border-rose-500/50 transition-all">
                 <p className="font-bold text-white">{edu.degree}</p>
                 <p className="text-xs opacity-80 text-white/60 mb-0.5">{edu.institution} | {edu.period}</p>
-                <p className="text-[11px] opacity-70 text-cyan-400 flex items-center gap-1.5 mb-2">
-                  <span className="text-pink-500">📍</span> {edu.location}
+                <p className="text-[11px] opacity-70 text-sky-400 flex items-center gap-1.5 mb-2">
+                  <span className="text-rose-500">📍</span> {edu.location}
                 </p>
                 <p className="text-xs text-white/80 border-t border-white/5 pt-2">
                   {edu.focus}
@@ -136,7 +132,7 @@ const About: React.FC = () => {
         </div>
       </section>
 
-      <section className="group bg-black/60 border border-white/10 hover:border-white/40 hover:bg-white/[0.04] p-8 space-y-12 shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:shadow-[0_0_50px_rgba(0,255,65,0.05)] relative overflow-hidden transition-all duration-500">
+      <section className="group bg-black/60 border border-white/10 hover:border-white/40 hover:bg-white/[0.04] p-8 space-y-12 shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:shadow-[0_0_50px_rgba(16,185,129,0.05)] relative overflow-hidden transition-all duration-500">
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-white/10 pb-6">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">

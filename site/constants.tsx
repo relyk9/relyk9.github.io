@@ -111,9 +111,9 @@ export const HOME_DATA = {
   heroTitle: ["HELPING ENGINEER", "THE FUTURE."],
   typedText: "> LOADING SYSTEMS... \n> AUTHENTICATING USER... \n> ACCESS GRANTED. \n> STATUS: READY_FOR_INSPECTION.",
   stats: [
-    { label: "PROJECTS_COMPLETED", value: "2+", icon: "◈", color: "text-cyan-400", border: "border-cyan-500/40" },
-    { label: "EXPERIENCE", value: `${EXP_YEARS} YRS`, icon: "⌬", color: "text-yellow-400", border: "border-yellow-500/40" },
-    { label: "DESIGN_INTENT", value: "RELIABILITY > COMPLEXITY", icon: "⚙", color: "text-pink-400", border: "border-pink-500/40" },
+    { label: "PROJECTS_COMPLETED", value: "2+", icon: "◈", color: "text-sky-400", border: "border-sky-500/40" },
+    { label: "EXPERIENCE", value: `${EXP_YEARS} YRS`, icon: "⌬", color: "text-amber-400", border: "border-amber-500/40" },
+    { label: "DESIGN_INTENT", value: "RELIABILITY > COMPLEXITY", icon: "⚙", color: "text-rose-400", border: "border-rose-500/40" },
   ] as StatEntry[],
   logSectionTitle: "[LIVE_CORE_DIAGNOSTICS / SYSTEM_LOGS]",
   avatarUrl: '/images/profile_pic.jpg',
@@ -145,37 +145,37 @@ export const ABOUT_DATA = {
   proficiencyTitle: "SYSTEM_LEVELS",
   proficiencyHeader: "PROFICIENCY",
   proficiency: [
-    // SOFTWARE & CAD (Cyan)
-    { label: "SolidWorks", level: 3, category: 'Software', color: "bg-cyan-500", glow: "shadow-[0_0_10px_rgba(6,182,212,0.8)]" },
-    { label: "Fusion 360", level: 2, category: 'Software', color: "bg-cyan-500", glow: "shadow-[0_0_10px_rgba(6,182,212,0.8)]" },
-    { label: "Cura", level: 2, category: 'Software', color: "bg-cyan-500", glow: "shadow-[0_0_10px_rgba(6,182,212,0.8)]" },
-    { label: "Visual Studio", level: 2, category: 'Software', color: "bg-cyan-500", glow: "shadow-[0_0_10px_rgba(6,182,212,0.8)]" },
-    { label: "MiniTab", level: 2, category: 'Software', color: "bg-cyan-500", glow: "shadow-[0_0_10px_rgba(6,182,212,0.8)]" },
-    { label: "SmartSheet", level: 2, category: 'Software', color: "bg-cyan-500", glow: "shadow-[0_0_10px_rgba(6,182,212,0.8)]" },
-    { label: "Visio", level: 2, category: 'Software', color: "bg-cyan-500", glow: "shadow-[0_0_10px_rgba(6,182,212,0.8)]" },
-    { label: "KiCad", level: 1, category: 'Software', color: "bg-cyan-500", glow: "shadow-[0_0_10px_rgba(6,182,212,0.8)]" },
-    { label: "PDM", level: 1, category: 'Software', color: "bg-cyan-500", glow: "shadow-[0_0_10px_rgba(6,182,212,0.8)]" },
+    // SOFTWARE & CAD (Sky)
+    { label: "SolidWorks", level: 3, category: 'Software', color: "bg-sky-500", glow: "shadow-[0_0_10px_rgba(14,165,233,0.8)]" },
+    { label: "Fusion 360", level: 2, category: 'Software', color: "bg-sky-500", glow: "shadow-[0_0_10px_rgba(14,165,233,0.8)]" },
+    { label: "Cura", level: 2, category: 'Software', color: "bg-sky-500", glow: "shadow-[0_0_10px_rgba(14,165,233,0.8)]" },
+    { label: "Visual Studio", level: 2, category: 'Software', color: "bg-sky-500", glow: "shadow-[0_0_10px_rgba(14,165,233,0.8)]" },
+    { label: "MiniTab", level: 2, category: 'Software', color: "bg-sky-500", glow: "shadow-[0_0_10px_rgba(14,165,233,0.8)]" },
+    { label: "SmartSheet", level: 2, category: 'Software', color: "bg-sky-500", glow: "shadow-[0_0_10px_rgba(14,165,233,0.8)]" },
+    { label: "Visio", level: 2, category: 'Software', color: "bg-sky-500", glow: "shadow-[0_0_10px_rgba(14,165,233,0.8)]" },
+    { label: "KiCad", level: 1, category: 'Software', color: "bg-sky-500", glow: "shadow-[0_0_10px_rgba(14,165,233,0.8)]" },
+    { label: "PDM", level: 1, category: 'Software', color: "bg-sky-500", glow: "shadow-[0_0_10px_rgba(14,165,233,0.8)]" },
 
-    // ENGINEERING & MANUFACTURING (Green)
-    { label: "3D Printing (SLA/FDM)", level: 3, category: 'Engineering', color: "bg-[#00FF41]", glow: "shadow-[0_0_10px_rgba(0,255,65,0.8)]" },
-    { label: "DFM/DFA", level: 3, category: 'Engineering', color: "bg-[#00FF41]", glow: "shadow-[0_0_10_px_rgba(0,255,65,0.8)]" },
-    { label: "FEA/CFD", level: 2, category: 'Engineering', color: "bg-[#00FF41]", glow: "shadow-[0_0_10px_rgba(0,255,65,0.8)]" },
-    { label: "GD&T", level: 1, category: 'Engineering', color: "bg-[#00FF41]", glow: "shadow-[0_0_10px_rgba(0,255,65,0.8)]" },
-    { label: "CNC Programming", level: 1, category: 'Engineering', color: "bg-[#00FF41]", glow: "shadow-[0_0_10px_rgba(0,255,65,0.8)]" },
+    // ENGINEERING & MANUFACTURING (Emerald)
+    { label: "3D Printing (SLA/FDM)", level: 3, category: 'Engineering', color: "bg-emerald-500", glow: "shadow-[0_0_10px_rgba(16,185,129,0.8)]" },
+    { label: "DFM/DFA", level: 3, category: 'Engineering', color: "bg-emerald-500", glow: "shadow-[0_0_10_px_rgba(16,185,129,0.8)]" },
+    { label: "FEA/CFD", level: 2, category: 'Engineering', color: "bg-emerald-500", glow: "shadow-[0_0_10px_rgba(16,185,129,0.8)]" },
+    { label: "GD&T", level: 1, category: 'Engineering', color: "bg-emerald-500", glow: "shadow-[0_0_10px_rgba(16,185,129,0.8)]" },
+    { label: "CNC Programming", level: 1, category: 'Engineering', color: "bg-emerald-500", glow: "shadow-[0_0_10px_rgba(16,185,129,0.8)]" },
 
-    // LANGUAGES (Yellow)
-    { label: "Python", level: 2, category: 'Languages', color: "bg-yellow-500", glow: "shadow-[0_0_10px_rgba(234,179,8,0.8)]" },
-    { label: "C#", level: 2, category: 'Languages', color: "bg-yellow-500", glow: "shadow-[0_0_10px_rgba(234,179,8,0.8)]" },
-    { label: "MATLAB", level: 1, category: 'Languages', color: "bg-yellow-500", glow: "shadow-[0_0_10px_rgba(234,179,8,0.8)]" },
+    // LANGUAGES (Amber)
+    { label: "Python", level: 2, category: 'Languages', color: "bg-amber-500", glow: "shadow-[0_0_10px_rgba(245,158,11,0.8)]" },
+    { label: "C#", level: 2, category: 'Languages', color: "bg-amber-500", glow: "shadow-[0_0_10px_rgba(245,158,11,0.8)]" },
+    { label: "MATLAB", level: 1, category: 'Languages', color: "bg-amber-500", glow: "shadow-[0_0_10px_rgba(245,158,11,0.8)]" },
 
-    // PROFESSIONAL SKILLS (Pink)
-    { label: "Troubleshooting", level: 3, category: 'Professional', color: "bg-pink-500", glow: "shadow-[0_0_10px_rgba(236,72,153,0.8)]" },
-    { label: "Documentation", level: 3, category: 'Professional', color: "bg-pink-500", glow: "shadow-[0_0_10px_rgba(236,72,153,0.8)]" },
-    { label: "Problem Solving", level: 3, category: 'Professional', color: "bg-pink-500", glow: "shadow-[0_0_10px_rgba(236,72,153,0.8)]" },
-    { label: "Root Cause Analysis", level: 2, category: 'Professional', color: "bg-pink-500", glow: "shadow-[0_0_10px_rgba(236,72,153,0.8)]" },
-    { label: "Cross-functional Collaboration", level: 2, category: 'Professional', color: "bg-pink-500", glow: "shadow-[0_0_10px_rgba(236,72,153,0.8)]" },
-    { label: "Peer Mentoring", level: 1, category: 'Professional', color: "bg-pink-500", glow: "shadow-[0_0_10px_rgba(236,72,153,0.8)]" },
-    { label: "Stakeholder Coordination", level: 1, category: 'Professional', color: "bg-pink-500", glow: "shadow-[0_0_10px_rgba(236,72,153,0.8)]" },
+    // PROFESSIONAL SKILLS (Rose)
+    { label: "Troubleshooting", level: 3, category: 'Professional', color: "bg-rose-500", glow: "shadow-[0_0_10px_rgba(244,63,94,0.8)]" },
+    { label: "Documentation", level: 3, category: 'Professional', color: "bg-rose-500", glow: "shadow-[0_0_10px_rgba(244,63,94,0.8)]" },
+    { label: "Problem Solving", level: 3, category: 'Professional', color: "bg-rose-500", glow: "shadow-[0_0_10px_rgba(244,63,94,0.8)]" },
+    { label: "Root Cause Analysis", level: 2, category: 'Professional', color: "bg-rose-500", glow: "shadow-[0_0_10px_rgba(244,63,94,0.8)]" },
+    { label: "Cross-functional Collaboration", level: 2, category: 'Professional', color: "bg-rose-500", glow: "shadow-[0_0_10px_rgba(244,63,94,0.8)]" },
+    { label: "Peer Mentoring", level: 1, category: 'Professional', color: "bg-rose-500", glow: "shadow-[0_0_10px_rgba(244,63,94,0.8)]" },
+    { label: "Stakeholder Coordination", level: 1, category: 'Professional', color: "bg-rose-500", glow: "shadow-[0_0_10px_rgba(244,63,94,0.8)]" },
   ] as ProficiencyEntry[]
 };
 

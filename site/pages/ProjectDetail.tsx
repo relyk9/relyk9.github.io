@@ -19,9 +19,9 @@ const ProjectDetail: React.FC = () => {
   if (!project) {
     return (
       <div className="text-center py-20 space-y-6">
-        <h2 className="text-4xl font-bold text-red-500">404: DATA_NOT_FOUND</h2>
+        <h2 className="text-4xl font-bold text-rose-500">404: DATA_NOT_FOUND</h2>
         <p>The requested project archive does not exist in the current sector.</p>
-        <Link to="/portfolio" className="inline-block border border-[#00FF41] px-6 py-2 hover:bg-[#00FF41] hover:text-black transition-all">
+        <Link to="/portfolio" className="inline-block border border-emerald-500 px-6 py-2 hover:bg-emerald-500 hover:text-black transition-all">
           RETURN_TO_ARCHIVES
         </Link>
       </div>
@@ -38,10 +38,10 @@ const ProjectDetail: React.FC = () => {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'Professional': return 'cyan';
-      case 'Personal': return 'yellow';
-      case 'Academic': return 'pink';
-      default: return '[#00FF41]';
+      case 'Professional': return 'sky';
+      case 'Personal': return 'amber';
+      case 'Academic': return 'rose';
+      default: return 'emerald';
     }
   };
 
@@ -62,9 +62,9 @@ const ProjectDetail: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Completed': return 'text-[#00FF41] border-[#00FF41] bg-[#00FF41]/10';
-      case 'In Progress': return 'text-orange-400 border-orange-500 bg-orange-500/10';
-      case 'Concept': return 'text-red-400 border-red-500 bg-red-500/10';
+      case 'Completed': return 'text-emerald-500 border-emerald-500 bg-emerald-500/10';
+      case 'In Progress': return 'text-amber-500 border-amber-600 bg-amber-600/10';
+      case 'Concept': return 'text-rose-400 border-rose-500 bg-rose-500/10';
       default: return 'text-white border-white bg-white/10';
     }
   };
@@ -95,16 +95,16 @@ const ProjectDetail: React.FC = () => {
       <div className="flex flex-col md:flex-row justify-between items-start border-b border-white/20 pb-6 gap-6">
         <div className="space-y-2">
           <div className="flex items-center gap-4">
-            <span className="bg-cyan-500 text-black px-2 py-0.5 text-[10px] font-bold">PROJECT_ID: {project.id.toUpperCase()}</span>
+            <span className="bg-sky-500 text-black px-2 py-0.5 text-[10px] font-bold">PROJECT_ID: {project.id.toUpperCase()}</span>
             <span className="text-[10px] text-white/40">{project.date}</span>
             <span className={`px-2 py-0.5 text-[10px] font-bold border ${statusColorClass} uppercase tracking-widest`}>
               STATUS: {project.status}
             </span>
           </div>
           <h1 className="text-3xl md:text-5xl font-bold glow-text">{project.title}</h1>
-          <p className="text-cyan-400 font-mono tracking-widest text-sm uppercase">Sector: {project.category} // Role: {project.role}</p>
+          <p className="text-sky-400 font-mono tracking-widest text-sm uppercase">Sector: {project.category} // Role: {project.role}</p>
         </div>
-        <Link to="/portfolio" className="border border-white/20 px-4 py-2 text-xs hover:border-[#00FF41] hover:text-[#00FF41] transition-all uppercase font-bold tracking-widest">
+        <Link to="/portfolio" className="border border-white/20 px-4 py-2 text-xs hover:border-emerald-500 hover:text-emerald-500 transition-all uppercase font-bold tracking-widest">
           [Back_to_Portfolio]
         </Link>
       </div>
@@ -131,7 +131,7 @@ const ProjectDetail: React.FC = () => {
               />
               
               {/* Scanline Overlay */}
-              <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(transparent_0%,rgba(0,255,65,0.02)_50%,transparent_100%)] bg-[size:100%_10px] opacity-30"></div>
+              <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(transparent_0%,rgba(16,185,129,0.02)_50%,transparent_100%)] bg-[size:100%_10px] opacity-30"></div>
 
               {/* Minimal Navigation Arrows */}
               {images.length > 1 && (
@@ -168,7 +168,7 @@ const ProjectDetail: React.FC = () => {
                     onClick={() => setCurrentImageIndex(idx)}
                     className={`relative w-24 h-16 flex-shrink-0 border transition-all duration-300 ${
                       currentImageIndex === idx 
-                      ? `border-${categoryColor}-500 shadow-[0_0_10px_rgba(0,255,65,0.3)]` 
+                      ? `border-${categoryColor}-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]` 
                       : 'border-white/10 grayscale hover:grayscale-0 hover:border-white/30'
                     }`}
                   >
@@ -183,7 +183,7 @@ const ProjectDetail: React.FC = () => {
           </div>
 
           <div className="space-y-6">
-            <h3 className="text-xl font-bold text-[#00FF41] border-l-4 border-[#00FF41] pl-4 uppercase tracking-tighter">Executive_Summary / <span className="opacity-60">Description</span></h3>
+            <h3 className="text-xl font-bold text-emerald-500 border-l-4 border-emerald-500 pl-4 uppercase tracking-tighter">Executive_Summary / <span className="opacity-60">Description</span></h3>
             <p className="text-white/80 leading-loose text-lg">
               {project.description}
             </p>
@@ -192,15 +192,15 @@ const ProjectDetail: React.FC = () => {
             </p>
           </div>
 
-          <div className="bg-cyan-900/10 border border-cyan-500/30 p-8 space-y-6 shadow-[inset_0_0_20px_rgba(6,182,212,0.05)]">
-            <h3 className="text-xl font-bold text-cyan-400 uppercase tracking-tighter">Operational_Metrics / <span className="opacity-60 text-white">Project Details</span></h3>
+          <div className="bg-sky-900/10 border border-sky-500/30 p-8 space-y-6 shadow-[inset_0_0_20px_rgba(14,165,233,0.05)]">
+            <h3 className="text-xl font-bold text-sky-400 uppercase tracking-tighter">Operational_Metrics / <span className="opacity-60 text-white">Project Details</span></h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-4">
                 <p className="text-xs font-bold text-white/40 tracking-widest uppercase">System_Constraints / Requirements</p>
                 <ul className="space-y-2">
                   {constraints.map((c, i) => (
                     <li key={i} className="text-sm flex items-center gap-3">
-                      <span className="text-cyan-500">◈</span> {c}
+                      <span className="text-sky-500">◈</span> {c}
                     </li>
                   ))}
                 </ul>
@@ -210,7 +210,7 @@ const ProjectDetail: React.FC = () => {
                 <ul className="space-y-2">
                   {tools.map((t, i) => (
                     <li key={i} className="text-sm flex items-center gap-3">
-                      <span className="text-cyan-500">◈</span> {t}
+                      <span className="text-sky-500">◈</span> {t}
                     </li>
                   ))}
                 </ul>
@@ -221,13 +221,13 @@ const ProjectDetail: React.FC = () => {
 
         <div className="space-y-8">
           <div className="border border-white/10 p-6 bg-black/40 space-y-6">
-            <h4 className="text-sm font-bold text-yellow-500 uppercase tracking-widest border-b border-yellow-500/30 pb-2">Technical_Manifest / <span className="opacity-60 text-white">Specs</span></h4>
+            <h4 className="text-sm font-bold text-amber-500 uppercase tracking-widest border-b border-amber-500/30 pb-2">Technical_Manifest / <span className="opacity-60 text-white">Specs</span></h4>
             <div className="space-y-4">
               {project.technicalSpecs.map((spec, i) => (
                 <div key={i} className="group cursor-default">
                   <div className="flex justify-between text-[10px] text-white/40 mb-1">
                     <span>SPEC_PARAM_{i+1}</span>
-                    <span className="group-hover:text-yellow-400 transition-colors">ACTIVE</span>
+                    <span className="group-hover:text-amber-400 transition-colors">ACTIVE</span>
                   </div>
                   <div className="text-sm text-white group-hover:translate-x-2 transition-transform duration-300 font-mono">
                     {spec}
@@ -239,7 +239,7 @@ const ProjectDetail: React.FC = () => {
 
           <button 
             onClick={handleActionClick}
-            className="w-full bg-white text-black py-4 font-bold text-xs hover:bg-[#00FF41] transition-all flex justify-center items-center gap-2 group uppercase tracking-widest shadow-[0_4px_15px_rgba(0,0,0,0.5)]"
+            className="w-full bg-white text-black py-4 font-bold text-xs hover:bg-emerald-500 transition-all flex justify-center items-center gap-2 group uppercase tracking-widest shadow-[0_4px_15px_rgba(0,0,0,0.5)]"
           >
             {project.actionButton?.label || 'Request_Detailed_Docs'}
             <span className="group-hover:translate-x-2 transition-transform">→</span>
