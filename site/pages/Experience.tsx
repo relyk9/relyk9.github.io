@@ -14,24 +14,24 @@ const Experience: React.FC = () => {
         </p>
       </div>
 
-      <div className="relative border-l-2 border-[#10B981]/30 ml-4 md:ml-0 space-y-16">
+      <div className="relative border-l-2 border-[#00FF41]/30 ml-4 md:ml-0 space-y-16">
         {EXPERIENCE.map((exp, idx) => (
           <div key={idx} className="relative pl-8 md:pl-12">
             {/* Timeline Dot */}
-            <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-black border-2 border-[#10B981] shadow-[0_0_10px_#10B981]"></div>
+            <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-black border-2 border-[#00FF41] shadow-[0_0_10px_#00FF41]"></div>
             
-            <div className="space-y-4 bg-black/40 border border-[#10B981]/20 p-6 rounded group hover:border-[#10B981] transition-all">
+            <div className="space-y-4 bg-black/40 border border-[#00FF41]/20 p-6 rounded group hover:border-[#00FF41] transition-all">
               <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
                 <div>
                   <h3 className="text-xl font-bold glow-text">{exp.role}</h3>
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                    <p className="text-[#10B981] text-sm font-bold uppercase">{exp.company}</p>
+                    <p className="text-[#00FF41] text-sm font-bold uppercase">{exp.company}</p>
                     <span className="text-[10px] text-white/40 font-mono flex items-center gap-1">
-                      <span className="text-rose-500">📍</span> {exp.location}
+                      <span className="text-pink-500">📍</span> {exp.location}
                     </span>
                   </div>
                 </div>
-                <div className="bg-[#10B981] text-black px-3 py-1 text-[10px] font-bold self-start">
+                <div className="bg-[#00FF41] text-black px-3 py-1 text-[10px] font-bold self-start">
                   {exp.period}
                 </div>
               </div>
@@ -39,7 +39,7 @@ const Experience: React.FC = () => {
               <ul className="space-y-3">
                 {exp.description.map((item, i) => (
                   <li key={i} className="text-xs flex items-start gap-3 leading-relaxed">
-                    <span className="text-[#10B981] opacity-70 font-bold mt-0.5 shrink-0 select-none">{">"}</span>
+                    <span className="text-[#00FF41] opacity-70 font-bold mt-0.5 shrink-0 select-none">{">"}</span>
                     <span className="text-white/90">{item}</span>
                   </li>
                 ))}

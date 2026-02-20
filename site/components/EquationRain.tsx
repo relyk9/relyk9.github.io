@@ -138,11 +138,11 @@ const EQUATIONS = [
 ];
 
 const COLORS = [
-  "#10B981", // Terminal Green
-  "#2dd4bf", // Teal
-  "#fbbf24", // Amber
-  "#38bdf8", // Sky
-  "#f87171"  // Red (Softer)
+  "#00FF41", // Terminal Green
+  "#00f2ff", // Cyan
+  "#facc15", // Yellow
+  "#3b82f6", // Blue
+  "#ef4444"  // Red
 ];
 
 const EquationRain: React.FC = () => {
