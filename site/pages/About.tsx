@@ -16,7 +16,7 @@ const About: React.FC = () => {
         return <span key={i} className="text-rose-400 font-bold">{part.replace(/<\/?highlight2>/g, '')}</span>;
       }
       if (part.startsWith('<highlight3>')) {
-        return <span key={i} className="text-sky-400 font-bold">{part.replace(/<\/?highlight3>/g, '')}</span>;
+        return <span key={i} className="text-teal-400 font-bold">{part.replace(/<\/?highlight3>/g, '')}</span>;
       }
       return part;
     });
@@ -41,8 +41,8 @@ const About: React.FC = () => {
   };
 
   const categories = [
-    { id: 'Software', label: 'DESIGN SOFTWARE', color: 'text-sky-400', bar: 'bg-sky-500', border: 'border-sky-500' },
-    { id: 'Engineering', label: 'ENGINEERING & MFG', color: 'text-emerald-500', bar: 'bg-emerald-500', border: 'border-emerald-500' },
+    { id: 'Software', label: 'DESIGN SOFTWARE', color: 'text-teal-400', bar: 'bg-teal-500', border: 'border-teal-500' },
+    { id: 'Engineering', label: 'ENGINEERING & MFG', color: 'text-[#10B981]', bar: 'bg-[#10B981]', border: 'border-[#10B981]' },
     { id: 'Languages', label: 'PROGRAMMING & DEV', color: 'text-amber-400', bar: 'bg-amber-500', border: 'border-amber-500' },
     { id: 'Professional', label: 'PROFESSIONAL SKILLS', color: 'text-rose-400', bar: 'bg-rose-500', border: 'border-rose-500' },
   ];
@@ -62,7 +62,7 @@ const About: React.FC = () => {
       <section className="space-y-8">
         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
           <div className="flex-1 space-y-8">
-            <h2 className="text-2xl md:text-3xl font-bold border-b border-sky-500 pb-2 text-sky-400 inline-block shadow-[0_4px_10px_-5px_rgba(14,165,233,0.5)] uppercase tracking-widest">
+            <h2 className="text-2xl md:text-3xl font-bold border-b border-teal-500 pb-2 text-teal-400 inline-block shadow-[0_4px_10px_-5px_rgba(45,212,191,0.5)] uppercase tracking-widest">
               ENGINEER_PROFILE / <span className="text-white opacity-80">BIO</span>
             </h2>
             <div className="space-y-4 text-sm leading-loose">
@@ -72,8 +72,8 @@ const About: React.FC = () => {
                 </p>
               ))}
               
-              <div className="bg-sky-500/10 p-4 border-l-2 border-sky-500 mt-8 group hover:bg-sky-500/20 transition-all">
-                <h4 className="text-xs font-bold mb-2 text-sky-400 uppercase tracking-widest">
+              <div className="bg-teal-500/10 p-4 border-l-2 border-teal-500 mt-8 group hover:bg-teal-500/20 transition-all">
+                <h4 className="text-xs font-bold mb-2 text-teal-400 uppercase tracking-widest">
                   {ABOUT_DATA.missionTitle}
                 </h4>
                 <p className="italic text-xs text-white/90 leading-relaxed">
@@ -85,19 +85,23 @@ const About: React.FC = () => {
 
           <div className="flex flex-col items-center gap-4 w-full md:w-auto md:shrink-0 pt-4">
             <div 
-              className="w-56 h-56 border border-sky-500 p-2 relative group cursor-pointer"
+              className="w-56 h-56 border border-teal-500 p-2 relative group cursor-pointer"
               onMouseEnter={() => setAvatarInteracted(true)}
               onClick={() => setAvatarInteracted(true)}
             >
-              <div className="absolute inset-0 border border-sky-500 animate-pulse"></div>
+              <div className="absolute inset-0 border border-teal-500 animate-pulse"></div>
               <img 
                 src={ABOUT_DATA.avatarUrl} 
                 alt="System Avatar" 
-                className="w-full h-full object-cover transition-all duration-700"
+                className={`w-full h-full object-cover transition-all duration-700 ${
+                  avatarInteracted 
+                  ? 'brightness-100' 
+                  : 'brightness-50 group-hover:brightness-100'
+                }`}
               />
             </div>
             <div className="text-center">
-              <p className="text-lg font-bold text-sky-400 tracking-widest glow-text uppercase">{HOME_DATA.userName}</p>
+              <p className="text-lg font-bold text-teal-400 tracking-widest glow-text uppercase">{HOME_DATA.userName}</p>
             </div>
           </div>
         </div>
@@ -120,7 +124,7 @@ const About: React.FC = () => {
               <div key={idx} className="border border-white/10 p-4 bg-black/40 hover:border-rose-500/50 transition-all">
                 <p className="font-bold text-white">{edu.degree}</p>
                 <p className="text-xs opacity-80 text-white/60 mb-0.5">{edu.institution} | {edu.period}</p>
-                <p className="text-[11px] opacity-70 text-sky-400 flex items-center gap-1.5 mb-2">
+                <p className="text-[11px] opacity-70 text-teal-400 flex items-center gap-1.5 mb-2">
                   <span className="text-rose-500">📍</span> {edu.location}
                 </p>
                 <p className="text-xs text-white/80 border-t border-white/5 pt-2">

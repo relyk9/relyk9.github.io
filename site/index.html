@@ -13,10 +13,41 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
 
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      // https://github.com/rafrex/spa-github-pages
+      // Copyright (c) 2016 Rafael Pedicini, licensed under the MIT License
+      // ----------------------------------------------------------------------
+      // This script checks to see if a redirect is present in the query string
+      // and converts it back into the correct url and adds it to the
+      // browser's history using window.history.replaceState(...),
+      // which won't cause the browser to attempt to load the new url.
+      // When the single page app is loaded further down in this file,
+      // the correct url will be waiting in the browser's history for
+      // the single page app to route accordingly.
+      // ----------------------------------------------------------------------
+      (function(l) {
+        if (l.search) {
+          var q = {};
+          l.search.slice(1).split('&').forEach(function(v) {
+            var a = v.split('=');
+            q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
+          });
+          if (q.p !== undefined) {
+            window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + (q.p || '') +
+              (q.q ? ('?' + q.q) : '') +
+              l.hash
+            );
+          }
+        }
+      }(window.location))
+    </script>
+
     <style>
         body {
             background-color: #020202;
-            color: #00FF41;
+            color: #10B981;
             font-family: 'Fira Code', 'Courier New', Courier, monospace;
             margin: 0;
             overflow-x: hidden;
@@ -28,11 +59,11 @@
             background: #020202;
         }
         ::-webkit-scrollbar-thumb {
-            background: #008F11;
+            background: #059669;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #00FF41;
+            background: #10B981;
         }
         .crt-overlay {
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 255, 0, 0.06));
@@ -46,7 +77,7 @@
             z-index: 100;
         }
         .glow-text {
-            text-shadow: 0 0 5px #00FF41, 0 0 10px #00FF41;
+            text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
         }
 
         /* Pipboy/Terminal Flicker Animation */
@@ -77,7 +108,7 @@
             left: 0;
             width: 100%;
             height: 10px;
-            background: rgba(0, 255, 65, 0.1);
+            background: rgba(16, 185, 129, 0.1);
             opacity: 0.5;
             z-index: 99;
             pointer-events: none;

@@ -202,7 +202,7 @@ const TypingChallenge: React.FC = () => {
             const isTyped = i < userInput.length;
             let color = 'text-white/20';
             if (isTyped) {
-              color = userInput[i] === char ? 'text-emerald-500' : 'text-rose-500 bg-rose-900/30';
+              color = userInput[i] === char ? 'text-[#10B981]' : 'text-red-500 bg-red-900/30';
             }
             return (
               <span key={i} className={`${color} transition-colors duration-100`}>{char}</span>
@@ -221,12 +221,12 @@ const TypingChallenge: React.FC = () => {
   return (
     <div className={`max-w-4xl mx-auto flex flex-col gap-4 animate-in fade-in duration-700 pb-10 transition-all duration-500 ${isInputFocused ? 'pt-4 md:pt-0' : ''}`}>
       
-      <div className={`flex justify-between items-end border-b border-emerald-500/30 pb-4 transition-all duration-300 ${isInputFocused ? 'opacity-40 md:opacity-100' : 'opacity-100'}`}>
+      <div className={`flex justify-between items-end border-b border-[#10B981]/30 pb-4 transition-all duration-300 ${isInputFocused ? 'opacity-40 md:opacity-100' : 'opacity-100'}`}>
         <div className="space-y-1">
           <h2 className="text-base md:text-3xl font-bold glow-text tracking-widest uppercase">
             {TYPING_CHALLENGE_DATA.header}
           </h2>
-          <p className="text-[8px] md:text-[10px] text-sky-400 font-mono tracking-widest">
+          <p className="text-[8px] md:text-[10px] text-teal-400 font-mono tracking-widest">
             PHASE: {currentIndex + 1} / {shuffledPhrases.length}
           </p>
         </div>
@@ -243,7 +243,7 @@ const TypingChallenge: React.FC = () => {
         </div>
       </div>
 
-      <div className={`relative border border-emerald-500/40 bg-black/95 p-4 md:p-12 shadow-2xl transition-all duration-300 min-h-[280px] md:min-h-[400px] flex flex-col justify-center rounded-sm ${isInputFocused ? 'ring-2 ring-emerald-500/20 transform -translate-y-4 md:translate-y-0' : ''}`}>
+      <div className={`relative border border-[#10B981]/40 bg-black/95 p-4 md:p-12 shadow-2xl transition-all duration-300 min-h-[280px] md:min-h-[400px] flex flex-col justify-center rounded-sm ${isInputFocused ? 'ring-2 ring-[#10B981]/20 transform -translate-y-4 md:translate-y-0' : ''}`}>
         
         {!isFinished && (
           <div className="space-y-6 md:space-y-12">
@@ -252,11 +252,11 @@ const TypingChallenge: React.FC = () => {
             </div>
 
             <div className="relative max-w-xl mx-auto w-full">
-              <div className={`w-full relative py-3 border-b-2 transition-colors ${isInputFocused ? 'border-emerald-500' : 'border-emerald-500/40'}`}>
+              <div className={`w-full relative py-3 border-b-2 transition-colors ${isInputFocused ? 'border-[#10B981]' : 'border-[#10B981]/40'}`}>
                 <div className="text-xs md:text-2xl font-mono min-h-[1.5em] text-center pointer-events-none break-all whitespace-pre-wrap px-4">
                   <span className="text-white">
                     {userInput}
-                    <span className="inline-block w-[1ch] h-[1.1em] bg-emerald-500 animate-pulse align-middle ml-[1px] shadow-[0_0_10px_rgba(16,185,129,1)]" />
+                    <span className="inline-block w-[1ch] h-[1.1em] bg-[#10B981] animate-pulse align-middle ml-[1px] shadow-[0_0_10px_#10B981]" />
                   </span>
                   {!userInput && !isInputFocused && (
                     <span className="opacity-20 italic text-[10px] md:text-base tracking-widest">BEGIN_TYPING_PROTOCOL...</span>
@@ -280,7 +280,7 @@ const TypingChallenge: React.FC = () => {
               
               {userInput.length >= targetQuote.length && (
                 <div className="text-center mt-4 animate-bounce">
-                    <p className="text-[9px] text-emerald-500 font-bold tracking-[0.2em] uppercase">Press [ENTER] to continue</p>
+                    <p className="text-[9px] text-[#10B981] font-bold tracking-[0.2em] uppercase">Press [ENTER] to continue</p>
                 </div>
               )}
             </div>
@@ -289,14 +289,14 @@ const TypingChallenge: React.FC = () => {
 
         {isFinished && showScoreEntry && (
           <div className="text-center space-y-8 animate-in zoom-in duration-500 py-6">
-            <h3 className="text-xl md:text-4xl font-bold text-emerald-500 glow-text italic tracking-tighter uppercase">MISSION_COMPLETE</h3>
+            <h3 className="text-xl md:text-4xl font-bold text-[#10B981] glow-text italic tracking-tighter uppercase">MISSION_COMPLETE</h3>
             <div className="max-w-xs mx-auto space-y-4">
               <p className="text-[9px] md:text-xs opacity-50 uppercase tracking-widest">ENTER_OPERATOR_ID [2 CHARS]</p>
               <input
                 type="text"
                 value={initials}
                 onChange={(e) => setInitials(e.target.value.substring(0, 2).toUpperCase())}
-                className="w-full bg-black/50 border border-emerald-500/40 text-center text-4xl md:text-6xl font-mono p-4 focus:border-emerald-500 outline-none text-emerald-500 rounded"
+                className="w-full bg-black/50 border border-[#10B981]/40 text-center text-4xl md:text-6xl font-mono p-4 focus:border-[#10B981] outline-none text-[#10B981] rounded"
                 placeholder="__"
                 autoFocus
                 onKeyDown={(e) => e.key === 'Enter' && initials.length > 0 && saveScoreToRegistry()}
@@ -304,7 +304,7 @@ const TypingChallenge: React.FC = () => {
               <button 
                 onClick={saveScoreToRegistry}
                 disabled={initials.length === 0}
-                className="w-full py-4 bg-emerald-500 text-black font-bold hover:bg-white transition-all uppercase text-xs md:text-sm tracking-[0.3em] disabled:opacity-20 shadow-[0_0_30px_rgba(16,185,129,0.2)]"
+                className="w-full py-4 bg-[#10B981] text-black font-bold hover:bg-white transition-all uppercase text-xs md:text-sm tracking-[0.3em] disabled:opacity-20 shadow-[0_0_30px_rgba(16,185,129,0.2)]"
               >
                 COMMIT_DATA
               </button>
@@ -330,7 +330,7 @@ const TypingChallenge: React.FC = () => {
              </div>
              <button 
               onClick={reInitializeSystem}
-              className="px-6 md:px-12 py-3 md:py-4 border-2 border-emerald-500 text-emerald-500 font-bold hover:bg-emerald-500 hover:text-black transition-all uppercase text-[9px] md:text-xs tracking-[0.4em]"
+              className="px-6 md:px-12 py-3 md:py-4 border-2 border-[#10B981] text-[#10B981] font-bold hover:bg-[#10B981] hover:text-black transition-all uppercase text-[9px] md:text-xs tracking-[0.4em]"
             >
               NEW_SIMULATION
             </button>
@@ -344,8 +344,8 @@ const TypingChallenge: React.FC = () => {
           <div className="space-y-2 max-h-32 overflow-y-auto custom-scrollbar">
             {personalHistory.length > 0 ? personalHistory.slice(0, 5).map((s, i) => (
               <div key={i} className="flex justify-between text-[10px] font-mono p-1 border-b border-white/5 bg-white/5">
-                <span className="text-sky-400">#0{i+1} <span className="text-white ml-2">{s.initials}</span></span>
-                <span className="text-emerald-500">{s.wpm} WPM // {s.score} PTS</span>
+                <span className="text-teal-400">#0{i+1} <span className="text-white ml-2">{s.initials}</span></span>
+                <span className="text-[#10B981]">{s.wpm} WPM // {s.score} PTS</span>
               </div>
             )) : <p className="text-[10px] opacity-20 italic">AWAITING_DATA...</p>}
           </div>

@@ -19,9 +19,9 @@ const ProjectDetail: React.FC = () => {
   if (!project) {
     return (
       <div className="text-center py-20 space-y-6">
-        <h2 className="text-4xl font-bold text-rose-500">404: DATA_NOT_FOUND</h2>
+        <h2 className="text-4xl font-bold text-red-500">404: DATA_NOT_FOUND</h2>
         <p>The requested project archive does not exist in the current sector.</p>
-        <Link to="/portfolio" className="inline-block border border-emerald-500 px-6 py-2 hover:bg-emerald-500 hover:text-black transition-all">
+        <Link to="/portfolio" className="inline-block border border-[#10B981] px-6 py-2 hover:bg-[#10B981] hover:text-black transition-all">
           RETURN_TO_ARCHIVES
         </Link>
       </div>
@@ -38,10 +38,10 @@ const ProjectDetail: React.FC = () => {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'Professional': return 'sky';
+      case 'Professional': return 'teal';
       case 'Personal': return 'amber';
       case 'Academic': return 'rose';
-      default: return 'emerald';
+      default: return '[#10B981]';
     }
   };
 
@@ -62,9 +62,9 @@ const ProjectDetail: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Completed': return 'text-emerald-500 border-emerald-500 bg-emerald-500/10';
-      case 'In Progress': return 'text-amber-500 border-amber-600 bg-amber-600/10';
-      case 'Concept': return 'text-rose-400 border-rose-500 bg-rose-500/10';
+      case 'Completed': return 'text-[#10B981] border-[#10B981] bg-[#10B981]/10';
+      case 'In Progress': return 'text-orange-400 border-orange-500 bg-orange-500/10';
+      case 'Concept': return 'text-red-400 border-red-400 bg-red-400/10';
       default: return 'text-white border-white bg-white/10';
     }
   };
@@ -95,16 +95,16 @@ const ProjectDetail: React.FC = () => {
       <div className="flex flex-col md:flex-row justify-between items-start border-b border-white/20 pb-6 gap-6">
         <div className="space-y-2">
           <div className="flex items-center gap-4">
-            <span className="bg-sky-500 text-black px-2 py-0.5 text-[10px] font-bold">PROJECT_ID: {project.id.toUpperCase()}</span>
+            <span className="bg-teal-500 text-black px-2 py-0.5 text-[10px] font-bold">PROJECT_ID: {project.id.toUpperCase()}</span>
             <span className="text-[10px] text-white/40">{project.date}</span>
             <span className={`px-2 py-0.5 text-[10px] font-bold border ${statusColorClass} uppercase tracking-widest`}>
               STATUS: {project.status}
             </span>
           </div>
           <h1 className="text-3xl md:text-5xl font-bold glow-text">{project.title}</h1>
-          <p className="text-sky-400 font-mono tracking-widest text-sm uppercase">Sector: {project.category} // Role: {project.role}</p>
+          <p className="text-teal-400 font-mono tracking-widest text-sm uppercase">Sector: {project.category} // Role: {project.role}</p>
         </div>
-        <Link to="/portfolio" className="border border-white/20 px-4 py-2 text-xs hover:border-emerald-500 hover:text-emerald-500 transition-all uppercase font-bold tracking-widest">
+        <Link to="/portfolio" className="border border-white/20 px-4 py-2 text-xs hover:border-[#10B981] hover:text-[#10B981] transition-all uppercase font-bold tracking-widest">
           [Back_to_Portfolio]
         </Link>
       </div>
@@ -183,7 +183,7 @@ const ProjectDetail: React.FC = () => {
           </div>
 
           <div className="space-y-6">
-            <h3 className="text-xl font-bold text-emerald-500 border-l-4 border-emerald-500 pl-4 uppercase tracking-tighter">Executive_Summary / <span className="opacity-60">Description</span></h3>
+            <h3 className="text-xl font-bold text-[#10B981] border-l-4 border-[#10B981] pl-4 uppercase tracking-tighter">Executive_Summary / <span className="opacity-60">Description</span></h3>
             <p className="text-white/80 leading-loose text-lg">
               {project.description}
             </p>
@@ -192,15 +192,15 @@ const ProjectDetail: React.FC = () => {
             </p>
           </div>
 
-          <div className="bg-sky-900/10 border border-sky-500/30 p-8 space-y-6 shadow-[inset_0_0_20px_rgba(14,165,233,0.05)]">
-            <h3 className="text-xl font-bold text-sky-400 uppercase tracking-tighter">Operational_Metrics / <span className="opacity-60 text-white">Project Details</span></h3>
+          <div className="bg-teal-900/10 border border-teal-500/30 p-8 space-y-6 shadow-[inset_0_0_20px_rgba(45,212,191,0.05)]">
+            <h3 className="text-xl font-bold text-teal-400 uppercase tracking-tighter">Operational_Metrics / <span className="opacity-60 text-white">Project Details</span></h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-4">
                 <p className="text-xs font-bold text-white/40 tracking-widest uppercase">System_Constraints / Requirements</p>
                 <ul className="space-y-2">
                   {constraints.map((c, i) => (
                     <li key={i} className="text-sm flex items-center gap-3">
-                      <span className="text-sky-500">◈</span> {c}
+                      <span className="text-teal-500">◈</span> {c}
                     </li>
                   ))}
                 </ul>
@@ -210,7 +210,7 @@ const ProjectDetail: React.FC = () => {
                 <ul className="space-y-2">
                   {tools.map((t, i) => (
                     <li key={i} className="text-sm flex items-center gap-3">
-                      <span className="text-sky-500">◈</span> {t}
+                      <span className="text-teal-500">◈</span> {t}
                     </li>
                   ))}
                 </ul>
@@ -239,7 +239,7 @@ const ProjectDetail: React.FC = () => {
 
           <button 
             onClick={handleActionClick}
-            className="w-full bg-white text-black py-4 font-bold text-xs hover:bg-emerald-500 transition-all flex justify-center items-center gap-2 group uppercase tracking-widest shadow-[0_4px_15px_rgba(0,0,0,0.5)]"
+            className="w-full bg-white text-black py-4 font-bold text-xs hover:bg-[#10B981] transition-all flex justify-center items-center gap-2 group uppercase tracking-widest shadow-[0_4px_15px_rgba(0,0,0,0.5)]"
           >
             {project.actionButton?.label || 'Request_Detailed_Docs'}
             <span className="group-hover:translate-x-2 transition-transform">→</span>
