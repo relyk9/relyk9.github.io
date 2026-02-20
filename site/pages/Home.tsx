@@ -15,6 +15,25 @@ const Home: React.FC = () => {
   const fullText = HOME_DATA.typedText;
   const logContainerRef = useRef<HTMLDivElement>(null);
 
+  // Simon Game State
+  const [simonGame, setSimonGame] = useState<{ 
+    sequence: number[];
+    playerSequence: number[];
+    active: boolean;
+    turn: 'computer' | 'player';
+    litButton: number | null;
+    highScore: number;
+  }>({ 
+    sequence: [], 
+    playerSequence: [], 
+    active: false, 
+    turn: 'computer',
+    litButton: null,
+    highScore: 0,
+  });
+
+  const audioCtxRef = useRef<AudioContext | null>(null);
+
   useEffect(() => {
     let i = 0;
     const interval = setInterval(() => {
@@ -31,11 +50,122 @@ const Home: React.FC = () => {
     }
   }, [activeLogs]);
 
-  const addManualLog = () => {
+
+
+  // --- Simon Game Logic ---
+
+  const playSimonSound = (index: number) => {
+    if (!audioCtxRef.current) {
+      audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    const ctx = audioCtxRef.current;
+    if (!ctx) return;
+
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+
+    const frequencies = [261.63, 329.63, 392.00]; // C4, E4, G4
+    oscillator.frequency.setValueAtTime(frequencies[index], ctx.currentTime);
+    oscillator.type = 'sine';
+
+    gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + 0.4);
+  };
+
+  const startGame = () => {
+    setSimonGame(prev => ({ ...prev, active: true, sequence: [], playerSequence: [], turn: 'computer' }));
+  };
+
+  const nextTurn = () => {
+    const nextButton = Math.floor(Math.random() * 3);
+    setSimonGame(prev => ({
+      ...prev,
+      sequence: [...prev.sequence, nextButton],
+      playerSequence: [],
+      turn: 'computer',
+    }));
+  };
+
+  const handlePlayerInput = (buttonIndex: number) => {
+    if (!simonGame.active || simonGame.turn !== 'player') return;
+
+    // Provide immediate audio/visual feedback
+    playSimonSound(buttonIndex);
+    setSimonGame(prev => ({ ...prev, litButton: buttonIndex }));
+    setTimeout(() => {
+      setSimonGame(prev => ({ ...prev, litButton: null }));
+    }, 200);
+
+    const newPlayerSequence = [...simonGame.playerSequence, buttonIndex];
+
+    if (newPlayerSequence[newPlayerSequence.length - 1] !== simonGame.sequence[newPlayerSequence.length - 1]) {
+      endGame();
+      return;
+    }
+
+    setSimonGame(prev => ({ ...prev, playerSequence: newPlayerSequence }));
+
+    if (newPlayerSequence.length === simonGame.sequence.length) {
+      setSimonGame(prev => ({ ...prev, highScore: Math.max(prev.highScore, prev.sequence.length) }));
+      // Larger delay before computer starts new sequence
+      setTimeout(nextTurn, 1500);
+    }
+  };
+
+  const endGame = () => {
+    // Visual game over effect
+    setSimonGame(prev => ({ ...prev, litButton: 99 })); // Special code for all lit
+    setTimeout(() => setSimonGame(prev => ({ ...prev, litButton: null })), 500);
+    
+    addManualLog({ text: `SIMON_GAME_OVER. Final Score: ${simonGame.sequence.length - 1}. High Score: ${simonGame.highScore}`, color: 'text-red-500' });
+    setSimonGame({ ...simonGame, active: false, sequence: [], playerSequence: [], turn: 'computer' });
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    const playSequence = async () => {
+      if (simonGame.active && simonGame.turn === 'computer') {
+        if (simonGame.sequence.length === 0) {
+          setTimeout(nextTurn, 500);
+          return;
+        }
+
+        // Initial delay before starting the sequence playback
+        await new Promise(resolve => setTimeout(resolve, 800));
+        if (!isMounted) return;
+
+        // Play the ENTIRE sequence
+        for (const buttonIndex of simonGame.sequence) {
+          if (!isMounted) return;
+          playSimonSound(buttonIndex);
+          setSimonGame(prev => ({ ...prev, litButton: buttonIndex }));
+          await new Promise(resolve => setTimeout(resolve, 500));
+          if (!isMounted) return;
+          setSimonGame(prev => ({ ...prev, litButton: null }));
+          await new Promise(resolve => setTimeout(resolve, 200));
+        }
+
+        if (isMounted) {
+          setSimonGame(prev => ({ ...prev, turn: 'player' }));
+        }
+      }
+    };
+
+    playSequence();
+    return () => { isMounted = false; };
+  }, [simonGame.active, simonGame.turn, simonGame.sequence]);
+
+  const addManualLog = (logOverride?: { text: string, color: string }) => {
     const getTime = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-    const randomLog = LOG_POOL[Math.floor(Math.random() * LOG_POOL.length)];
+    const log = logOverride || LOG_POOL[Math.floor(Math.random() * LOG_POOL.length)];
     setActiveLogs(prev => {
-      const newLogs = [...prev, { ...randomLog, time: getTime() }];
+      const newLogs = [...prev, { ...log, time: getTime() }];
       return newLogs.slice(-100);
     });
   };
@@ -106,19 +236,47 @@ const Home: React.FC = () => {
       </section>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
-        {HOME_DATA.stats.map((stat, idx) => (
-          <div key={idx} className={`border ${stat.border} p-4 md:p-6 flex items-center gap-4 hover:border-white transition-all bg-black/40 group overflow-hidden rounded-sm`}>
-            <div className={`text-xl md:text-3xl ${stat.color} group-hover:scale-110 transition-transform shrink-0`}>{stat.icon}</div>
-            <div className="min-w-0 flex-1">
-              <p className="text-[9px] md:text-[10px] text-white/40 font-bold tracking-widest uppercase truncate mb-0.5">{stat.label}</p>
-              <p className={`font-bold ${stat.color} group-hover:text-white transition-colors leading-tight ${
-                stat.value.length > 12 ? 'text-xs md:text-base' : 'text-lg md:text-2xl'
-              }`}>
-                {stat.value}
-              </p>
+        {HOME_DATA.stats.map((stat, idx) => {
+          const isLit = simonGame.litButton === idx || simonGame.litButton === 99;
+          const statColor = stat.color.split('-')[1]; // e.g., 'teal' from 'text-teal-400'
+          const isPlayerTurn = simonGame.active && simonGame.turn === 'player';
+
+          return (
+            <div 
+              key={idx} 
+              onClick={() => {
+                if (!simonGame.active) {
+                  startGame();
+                } else if (isPlayerTurn) {
+                  handlePlayerInput(idx);
+                }
+              }}
+              className={`p-4 md:p-6 flex items-center gap-4 bg-black/40 group overflow-hidden rounded-sm transition-all duration-150 relative
+                ${!simonGame.active || isPlayerTurn ? 'cursor-pointer' : 'cursor-not-allowed opacity-80'}
+                ${
+                  isLit
+                    ? `border-white shadow-[0_0_35px_rgba(${statColor === 'teal' ? '45,212,191' : statColor === 'amber' ? '251,191,36' : '244,63,94'},1)] bg-white/10`
+                    : `border ${stat.border} hover:border-white`
+                }`
+              }
+            >
+              {/* Flash overlay for lit state */}
+              {isLit && (
+                <div className={`absolute inset-0 opacity-20 animate-pulse ${stat.color.replace('text', 'bg')}`}></div>
+              )}
+              
+              <div className={`text-xl md:text-3xl ${stat.color} ${isLit ? 'scale-125' : 'group-hover:scale-110'} transition-transform shrink-0 relative z-10`}>{stat.icon}</div>
+              <div className="min-w-0 flex-1 relative z-10">
+                <p className="text-[9px] md:text-[10px] text-white/40 font-bold tracking-widest uppercase truncate mb-0.5">{stat.label}</p>
+                <p className={`font-bold ${isLit ? 'text-white' : stat.color} group-hover:text-white transition-colors leading-tight ${
+                  stat.value.length > 12 ? 'text-xs md:text-base' : 'text-lg md:text-2xl'
+                }`}>
+                  {stat.value}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       <div className="w-full">
@@ -128,7 +286,7 @@ const Home: React.FC = () => {
               {HOME_DATA.logSectionTitle}
             </h3>
             <button 
-              onClick={addManualLog}
+              onClick={() => addManualLog()}
               className="w-full lg:w-auto px-5 py-2 border border-[#10B981] text-[#10B981] text-[9px] md:text-[10px] font-bold hover:bg-[#10B981] hover:text-black transition-all active:scale-95 shadow-[0_0_15px_rgba(16,185,129,0.1)] uppercase tracking-widest"
             >
               [RUN_DIAGNOSTICS]
