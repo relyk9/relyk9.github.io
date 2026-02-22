@@ -8,6 +8,7 @@ import Portfolio from './pages/Portfolio';
 import Experience from './pages/Experience';
 import TypingChallenge from './pages/TypingChallenge';
 import ProjectDetail from './pages/ProjectDetail';
+import AutomationEfficiency from './pages/AutomationEfficiency';
 
 const App: React.FC = () => {
   return (
@@ -20,6 +21,7 @@ const App: React.FC = () => {
           <Route path="/portfolio/:projectId" element={<ProjectDetail />} />
           <Route path="/experience" element={<Experience />} />
           <Route path="/challenge" element={<TypingChallenge />} />
+          <Route path="/automation" element={<AutomationEfficiency />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </Layout>

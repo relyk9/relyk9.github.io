@@ -114,6 +114,81 @@
             pointer-events: none;
             animation: scanline 4s linear infinite;
         }
+
+        /* Simplified Mode Overrides */
+        .simplified-mode {
+            background-color: #1a1b1a !important;
+            color: #94a394 !important;
+        }
+        .simplified-mode .glow-text {
+            text-shadow: none !important;
+            color: #a3b3a3 !important;
+        }
+        .simplified-mode .crt-overlay,
+        .simplified-mode .scanline-effect,
+        .simplified-mode .page-flicker {
+            display: none !important;
+            animation: none !important;
+        }
+        .simplified-mode [class*="shadow-"] {
+            box-shadow: none !important;
+        }
+        .simplified-mode .animate-pulse {
+            animation: none !important;
+        }
+        .simplified-mode section, 
+        .simplified-mode .card,
+        .simplified-mode div[class*="border-"],
+        .simplified-mode header,
+        .simplified-mode footer {
+            border-color: rgba(100, 120, 100, 0.2) !important;
+            background-color: #242624 !important;
+            box-shadow: none !important;
+        }
+        .simplified-mode a, 
+        .simplified-mode button {
+            color: #94a394 !important;
+            border-color: #4a5a4a !important;
+            background-color: transparent !important;
+        }
+        .simplified-mode a:hover, 
+        .simplified-mode button:hover {
+            background-color: #343634 !important;
+            color: #a3b3a3 !important;
+            border-color: #6a7a6a !important;
+        }
+        .simplified-mode [class*="text-teal-"],
+        .simplified-mode [class*="text-amber-"],
+        .simplified-mode [class*="text-rose-"],
+        .simplified-mode [class*="text-sky-"],
+        .simplified-mode [class*="text-red-"],
+        .simplified-mode [class*="text-emerald-"],
+        .simplified-mode [class*="text-rose-"] {
+            color: #94a394 !important;
+        }
+        .simplified-mode [class*="bg-teal-"],
+        .simplified-mode [class*="bg-amber-"],
+        .simplified-mode [class*="bg-rose-"],
+        .simplified-mode [class*="bg-sky-"],
+        .simplified-mode [class*="bg-red-"],
+        .simplified-mode [class*="bg-emerald-"] {
+            background-color: #4a5a4a !important;
+            color: #1a1b1a !important;
+        }
+        .simplified-mode [class*="border-teal-"],
+        .simplified-mode [class*="border-amber-"],
+        .simplified-mode [class*="border-rose-"],
+        .simplified-mode [class*="border-sky-"],
+        .simplified-mode [class*="border-red-"],
+        .simplified-mode [class*="border-emerald-"] {
+            border-color: #4a5a4a !important;
+        }
+        .simplified-mode .bg-black,
+        .simplified-mode .bg-black\/80,
+        .simplified-mode .bg-black\/40,
+        .simplified-mode .bg-black\/95 {
+            background-color: #242624 !important;
+        }
     </style>
 <script type="importmap">
 {
@@ -130,8 +205,6 @@
 </head>
 <body>
     <div id="root"></div>
-    <div class="crt-overlay"></div>
-    <div class="scanline-effect"></div>
 <script type="module" src="/index.tsx"></script>
 </body>
 </html>

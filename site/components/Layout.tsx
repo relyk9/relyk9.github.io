@@ -12,6 +12,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cpuTemp, setCpuTemp] = useState(42.5);
   const [latency, setLatency] = useState(12);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSimplified, setIsSimplified] = useState(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
 
   useEffect(() => {
@@ -30,8 +31,20 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
-        () => {
-          // Permission granted, keep the detected node
+        async (position) => {
+          try {
+            const { latitude, longitude } = position.coords;
+            const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
+            const data = await response.json();
+            if (data.city || data.countryName) {
+              const locationStr = `${data.city || ''}${data.city && data.countryName ? ', ' : ''}${data.countryCode || data.countryName || ''}`.toUpperCase();
+              setNodeId(locationStr || `${latitude.toFixed(2)}N_${longitude.toFixed(2)}E`);
+            } else {
+              setNodeId(`${latitude.toFixed(2)}N_${longitude.toFixed(2)}E`);
+            }
+          } catch (e) {
+            console.error("Location fetch failed", e);
+          }
         },
         (error) => {
           if (error.code === error.PERMISSION_DENIED) {
@@ -105,11 +118,21 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   ];
 
   return (
-    <div className={`min-h-screen flex flex-col relative text-[#10B981] bg-[#020202] overflow-x-hidden`}>
+    <div className={`min-h-screen flex flex-col relative ${isSimplified ? 'text-[#10B981] bg-[#020202]' : 'text-[#10B981] bg-[#020202]'} overflow-x-hidden`}>
       {/* Background Layer */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <EquationRain />
-      </div>
+      {!isSimplified && (
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <EquationRain />
+        </div>
+      )}
+
+      {/* Visual Overlays */}
+      {!isSimplified && (
+        <>
+          <div className="crt-overlay"></div>
+          <div className="scanline-effect"></div>
+        </>
+      )}
       
       {/* Persistent UI Elements */}
       <div className="relative z-10 flex flex-col min-h-screen bg-transparent">
@@ -118,12 +141,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <header className="fixed top-0 inset-x-0 z-[1000] bg-black border-b border-[#10B981] py-4 px-6 h-[64px] flex items-center shadow-[0_4px_30px_rgba(0,0,0,1)]">
           <div className="w-full max-w-6xl mx-auto flex justify-between items-center gap-4">
             <Link to="/" className="flex items-center gap-2 group cursor-pointer" onClick={() => setIsMenuOpen(false)}>
-              <div className="w-3 h-3 rounded-full bg-[#10B981] animate-pulse group-hover:bg-teal-400"></div>
-              <h1 className="text-xl font-bold tracking-widest glow-text group-hover:text-teal-400 transition-colors uppercase">KYLERM.ME</h1>
+              <div className={`w-3 h-3 rounded-full bg-[#10B981] ${isSimplified ? '' : 'animate-pulse'} group-hover:bg-teal-400`}></div>
+              <h1 className={`text-xl font-bold tracking-widest ${isSimplified ? '' : 'glow-text'} group-hover:text-teal-400 transition-colors uppercase`}>KYLERM.ME</h1>
             </Link>
             
             {/* Desktop Nav */}
-            <nav className="hidden lg:flex justify-center gap-8">
+            <nav className="hidden lg:flex justify-center items-center gap-8">
               {navItems.map((item) => (
                 <Link
                   key={item.path}
@@ -137,20 +160,36 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   {item.label}
                 </Link>
               ))}
+              
+              {/* Simplified Mode Toggle */}
+              <button 
+                onClick={() => setIsSimplified(!isSimplified)}
+                className={`ml-4 px-3 py-1 border border-[#10B981] text-[10px] font-bold transition-all ${isSimplified ? 'bg-[#10B981] text-black' : 'text-[#10B981] hover:bg-[#10B981]/20'}`}
+              >
+                {isSimplified ? '[FULL_AESTHETIC]' : '[SIMPLIFIED_MODE]'}
+              </button>
             </nav>
 
             {/* Mobile Nav Toggle */}
-            <button 
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden flex flex-col items-center justify-center w-10 h-10 border border-[#10B981] rounded hover:bg-[#10B981]/20 transition-all active:scale-90"
-              aria-label="Toggle Menu"
-            >
-              <div className="relative w-6 h-5">
-                <span className={`absolute block w-full h-0.5 bg-[#10B981] transition-all duration-300 ${isMenuOpen ? 'rotate-45 top-2.5 shadow-[0_0_5px_#10B981]' : 'top-0'}`}></span>
-                <span className={`absolute block w-full h-0.5 bg-[#10B981] transition-all duration-300 top-2.5 ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
-                <span className={`absolute block w-full h-0.5 bg-[#10B981] transition-all duration-300 ${isMenuOpen ? '-rotate-45 top-2.5 shadow-[0_0_5px_#10B981]' : 'top-5'}`}></span>
-              </div>
-            </button>
+            <div className="lg:hidden flex items-center gap-4">
+              <button 
+                onClick={() => setIsSimplified(!isSimplified)}
+                className={`px-2 py-1 border border-[#10B981] text-[9px] font-bold transition-all ${isSimplified ? 'bg-[#10B981] text-black' : 'text-[#10B981]'}`}
+              >
+                {isSimplified ? 'FULL' : 'SIMPLE'}
+              </button>
+              <button 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="flex flex-col items-center justify-center w-10 h-10 border border-[#10B981] rounded hover:bg-[#10B981]/20 transition-all active:scale-90"
+                aria-label="Toggle Menu"
+              >
+                <div className="relative w-6 h-5">
+                  <span className={`absolute block w-full h-0.5 bg-[#10B981] transition-all duration-300 ${isMenuOpen ? 'rotate-45 top-2.5 shadow-[0_0_5px_#10B981]' : 'top-0'}`}></span>
+                  <span className={`absolute block w-full h-0.5 bg-[#10B981] transition-all duration-300 top-2.5 ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+                  <span className={`absolute block w-full h-0.5 bg-[#10B981] transition-all duration-300 ${isMenuOpen ? '-rotate-45 top-2.5 shadow-[0_0_5px_#10B981]' : 'top-5'}`}></span>
+                </div>
+              </button>
+            </div>
           </div>
         </header>
 
@@ -192,7 +231,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className="mt-[64px] bg-[#001a08] border-b border-[#10B981]/40 text-[9px] md:text-[10px] uppercase tracking-[0.2em] px-6 py-2 relative z-50">
           <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-y-2 text-center sm:text-left">
             <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-              <span className="text-teal-400">SYS: <span className="text-white">UNDER DEV</span></span>
+              <span className="text-teal-400">SYS: <span className="text-white">PRODUCTION</span></span>
               <span className="text-amber-400">ENC: <span className="text-white">AES-256</span></span>
               <span className="text-teal-400">NODE: <span className="text-white">{nodeId}</span></span>
             </div>
@@ -207,7 +246,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         {/* Main Content Area */}
         <main 
           key={flickerKey} 
-          className="flex-1 w-full max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-12 page-flicker relative z-20"
+          className={`flex-1 w-full max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-12 ${isSimplified ? '' : 'page-flicker'} relative z-20`}
         >
           {children}
         </main>

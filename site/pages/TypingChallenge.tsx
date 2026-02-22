@@ -37,6 +37,8 @@ const TypingChallenge: React.FC = () => {
   const [mistakes, setMistakes] = useState(0);
   const [totalKeys, setTotalKeys] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
+  const [isStarted, setIsStarted] = useState(false);
+  const [numRounds, setNumRounds] = useState(5);
   const [history, setHistory] = useState<{phrase: string, wpm: number, accuracy: number}[]>([]);
   const [initials, setInitials] = useState('');
   const [personalHistory, setPersonalHistory] = useState<ScoreEntry[]>([]);
@@ -67,10 +69,10 @@ const TypingChallenge: React.FC = () => {
   const targetAuthor = parts.length > 1 ? parts[1] : null;
 
   useEffect(() => {
-    if (inputRef.current && !isFinished && !showScoreEntry) {
+    if (inputRef.current && !isFinished && !showScoreEntry && isStarted) {
         inputRef.current.focus();
     }
-  }, [currentIndex, isFinished, showScoreEntry]);
+  }, [currentIndex, isFinished, showScoreEntry, isStarted]);
 
   useEffect(() => {
     if (startTime && !isFinished) {
@@ -151,8 +153,8 @@ const TypingChallenge: React.FC = () => {
   };
 
   const reInitializeSystem = () => {
-    const shuffled = [...CHALLENGE_POOL].sort(() => 0.5 - Math.random());
-    setShuffledPhrases(shuffled.slice(0, 5));
+    setIsStarted(false);
+    setShuffledPhrases([]);
     setCurrentIndex(0);
     setUserInput('');
     setStartTime(null);
@@ -164,6 +166,17 @@ const TypingChallenge: React.FC = () => {
     setMistakes(0);
     setTotalKeys(0);
     setHistory([]);
+  };
+
+  const startSimulation = (rounds: number) => {
+    const shuffled = [...CHALLENGE_POOL].sort(() => 0.5 - Math.random());
+    setShuffledPhrases(shuffled.slice(0, rounds));
+    setNumRounds(rounds);
+    setIsStarted(true);
+    setCurrentIndex(0);
+    setUserInput('');
+    setStartTime(null);
+    setIsFinished(false);
   };
 
   const saveScoreToRegistry = () => {
@@ -226,26 +239,56 @@ const TypingChallenge: React.FC = () => {
           <h2 className="text-base md:text-3xl font-bold glow-text tracking-widest uppercase">
             {TYPING_CHALLENGE_DATA.header}
           </h2>
-          <p className="text-[8px] md:text-[10px] text-teal-400 font-mono tracking-widest">
-            PHASE: {currentIndex + 1} / {shuffledPhrases.length}
-          </p>
+          {isStarted && (
+            <p className="text-[8px] md:text-[10px] text-teal-400 font-mono tracking-widest">
+              PHASE: {currentIndex + 1} / {shuffledPhrases.length}
+            </p>
+          )}
         </div>
         
-        <div className="flex gap-4 md:gap-8 text-right">
-          <div className="flex flex-col">
-            <span className="text-[7px] md:text-[10px] opacity-40 uppercase tracking-widest">WPM</span>
-            <span className="text-xs md:text-2xl font-bold text-amber-400">{wpm || '--'}</span>
+        {isStarted && (
+          <div className="flex gap-4 md:gap-8 text-right">
+            <div className="flex flex-col">
+              <span className="text-[7px] md:text-[10px] opacity-40 uppercase tracking-widest">WPM</span>
+              <span className="text-xs md:text-2xl font-bold text-amber-400">{wpm || '--'}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[7px] md:text-[10px] opacity-40 uppercase tracking-widest">ACC</span>
+              <span className="text-xs md:text-2xl font-bold text-rose-400">{accuracy}%</span>
+            </div>
           </div>
-          <div className="flex flex-col">
-            <span className="text-[7px] md:text-[10px] opacity-40 uppercase tracking-widest">ACC</span>
-            <span className="text-xs md:text-2xl font-bold text-rose-400">{accuracy}%</span>
-          </div>
-        </div>
+        )}
       </div>
 
       <div className={`relative border border-[#10B981]/40 bg-black/95 p-4 md:p-12 shadow-2xl transition-all duration-300 min-h-[280px] md:min-h-[400px] flex flex-col justify-center rounded-sm ${isInputFocused ? 'ring-2 ring-[#10B981]/20 transform -translate-y-4 md:translate-y-0' : ''}`}>
         
-        {!isFinished && (
+        {!isStarted && (
+          <div className="text-center space-y-8 animate-in fade-in duration-500">
+            <div className="space-y-2">
+              <h3 className="text-xl md:text-2xl font-bold text-[#10B981] uppercase tracking-widest">INITIALIZE_SEQUENCE</h3>
+              <p className="text-[10px] md:text-xs opacity-50 font-mono">SELECT_OPERATIONAL_ROUNDS</p>
+            </div>
+            
+            <div className="flex flex-wrap justify-center gap-4">
+              {[1, 3, 5, 10, 15, 20].map(r => (
+                <button
+                  key={r}
+                  onClick={() => startSimulation(r)}
+                  className="w-16 h-16 md:w-20 md:h-20 border border-[#10B981]/40 flex flex-col items-center justify-center hover:bg-[#10B981] hover:text-black transition-all group"
+                >
+                  <span className="text-xl md:text-2xl font-bold">{r}</span>
+                  <span className="text-[8px] opacity-40 group-hover:opacity-100 uppercase">{r === 1 ? 'Round' : 'Rounds'}</span>
+                </button>
+              ))}
+            </div>
+            
+            <div className="pt-4">
+              <p className="text-[9px] italic opacity-30 font-mono">System ready for high-throughput data entry.</p>
+            </div>
+          </div>
+        )}
+
+        {isStarted && !isFinished && (
           <div className="space-y-6 md:space-y-12">
             <div className="flex items-center justify-center min-h-[100px] md:min-h-[160px]">
               {renderTargetQuote()}
