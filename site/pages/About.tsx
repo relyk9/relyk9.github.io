@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { SKILLS, ABOUT_DATA, HOME_DATA } from '../constants';
 import { ProficiencyEntry } from '../types';
 
@@ -62,7 +62,7 @@ const About: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
           <div className="flex-1 space-y-8">
             <h2 className="text-2xl md:text-3xl font-bold border-b border-teal-500 pb-2 text-teal-400 inline-block shadow-[0_4px_10px_-5px_rgba(45,212,191,0.5)] uppercase tracking-widest">
-              ENGINEER_PROFILE / <span className="text-white opacity-80">BIO</span>
+              ABOUT / <span className="text-white opacity-80">PROFILE</span>
             </h2>
             <div className="space-y-4 text-sm leading-loose">
               {ABOUT_DATA.paragraphs.map((para, idx) => (
@@ -101,7 +101,7 @@ const About: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="space-y-6">
-            <h3 className="text-lg font-bold text-amber-400 uppercase tracking-tighter">CORE_STACK / SKILLS</h3>
+            <h3 className="text-lg font-bold text-amber-400 uppercase tracking-tighter">TOOLS & SKILLS</h3>
             <div className="flex flex-wrap gap-2">
               {SKILLS.map((skill) => (
                 <span key={skill} className={`px-3 py-1 border-2 ${getSkillTagColor(skill)} text-[10px] hover:bg-white hover:text-black transition-all cursor-default font-bold uppercase tracking-tight`}>
@@ -114,7 +114,7 @@ const About: React.FC = () => {
           <div className="space-y-6">
             <h3 className="text-lg font-bold text-rose-400 uppercase tracking-tighter">{ABOUT_DATA.educationTitle} / {ABOUT_DATA.educationHeader}</h3>
             {ABOUT_DATA.education.map((edu, idx) => (
-              <div key={idx} className="border border-white/10 p-4 bg-black/40 hover:border-rose-500/50 transition-all">
+              <div key={idx} className="border border-white/10 p-4 bg-black/40 hover:border-rose-500/40 transition-all">
                 <p className="font-bold text-white">{edu.degree}</p>
                 <p className="text-xs opacity-80 text-white/60 mb-0.5">{edu.institution} | {edu.period}</p>
                 <p className="text-[11px] opacity-70 text-teal-400 flex items-center gap-1.5 mb-2">
@@ -192,10 +192,10 @@ const About: React.FC = () => {
           })}
         </div>
 
-        <div className="pt-8 border-t border-white/5 flex flex-wrap justify-center gap-x-8 gap-y-2 text-[9px] font-bold opacity-30 tracking-widest uppercase text-center">
-          <div className="flex items-center gap-2">33% - Fundamental Knowledge</div>
-          <div className="flex items-center gap-2">66% - Production Ready</div>
-          <div className="flex items-center gap-2">100% - Subject Expert</div>
+        <div className="pt-8 border-t border-white/5 flex flex-wrap justify-center gap-x-8 gap-y-2 text-[9px] font-bold opacity-40 tracking-widest uppercase text-center">
+          <div className="flex items-center gap-2">33% - Working Knowledge</div>
+          <div className="flex items-center gap-2">66% - Strong Proficiency</div>
+          <div className="flex items-center gap-2">100% - Advanced Strength</div>
         </div>
       </section>
     </div>

@@ -1,11 +1,10 @@
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { PROJECTS } from '../constants';
 
 const ProjectDetail: React.FC = () => {
   const { projectId } = useParams();
-  const navigate = useNavigate();
   const project = PROJECTS.find(p => p.id === projectId);
   
   const images = project?.images || (project?.imageUrl ? [project.imageUrl] : []);
@@ -19,10 +18,10 @@ const ProjectDetail: React.FC = () => {
   if (!project) {
     return (
       <div className="text-center py-20 space-y-6">
-        <h2 className="text-4xl font-bold text-red-500">404: DATA_NOT_FOUND</h2>
-        <p>The requested project archive does not exist in the current sector.</p>
+        <h2 className="text-4xl font-bold text-red-500">Project Not Found</h2>
+        <p>The project you requested is not available in this portfolio.</p>
         <Link to="/portfolio" className="inline-block border border-[#10B981] px-6 py-2 hover:bg-[#10B981] hover:text-black transition-all">
-          RETURN_TO_ARCHIVES
+          Back to Portfolio
         </Link>
       </div>
     );
@@ -36,29 +35,12 @@ const ProjectDetail: React.FC = () => {
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'Professional': return 'teal';
-      case 'Personal': return 'amber';
-      case 'Academic': return 'rose';
-      default: return '[#10B981]';
-    }
+  const CATEGORY_STYLES: Record<string, { border: string; text: string; softBorder: string; softBg: string }> = {
+    Professional: { border: 'border-teal-500', text: 'text-teal-300', softBorder: 'border-teal-500/30', softBg: 'bg-teal-500/8' },
+    Personal: { border: 'border-amber-500', text: 'text-amber-300', softBorder: 'border-amber-500/30', softBg: 'bg-amber-500/8' },
+    Academic: { border: 'border-rose-500', text: 'text-rose-300', softBorder: 'border-rose-500/30', softBg: 'bg-rose-500/8' },
   };
-
-  const categoryColor = getCategoryColor(project.category);
-
-  const getCategoryNote = (category: string) => {
-    switch (category) {
-      case 'Professional':
-        return `Note: This project represents a professional deployment. The methodology prioritized industrial-grade reliability, compliance with international engineering standards, and rigorous multi-physics validation protocols.`;
-      case 'Personal':
-        return `Note: This represents a self-directed personal project. The focus was on creative engineering exploration, rapid prototyping, and the integration of emerging technologies to solve unique practical challenges.`;
-      case 'Academic':
-        return `Note: This project represents an academic research deployment. The methodology prioritized theoretical rigor, computational accuracy, and the application of fundamental mechanical principles to complex research problems.`;
-      default:
-        return `Note: This project summary represents a deployment in the ${category} sector. The methodology prioritized high-precision modeling coupled with rigorous validation steps.`;
-    }
-  };
+  const categoryStyle = CATEGORY_STYLES[project.category] || CATEGORY_STYLES.Personal;
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -81,85 +63,88 @@ const ProjectDetail: React.FC = () => {
     'Simulation & Analysis Suites',
     'Manufacturing Specifications'
   ];
+  const highlights = project.highlights || [];
+  const technicalSpecs = project.technicalSpecs.map((spec) => {
+    const separatorIndex = spec.indexOf(':');
+    if (separatorIndex === -1) {
+      return { label: 'Detail', value: spec };
+    }
+
+    return {
+      label: spec.slice(0, separatorIndex).trim(),
+      value: spec.slice(separatorIndex + 1).trim(),
+    };
+  });
 
   const handleActionClick = () => {
     if (project.actionButton?.url) {
       window.open(project.actionButton.url, '_blank');
-    } else {
-      alert("NOTICE: THIS PROJECT IS CURRENTLY A PLACEHOLDER. EDIT CONSTANTS.TSX TO ADD REAL DATA.");
     }
   };
 
   return (
     <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-12">
-      <div className="flex flex-col md:flex-row justify-between items-start border-b border-white/20 pb-6 gap-6">
-        <div className="space-y-2">
-          <div className="flex items-center gap-4">
-            <span className="bg-teal-500 text-black px-2 py-0.5 text-[10px] font-bold">PROJECT_ID: {project.id.toUpperCase()}</span>
+      <div className="flex flex-col md:flex-row justify-between items-start border-b border-white/15 pb-6 gap-6">
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className={`px-2 py-0.5 text-[10px] font-bold border ${categoryStyle.softBorder} ${categoryStyle.text} ${categoryStyle.softBg}`}>{project.category}</span>
             <span className="text-[10px] text-white/40">{project.date}</span>
             <span className={`px-2 py-0.5 text-[10px] font-bold border ${statusColorClass} uppercase tracking-widest`}>
-              STATUS: {project.status}
+              {project.status}
             </span>
           </div>
           <h1 className="text-3xl md:text-5xl font-bold glow-text">{project.title}</h1>
-          <p className="text-teal-400 font-mono tracking-widest text-sm uppercase">Sector: {project.category} // Role: {project.role}</p>
+          <p className="text-white/70 max-w-3xl leading-relaxed text-sm md:text-base">
+            {project.overview || project.description}
+          </p>
         </div>
         <Link to="/portfolio" className="border border-white/20 px-4 py-2 text-xs hover:border-[#10B981] hover:text-[#10B981] transition-all uppercase font-bold tracking-widest">
-          [Back_to_Portfolio]
+          Back to Portfolio
         </Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2 space-y-8">
-          
-          {/* Enhanced Image Gallery Component */}
           <div className="space-y-4">
             <div 
-              className={`relative aspect-video border-2 border-${categoryColor}-500/30 hover:border-${categoryColor}-500 bg-black/40 overflow-hidden group shadow-[0_0_30px_rgba(0,0,0,0.8)]`}
+              className={`relative aspect-video border ${categoryStyle.softBorder} bg-black/35 overflow-hidden group shadow-[0_0_20px_rgba(0,0,0,0.45)] rounded-sm`}
               onMouseEnter={() => setImageInteracted(true)}
             >
-              {/* Main Image */}
               <img 
                 key={currentImageIndex}
                 src={images[currentImageIndex]} 
                 alt={`${project.title} Visual ${currentImageIndex + 1}`} 
-                className={`w-full h-full object-cover transition-all duration-700 page-flicker ${
+                className={`w-full h-full object-cover transition-all duration-700 ${
                   imageInteracted 
                   ? 'grayscale-0 brightness-100' 
                   : 'grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100'
                 }`}
               />
-              
-              {/* Scanline Overlay */}
-              <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(transparent_0%,rgba(16,185,129,0.02)_50%,transparent_100%)] bg-[size:100%_10px] opacity-30"></div>
 
-              {/* Minimal Navigation Arrows */}
               {images.length > 1 && (
                 <>
                   <button 
                     onClick={handlePrevImage}
-                    className={`absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 border border-${categoryColor}-500/40 text-${categoryColor}-400 w-12 h-12 flex items-center justify-center hover:bg-${categoryColor}-500 hover:text-black transition-all z-20 font-bold text-xl`}
+                    className={`absolute left-4 top-1/2 -translate-y-1/2 bg-black/65 border ${categoryStyle.softBorder} ${categoryStyle.text} w-12 h-12 flex items-center justify-center hover:bg-white hover:text-black transition-all z-20 font-bold text-xl`}
                   >
                     &lt;
                   </button>
                   <button 
                     onClick={handleNextImage}
-                    className={`absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 border border-${categoryColor}-500/40 text-${categoryColor}-400 w-12 h-12 flex items-center justify-center hover:bg-${categoryColor}-500 hover:text-black transition-all z-20 font-bold text-xl`}
+                    className={`absolute right-4 top-1/2 -translate-y-1/2 bg-black/65 border ${categoryStyle.softBorder} ${categoryStyle.text} w-12 h-12 flex items-center justify-center hover:bg-white hover:text-black transition-all z-20 font-bold text-xl`}
                   >
                     &gt;
                   </button>
                 </>
               )}
 
-              {/* Simple Index Indicator */}
               {images.length > 1 && (
-                <div className={`absolute bottom-4 right-4 bg-black/80 border border-${categoryColor}-500/30 px-3 py-1 text-[11px] font-mono text-${categoryColor}-400 z-20`}>
+                <div className={`absolute bottom-4 right-4 bg-black/80 border ${categoryStyle.softBorder} px-3 py-1 text-[11px] font-mono ${categoryStyle.text} z-20`}>
                   {currentImageIndex + 1} / {images.length}
                 </div>
               )}
             </div>
 
-            {/* Thumbnails */}
             {images.length > 1 && (
               <div className="flex gap-4 overflow-x-auto pb-4 custom-scrollbar">
                 {images.map((img, idx) => (
@@ -168,13 +153,13 @@ const ProjectDetail: React.FC = () => {
                     onClick={() => setCurrentImageIndex(idx)}
                     className={`relative w-24 h-16 flex-shrink-0 border transition-all duration-300 ${
                       currentImageIndex === idx 
-                      ? `border-${categoryColor}-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]` 
+                      ? `${categoryStyle.border} shadow-[0_0_10px_rgba(255,255,255,0.12)]` 
                       : 'border-white/10 grayscale hover:grayscale-0 hover:border-white/30'
                     }`}
                   >
                     <img src={img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
                     {currentImageIndex === idx && (
-                      <div className={`absolute inset-0 border-2 border-dashed border-${categoryColor}-500 animate-pulse`}></div>
+                      <div className={`absolute inset-0 border border-dashed ${categoryStyle.border}`}></div>
                     )}
                   </button>
                 ))}
@@ -182,68 +167,114 @@ const ProjectDetail: React.FC = () => {
             )}
           </div>
 
-          <div className="space-y-6">
-            <h3 className="text-xl font-bold text-[#10B981] border-l-4 border-[#10B981] pl-4 uppercase tracking-tighter">Executive_Summary / <span className="opacity-60">Description</span></h3>
-            <p className="text-white/80 leading-loose text-lg">
-              {project.description}
-            </p>
-            <p className="text-white/70 leading-relaxed italic border-t border-white/5 pt-4 text-sm">
-              {getCategoryNote(project.category)}
-            </p>
-          </div>
+          <div className="grid grid-cols-1 gap-6">
+            <section className="border border-white/10 bg-black/35 p-6 md:p-8 space-y-4 rounded-sm">
+              <h3 className="text-lg font-bold text-white uppercase tracking-[0.16em]">Project Summary</h3>
+              <p className="text-white/80 leading-loose text-base">{project.description}</p>
+            </section>
 
-          <div className="bg-teal-900/10 border border-teal-500/30 p-8 space-y-6 shadow-[inset_0_0_20px_rgba(45,212,191,0.05)]">
-            <h3 className="text-xl font-bold text-teal-400 uppercase tracking-tighter">Operational_Metrics / <span className="opacity-60 text-white">Project Details</span></h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <section className="border border-white/10 bg-black/35 p-6 space-y-4 rounded-sm">
+                <h3 className="text-sm font-bold text-white/90 uppercase tracking-[0.16em]">Challenge</h3>
+                <p className="text-sm text-white/75 leading-loose">{project.challenge || 'This project was shaped by practical constraints around usability, implementation effort, and clear communication of the end result.'}</p>
+              </section>
+              <section className="border border-white/10 bg-black/35 p-6 space-y-4 rounded-sm">
+                <h3 className="text-sm font-bold text-white/90 uppercase tracking-[0.16em]">Outcome</h3>
+                <p className="text-sm text-white/75 leading-loose">{project.outcome || 'The final result reflects an emphasis on practical engineering decisions, readability, and a clear end-user experience.'}</p>
+              </section>
+            </div>
+
+            {highlights.length > 0 && (
+              <section className="border border-white/10 bg-black/35 p-6 md:p-8 space-y-4 rounded-sm">
+                <h3 className="text-sm font-bold text-white/90 uppercase tracking-[0.16em]">What I Focused On</h3>
+                <ul className="space-y-3">
+                  {highlights.map((item, i) => (
+                    <li key={i} className="text-sm text-white/80 flex items-start gap-3 leading-relaxed">
+                      <span className={`${categoryStyle.text} mt-0.5`}>•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            <section className={`border ${categoryStyle.softBorder} ${categoryStyle.softBg} p-6 md:p-8 space-y-6 rounded-sm`}>
+              <h3 className={`text-lg font-bold uppercase tracking-[0.16em] ${categoryStyle.text}`}>Project Details</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-4">
-                <p className="text-xs font-bold text-white/40 tracking-widest uppercase">System_Constraints / Requirements</p>
+                  <p className="text-xs font-bold text-white/45 tracking-widest uppercase">Constraints</p>
                 <ul className="space-y-2">
                   {constraints.map((c, i) => (
                     <li key={i} className="text-sm flex items-center gap-3">
-                      <span className="text-teal-500">◈</span> {c}
+                        <span className={categoryStyle.text}>◈</span> {c}
                     </li>
                   ))}
                 </ul>
               </div>
               <div className="space-y-4">
-                <p className="text-xs font-bold text-white/40 tracking-widest uppercase">Materials_Analysis / Tools</p>
+                  <p className="text-xs font-bold text-white/45 tracking-widest uppercase">Tools & Stack</p>
                 <ul className="space-y-2">
                   {tools.map((t, i) => (
                     <li key={i} className="text-sm flex items-center gap-3">
-                      <span className="text-teal-500">◈</span> {t}
+                        <span className={categoryStyle.text}>◈</span> {t}
                     </li>
                   ))}
                 </ul>
               </div>
-            </div>
+              </div>
+            </section>
           </div>
         </div>
 
         <div className="space-y-8">
-          <div className="border border-white/10 p-6 bg-black/40 space-y-6">
-            <h4 className="text-sm font-bold text-amber-500 uppercase tracking-widest border-b border-amber-500/30 pb-2">Technical_Manifest / <span className="opacity-60 text-white">Specs</span></h4>
+          <div className="border border-white/10 p-6 bg-black/35 space-y-6 rounded-sm">
+            <h4 className="text-sm font-bold text-white uppercase tracking-[0.16em] border-b border-white/10 pb-2">Project Snapshot</h4>
+            <div className="space-y-3 text-sm">
+              <div className="flex justify-between gap-4">
+                <span className="text-white/45 uppercase tracking-widest text-[10px]">Role</span>
+                <span className="text-white/85 text-right">{project.role}</span>
+              </div>
+              <div className="flex justify-between gap-4">
+                <span className="text-white/45 uppercase tracking-widest text-[10px]">Category</span>
+                <span className={`text-right ${categoryStyle.text}`}>{project.category}</span>
+              </div>
+              <div className="flex justify-between gap-4">
+                <span className="text-white/45 uppercase tracking-widest text-[10px]">Status</span>
+                <span className="text-white/85 text-right">{project.status}</span>
+              </div>
+              <div className="flex justify-between gap-4">
+                <span className="text-white/45 uppercase tracking-widest text-[10px]">Year</span>
+                <span className="text-white/85 text-right">{project.date}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="border border-white/10 p-6 bg-black/35 space-y-6 rounded-sm">
+            <h4 className="text-sm font-bold text-white uppercase tracking-[0.16em] border-b border-white/10 pb-2">Implementation Notes</h4>
             <div className="space-y-4">
-              {project.technicalSpecs.map((spec, i) => (
+              {technicalSpecs.map((spec, i) => (
                 <div key={i} className="group cursor-default">
                   <div className="flex justify-between text-[10px] text-white/40 mb-1">
-                    <span>SPEC_PARAM_{i+1}</span>
-                    <span className="group-hover:text-amber-400 transition-colors">ACTIVE</span>
+                    <span>{spec.label}</span>
+                    <span className="group-hover:text-white transition-colors">Included</span>
                   </div>
-                  <div className="text-sm text-white group-hover:translate-x-2 transition-transform duration-300 font-mono">
-                    {spec}
+                  <div className="text-sm text-white/85 group-hover:translate-x-1 transition-transform duration-300">
+                    {spec.value}
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <button 
-            onClick={handleActionClick}
-            className="w-full bg-white text-black py-4 font-bold text-xs hover:bg-[#10B981] transition-all flex justify-center items-center gap-2 group uppercase tracking-widest shadow-[0_4px_15px_rgba(0,0,0,0.5)]"
-          >
-            {project.actionButton?.label || 'Request_Detailed_Docs'}
-            <span className="group-hover:translate-x-2 transition-transform">→</span>
-          </button>
+          {project.actionButton?.url && (
+            <button 
+              onClick={handleActionClick}
+              className="w-full bg-white text-black py-4 font-bold text-xs hover:bg-[#10B981] transition-all flex justify-center items-center gap-2 group uppercase tracking-widest shadow-[0_4px_15px_rgba(0,0,0,0.5)]"
+            >
+              {project.actionButton.label}
+              <span className="group-hover:translate-x-2 transition-transform">→</span>
+            </button>
+          )}
         </div>
       </div>
     </div>
