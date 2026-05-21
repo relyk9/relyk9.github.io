@@ -53,7 +53,7 @@ const Portfolio: React.FC = () => {
     <div className="space-y-12">
       <div className="space-y-6 border-b border-[#10B981]/40 pb-6">
         <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-widest text-[#10B981]">
-          Project_Archives / <span className="text-white opacity-80">Portfolio</span>
+          Projects / <span className="text-white opacity-80">Portfolio</span>
         </h2>
         
         <div className="flex flex-col gap-4">
@@ -64,9 +64,9 @@ const Portfolio: React.FC = () => {
                 <button
                   key={cat}
                   onClick={() => setFilter(cat as any)}
-                  className={`px-3 py-1 transition-all duration-300 border text-[10px] ${
-                    filter === cat 
-                      ? `${CATEGORY_STYLES[cat].bg} text-black font-bold shadow-[0_0_10px_currentColor]` 
+                    className={`px-3 py-1 transition-all duration-300 border text-[10px] rounded-sm ${
+                      filter === cat 
+                      ? `${CATEGORY_STYLES[cat].bg} text-black font-bold shadow-[0_0_8px_currentColor]` 
                       : `${CATEGORY_STYLES[cat].border} ${CATEGORY_STYLES[cat].text} hover:opacity-100 opacity-60`
                   }`}
                 >
@@ -87,9 +87,9 @@ const Portfolio: React.FC = () => {
                   <button
                     key={stat}
                     onClick={() => setStatusFilter(stat as any)}
-                    className={`px-3 py-1 transition-all duration-300 border text-[10px] uppercase ${
+                    className={`px-3 py-1 transition-all duration-300 border text-[10px] uppercase rounded-sm ${
                       isSelected
-                        ? stat === 'All' ? 'bg-white text-black shadow-[0_0_10px_white]' : `${style?.bg} text-black font-bold shadow-[0_0_10px_currentColor]`
+                        ? stat === 'All' ? 'bg-white text-black shadow-[0_0_8px_white]' : `${style?.bg} text-black font-bold shadow-[0_0_8px_currentColor]`
                         : stat === 'All' ? 'border-white/20 text-white hover:border-white/60 opacity-60' : `${style?.border} ${style?.text} hover:opacity-100 opacity-60`
                     }`}
                   >
@@ -113,7 +113,7 @@ const Portfolio: React.FC = () => {
           return (
             <div 
               key={project.id} 
-              className={`group border ${style.border}/30 hover:${style.border} bg-black/40 transition-all duration-500 overflow-hidden flex flex-col shadow-[0_0_20px_rgba(0,0,0,0.5)]`}
+              className={`group border ${style.border}/25 hover:${style.border}/70 bg-black/35 transition-all duration-500 overflow-hidden flex flex-col shadow-[0_0_18px_rgba(0,0,0,0.45)] rounded-sm`}
               onMouseEnter={() => handleInteraction(project.id)}
             >
               <div 
@@ -127,15 +127,12 @@ const Portfolio: React.FC = () => {
                   key={currentImgIndex}
                   src={projectImages[currentImgIndex]} 
                   alt={project.title} 
-                  className={`w-full h-full object-cover transform group-hover:scale-105 transition-all duration-700 page-flicker ${
+                  className={`w-full h-full object-cover transform group-hover:scale-[1.03] transition-all duration-700 ${
                     hasInteracted 
                     ? 'grayscale-0 brightness-100' 
                     : 'grayscale group-hover:grayscale-0'
                   }`}
                 />
-                
-                {/* Scanline Overlay */}
-                <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(transparent_0%,rgba(16,185,129,0.02)_50%,transparent_100%)] bg-[size:100%_10px] opacity-30"></div>
 
                 {/* Minimal Gallery Navigation Controls */}
                 {projectImages.length > 1 && (
@@ -191,13 +188,16 @@ const Portfolio: React.FC = () => {
                   <span className="text-[10px] opacity-60 font-mono text-white">{project.date}</span>
                 </div>
                 
-                <p className="text-xs text-white/70 leading-relaxed mb-6 flex-1 line-clamp-3">
-                  {project.description}
+                <p className="text-xs text-white/72 leading-relaxed mb-3 flex-1 line-clamp-3">
+                  {project.overview || project.description}
+                </p>
+                <p className="text-[11px] text-white/45 mb-6">
+                  {project.role}
                 </p>
 
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <p className={`text-[10px] font-bold opacity-60 uppercase tracking-tighter ${style.text}`}>[TECHNICAL_SPECS / SPECS]</p>
+                    <p className={`text-[10px] font-bold opacity-60 uppercase tracking-tighter ${style.text}`}>Project Snapshot</p>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                       {project.technicalSpecs.slice(0, 4).map((spec, i) => (
                         <div key={i} className="text-[10px] flex items-center gap-2 text-white/80">
@@ -208,12 +208,12 @@ const Portfolio: React.FC = () => {
                   </div>
                   
                   <div className="flex justify-between items-center pt-4 border-t border-white/10">
-                    <span className="text-[10px] font-mono italic text-white/60">ROLE: {project.role}</span>
+                    <span className="text-[10px] font-mono italic text-white/55">Case study</span>
                     <button
                       onClick={() => navigate(`/portfolio/${project.id}`)}
-                      className={`text-[10px] font-bold border ${style.border} ${style.text} px-4 py-1 hover:${style.bg} hover:text-black transition-all shadow-[0_0_5px_currentColor] uppercase`}
+                      className={`text-[10px] font-bold border ${style.border} ${style.text} px-4 py-1 hover:${style.bg} hover:text-black transition-all shadow-[0_0_5px_currentColor] rounded-sm`}
                     >
-                      VIEW_PROJECT_DETAILS
+                      View Details
                     </button>
                   </div>
                 </div>
@@ -223,7 +223,7 @@ const Portfolio: React.FC = () => {
         })}
         {filteredProjects.length === 0 && (
           <div className="col-span-full py-20 text-center border border-dashed border-white/20">
-            <p className="text-white/40 font-mono text-sm uppercase tracking-widest">No matching archives found in this sector.</p>
+            <p className="text-white/40 font-mono text-sm uppercase tracking-widest">No matching projects found for this filter.</p>
           </div>
         )}
       </div>

@@ -1,59 +1,14 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import EquationRain from './EquationRain';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
-  const navigate = useNavigate();
-  const [nodeId, setNodeId] = useState('REMOTE');
   const [flickerKey, setFlickerKey] = useState(0);
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [cpuTemp, setCpuTemp] = useState(42.5);
-  const [latency, setLatency] = useState(12);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSimplified, setIsSimplified] = useState(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
-
-  useEffect(() => {
-    const hostname = window.location.hostname.toUpperCase();
-    let initialNode = 'REMOTE';
-    
-    if (hostname === 'LOCALHOST' || hostname === '127.0.0.1') {
-      initialNode = 'LOCAL_HOST';
-    } else {
-      const match = hostname.match(/(US-[A-Z0-9]+)/);
-      if (match) {
-        initialNode = match[1].replace('-', '_');
-      }
-    }
-    setNodeId(initialNode);
-
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          try {
-            const { latitude, longitude } = position.coords;
-            const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
-            const data = await response.json();
-            if (data.city || data.countryName) {
-              const locationStr = `${data.city || ''}${data.city && data.countryName ? ', ' : ''}${data.countryCode || data.countryName || ''}`.toUpperCase();
-              setNodeId(locationStr || `${latitude.toFixed(2)}N_${longitude.toFixed(2)}E`);
-            } else {
-              setNodeId(`${latitude.toFixed(2)}N_${longitude.toFixed(2)}E`);
-            }
-          } catch (e) {
-            console.error("Location fetch failed", e);
-          }
-        },
-        (error) => {
-          if (error.code === error.PERMISSION_DENIED) {
-            setNodeId('REMOTE');
-          }
-        }
-      );
-    }
-  }, []);
 
   const playTransitionSound = () => {
     try {
@@ -90,31 +45,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     playTransitionSound();
   }, [location.pathname]);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-      setCpuTemp(prev => {
-        const base = 42.0;
-        const trend = Math.sin(Date.now() / 10000) * 3;
-        const noise = (Math.random() - 0.5) * 1.8;
-        return base + trend + noise;
-      });
-      setLatency(prev => {
-        const base = 12;
-        const jitter = Math.floor(Math.random() * 15) - 5;
-        return Math.max(2, base + jitter);
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
   const navItems = [
-    { label: '[HOME]', path: '/', color: 'hover:text-teal-400' },
-    { label: '[ABOUT]', path: '/about', color: 'hover:text-amber-400' },
-    { label: '[PORTFOLIO]', path: '/portfolio', color: 'hover:text-rose-400' },
-    { label: '[EXPERIENCE]', path: '/experience', color: 'hover:text-sky-400' },
-    { label: '[TYPING_TEST]', path: '/challenge', color: 'hover:text-red-400' },
+    { label: 'Home', path: '/', color: 'hover:text-teal-300' },
+    { label: 'About', path: '/about', color: 'hover:text-amber-300' },
+    { label: 'Portfolio', path: '/portfolio', color: 'hover:text-rose-300' },
+    { label: 'Experience', path: '/experience', color: 'hover:text-sky-300' },
   ];
 
   return (
@@ -138,11 +73,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <div className="relative z-10 flex flex-col min-h-screen bg-transparent">
         
         {/* Header - Very High Z-Index to stay above everything */}
-        <header className="fixed top-0 inset-x-0 z-[1000] bg-black border-b border-[#10B981] py-4 px-6 h-[64px] flex items-center shadow-[0_4px_30px_rgba(0,0,0,1)]">
+        <header className="fixed top-0 inset-x-0 z-[1000] bg-black/95 border-b border-[#10B981]/50 py-4 px-6 h-[64px] flex items-center shadow-[0_4px_18px_rgba(0,0,0,0.6)] backdrop-blur-sm">
           <div className="w-full max-w-6xl mx-auto flex justify-between items-center gap-4">
             <Link to="/" className="flex items-center gap-2 group cursor-pointer" onClick={() => setIsMenuOpen(false)}>
               <div className={`w-3 h-3 rounded-full bg-[#10B981] ${isSimplified ? '' : 'animate-pulse'} group-hover:bg-teal-400`}></div>
-              <h1 className={`text-xl font-bold tracking-widest ${isSimplified ? '' : 'glow-text'} group-hover:text-teal-400 transition-colors uppercase`}>KYLERM.ME</h1>
+              <h1 className={`text-xl font-bold tracking-[0.2em] ${isSimplified ? '' : 'glow-text'} group-hover:text-teal-300 transition-colors uppercase`}>KYLERM.ME</h1>
             </Link>
             
             {/* Desktop Nav */}
@@ -152,9 +87,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   key={item.path}
                   to={item.path}
                   className={`text-sm transition-all duration-300 font-bold ${item.color} ${
-                    location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path)) 
-                      ? 'bg-[#10B981] text-black px-3 py-1 shadow-[0_0_15px_#10B981]' 
-                      : 'text-[#10B981]'
+                    location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path))
+                      ? 'bg-[#10B981]/15 text-white px-3 py-1 border border-[#10B981]/40'
+                      : 'text-[#10B981]/85'
                   }`}
                 >
                   {item.label}
@@ -164,9 +99,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               {/* Simplified Mode Toggle */}
               <button 
                 onClick={() => setIsSimplified(!isSimplified)}
-                className={`ml-4 px-3 py-1 border border-[#10B981] text-[10px] font-bold transition-all ${isSimplified ? 'bg-[#10B981] text-black' : 'text-[#10B981] hover:bg-[#10B981]/20'}`}
+                className={`ml-4 px-3 py-1 border border-[#10B981]/50 text-[10px] font-bold transition-all ${isSimplified ? 'bg-[#10B981] text-black' : 'text-[#10B981] hover:bg-[#10B981]/10'}`}
               >
-                {isSimplified ? '[FULL_AESTHETIC]' : '[SIMPLIFIED_MODE]'}
+                {isSimplified ? 'Full Theme' : 'Minimal Mode'}
               </button>
             </nav>
 
@@ -174,9 +109,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <div className="lg:hidden flex items-center gap-4">
               <button 
                 onClick={() => setIsSimplified(!isSimplified)}
-                className={`px-2 py-1 border border-[#10B981] text-[9px] font-bold transition-all ${isSimplified ? 'bg-[#10B981] text-black' : 'text-[#10B981]'}`}
+                className={`px-2 py-1 border border-[#10B981]/50 text-[9px] font-bold transition-all ${isSimplified ? 'bg-[#10B981] text-black' : 'text-[#10B981]'}`}
               >
-                {isSimplified ? 'FULL' : 'SIMPLE'}
+                {isSimplified ? 'FULL' : 'MIN'}
               </button>
               <button 
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -210,8 +145,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   to={item.path}
                   onClick={() => setIsMenuOpen(false)}
                   className={`w-full py-5 text-2xl font-bold tracking-[0.2em] text-center border transition-all duration-300 ${
-                    location.pathname === item.path 
-                      ? 'bg-[#10B981] text-black border-[#10B981] shadow-[0_0_25px_#10B981]' 
+                    location.pathname === item.path
+                      ? 'bg-[#10B981]/15 text-white border-[#10B981] shadow-[0_0_20px_rgba(16,185,129,0.15)]'
                       : 'text-[#10B981] border-[#10B981]/30 hover:border-[#10B981] hover:bg-[#10B981]/10'
                   }`}
                 >
@@ -222,23 +157,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
             <div className="mt-16 text-center space-y-4">
               <div className="w-32 h-0.5 bg-gradient-to-r from-transparent via-[#10B981] to-transparent mx-auto opacity-50"></div>
-              <p className="text-[10px] text-[#10B981]/60 uppercase tracking-[0.8em] font-mono animate-pulse">SYSTEM_LOCKED</p>
-            </div>
-          </div>
-        </div>
-
-        {/* System Status Bar */}
-        <div className="mt-[64px] bg-[#001a08] border-b border-[#10B981]/40 text-[9px] md:text-[10px] uppercase tracking-[0.2em] px-6 py-2 relative z-50">
-          <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-y-2 text-center sm:text-left">
-            <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-              <span className="text-teal-400">SYS: <span className="text-white">PRODUCTION</span></span>
-              <span className="text-amber-400">ENC: <span className="text-white">AES-256</span></span>
-              <span className="text-teal-400">NODE: <span className="text-white">{nodeId}</span></span>
-            </div>
-            <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-              <span className="text-sky-400">CPU_TEMP: <span className="text-white">{cpuTemp.toFixed(1)}°C</span></span>
-              <span className="text-red-400">LAT: <span className="text-white">{latency}ms</span></span>
-              <span className="text-[#10B981]">TIME: <span className="text-white">{currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</span></span>
+              <p className="text-[10px] text-[#10B981]/60 uppercase tracking-[0.5em] font-mono animate-pulse">MENU</p>
             </div>
           </div>
         </div>
@@ -246,13 +165,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         {/* Main Content Area */}
         <main 
           key={flickerKey} 
-          className={`flex-1 w-full max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-12 ${isSimplified ? '' : 'page-flicker'} relative z-20`}
+          className={`mt-[64px] flex-1 w-full max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-12 ${isSimplified ? '' : 'page-flicker'} relative z-20`}
         >
           {children}
         </main>
 
         {/* Footer */}
-        <footer className="border-t border-[#10B981]/30 bg-black/90 backdrop-blur-sm py-10 px-6 text-center text-xs opacity-60 relative z-20">
+        <footer className="border-t border-[#10B981]/20 bg-black/80 backdrop-blur-sm py-10 px-6 text-center text-xs text-white/70 relative z-20">
           <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 mb-6">
             <a href="https://www.linkedin.com/in/kyler-m-b830aa17a" target="_blank" rel="noopener noreferrer" className="text-sky-500 hover:text-white transition-colors uppercase tracking-[0.2em] text-[10px] font-bold">LINKEDIN</a>
             <a href="mailto:kylermof@gmail.com" className="text-amber-500 hover:text-white transition-colors uppercase tracking-[0.2em] text-[10px] font-bold">EMAIL</a>

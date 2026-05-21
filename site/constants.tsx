@@ -4,38 +4,42 @@ import { Project, ExperienceEntry, StatEntry, EducationEntry, ProficiencyEntry, 
 export const PROJECTS: Project[] = [
   {
     id: 'meta-portfolio',
-    title: 'Mechanical Matrix Portfolio',
+    title: 'Engineering Portfolio Site',
     category: 'Personal',
     status: 'In Progress',
     role: 'Architect / Engineer',
     date: '2026',
-    description: 'A high-end, terminal-inspired digital portfolio engineered to showcase technical proficiency. Built with a "Matrix" aesthetic, featuring a custom KaTeX-based equation rain system and a terminal-driven performance challenge.',
+    description: 'A personal portfolio site built to present engineering work, experience, and technical interests through a distinctive terminal and turn-of-the-millennium sci-fi movie inspired visual style.',
+    overview: 'Additional project context coming soon.',
+    challenge: 'Challenge notes coming soon.',
+    outcome: 'Outcome summary coming soon.',
+    highlights: [],
     technicalSpecs: [
-      'Engine: React 19 + TypeScript',
-      'UI: Tailwind CSS + CRT Filters',
-      'Math: KaTeX Render Engine',
-      'UX: Responsive Terminal Design'
+      'Frontend: React 19 + TypeScript',
+      'Styling: Tailwind CSS',
+      'Visual System: Custom overlays, glow, and motion',
+      'Layout: Responsive single-page portfolio structure'
     ],
-    imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000',
+    imageUrl: '/images/portfolio_home.png',
     images: [
-      'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000',
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1000',
-      'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1000'
+      '/images/portfolio_home.png',
+      '/images/portfolio_about.png',
+      '/images/portfolio_portfolio.png'
     ],
     metrics: {
       constraints: [
-        'Deterministic layout across sectors',
-        'Optimized math-rain performance',
-        'Seamless hardware-accelerated transitions'
+        'Keep the layout readable across desktop and mobile breakpoints',
+        'Preserve the theme without making the content harder to scan',
+        'Leave room to expand project pages without rebuilding the app structure'
       ],
       tools: [
         'React / TypeScript',
-        'KaTeX',
-        'Tailwind CSS'
+        'Tailwind CSS',
+        'React Router'
       ]
     },
     actionButton: {
-      label: 'VIEW_SOURCE',
+      label: 'View GitHub',
       url: 'https://github.com/relyk9'
     }
   },
@@ -47,11 +51,15 @@ export const PROJECTS: Project[] = [
     role: 'Developer',
     date: '2026',
     description: 'Web-based logbook for recording the details of the fish you catch. Designed with a mobile-first approach to ensure ease of use while in the field (or on the boat).',
+    overview: 'Additional project context coming soon.',
+    challenge: 'Challenge notes coming soon.',
+    outcome: 'Outcome summary coming soon.',
+    highlights: [],
     technicalSpecs: [
-      'Region: Southern US',
-      'Supported Platforms: Desktop, Mobile, Tablet',
-      'Status: Fully Functional',
-      'UX: Offline-ready'
+      'Target Use: Personal field logging',
+      'Platforms: Desktop, Mobile, Tablet',
+      'Storage: Browser-based local data',
+      'UX: Mobile-first and offline-friendly'
     ],
     imageUrl: '/images/anglers_logbook_titlepage.png',
     images: [
@@ -59,18 +67,18 @@ export const PROJECTS: Project[] = [
     ],
     metrics: {
       constraints: [
-        'Minimal latency in low-signal areas',
-        'Intuitive UI for wet-hand interactions',
-        'Cross-platform synchronization'
+        'Fast mobile data entry with minimal taps',
+        'Readable layouts in bright outdoor conditions',
+        'Simple persistence without backend overhead'
       ],
       tools: [
         'React / TypeScript',
         'Local Storage API',
-        'Responsive Design Frameworks'
+        'Responsive UI patterns'
       ]
     },
     actionButton: {
-      label: 'OPEN_LOGBOOK',
+      label: 'Open Project',
       url: '/anglers-logbook/'
     }
   }
@@ -78,50 +86,50 @@ export const PROJECTS: Project[] = [
 
 export const EXPERIENCE: ExperienceEntry[] = [
   {
-    company: '[MilliporeSigma]',
+    company: 'MilliporeSigma',
     role: 'Manufacturing Engineer',
     period: 'FEB 2024 - Present',
     location: 'The Woodlands, TX.',
     description: [
-      'Led end-to-end development of manufacturing automation systems, from design and prototyping through implementation.',
-      'Applied software development and data analysis to improve automation reliability and process performance.',
-      'Developed and supported liquid handling automation methods and technical roadmaps.',
-      'Contributed to engineering program planning, execution, and reporting.'
+      'Lead automation-focused engineering work from design and prototyping through implementation in manufacturing environments.',
+      'Use troubleshooting, software tools, and data analysis to improve equipment reliability and process performance.',
+      'Develop and support liquid handling automation methods for production use.',
+      'Contribute to planning, execution, and reporting across equipment and process improvement efforts.'
     ]
   },
   {
-    company: '[MilliporeSigma]',
+    company: 'MilliporeSigma',
     role: 'Associate Manufacturing Engineer',
     period: 'JUN 2022 - FEB 2024',
     location: 'The Woodlands, TX.',
     description: [
-      'Led safety, automation, and design improvements for biotech manufacturing equipment, from risk assessment through installation.',
-      'Resolved system-level issues in automated DNA synthesis platforms, deploying firmware/software updates fleet-wide and reducing production losses.',
-      'Supported equipment lifecycle activities including assembly, testing, commissioning, and onsite technical support, working closely with vendors and cross-functional teams.'
+      'Led safety, automation, and design improvements for biotech manufacturing equipment from risk assessment through installation.',
+      'Resolved system-level issues on automated DNA synthesis platforms, including firmware and software updates rolled out across multiple systems.',
+      'Supported equipment lifecycle work including assembly, testing, commissioning, and onsite technical support with vendors and cross-functional teams.'
     ]
   }
 ];
 
 export const EXPERIENCE_DATA: ExperienceData = {
-  header: "OPERATIONAL_HISTORY",
-  subHeader: "WORK EXPERIENCE",
-  description: "Timeline of professional deployments, career roles, and key engineering achievements.",
-  downloadLabel: "DOWNLOAD_FULL_RESUME.pdf"
+  header: "Experience",
+  subHeader: "Engineering Roles",
+  description: "Selected work across biotech manufacturing, automation, and equipment improvement.",
+  downloadLabel: "Resume available on request"
 };
 
 const EXP_YEARS = "3";
 
 export const HOME_DATA = {
-  userId: "MANUFACTURING_ENGINEER",
+  userId: "MECHANICAL ENGINEER",
   userName: "KYLER MOFFAT",
-  heroTitle: ["HELPING ENGINEER", "THE FUTURE."],
-  typedText: "> LOADING SYSTEMS... \n> AUTHENTICATING USER... \n> ACCESS GRANTED. \n> STATUS: READY_FOR_INSPECTION.",
+  heroTitle: ["BUILDING BETTER", "MANUFACTURING SYSTEMS."],
+  typedText: "Mechanical engineer focused on automation, manufacturing systems, and practical problem solving.\nExperience taking ideas from concept through implementation.\nBased in biotech manufacturing with a strong interest in reliable, scalable engineering solutions.",
   stats: [
-    { label: "PROJECTS_COMPLETED", value: "2+", icon: "◈", color: "text-teal-400", border: "border-teal-500/40" },
+    { label: "PROJECTS", value: "2+", icon: "◈", color: "text-teal-400", border: "border-teal-500/40" },
     { label: "EXPERIENCE", value: `${EXP_YEARS} YRS`, icon: "⌬", color: "text-amber-400", border: "border-amber-500/40" },
-    { label: "DESIGN_INTENT", value: "RELIABILITY > COMPLEXITY", icon: "⚙", color: "text-rose-400", border: "border-rose-500/40" },
+    { label: "FOCUS", value: "AUTOMATION & RELIABILITY", icon: "⚙", color: "text-rose-400", border: "border-rose-500/40" },
   ] as StatEntry[],
-  logSectionTitle: "[LIVE_CORE_DIAGNOSTICS / SYSTEM_LOGS]",
+  logSectionTitle: "CURRENT PRIORITIES",
   avatarUrl: '/images/profile_pic.jpg',
 };
 
@@ -134,21 +142,21 @@ export const ABOUT_DATA = {
     'My work focuses on developing practical solutions and carrying them from concept through implementation in manufacturing settings.',
     'Outside of work, I enjoy kayaking and hiking, traveling when I can, astrophotography, and reading about history.'
   ],
-  missionTitle: "MISSION_OBJECTIVE / CORE_GOAL",
-  missionHeader: "CORE GOAL",
+  missionTitle: "PROFESSIONAL FOCUS",
+  missionHeader: "FOCUS",
   missionStatement: "To build smarter manufacturing systems by combining mechanical engineering, automation, and continuous improvement.",
-  educationTitle: "EDUCATION_ARCHIVE",
-  educationHeader: "DEGREES",
+  educationTitle: "EDUCATION",
+  educationHeader: "ACADEMIC BACKGROUND",
   education: [
     {
-      degree: "B.S.c in Mechanical Engineering",
+      degree: "B.S. in Mechanical Engineering",
       institution: "Texas A&M University",
       location: "College Station, TX",
       period: "2018 - 2023",
       focus: 'Emphasis on mechanical systems, advanced SolidWorks, and applied physics'
     }
   ] as EducationEntry[],
-  proficiencyTitle: "SYSTEM_LEVELS",
+  proficiencyTitle: "SKILLS",
   proficiencyHeader: "PROFICIENCY",
   proficiency: [
     // SOFTWARE & CAD (Teal)

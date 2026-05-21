@@ -5,6 +5,10 @@ export interface Project {
   category: 'Professional' | 'Personal' | 'Academic';
   status: 'Completed' | 'In Progress' | 'Concept';
   description: string;
+  overview?: string;
+  challenge?: string;
+  outcome?: string;
+  highlights?: string[];
   technicalSpecs: string[];
   imageUrl: string;
   images?: string[];
