@@ -138,13 +138,13 @@ export const ABOUT_DATA = {
   profileHeader: "BIO",
   avatarUrl: '/images/profile_pic_about.jpg',
   paragraphs: [
-    'I’m a <highlight1>Mechanical Engineer</highlight1> working in <highlight2>biotech manufacturing</highlight2> with a focus on automation, machine design, and process improvement.',
+    'To build smarter manufacturing systems by combining <highlight1>mechanical engineering</highlight1>, <highlight2>automation</highlight2>, and continuous improvement.',
     'My work focuses on developing practical solutions and carrying them from concept through implementation in manufacturing settings.',
     'Outside of work, I enjoy kayaking and hiking, traveling when I can, astrophotography, and reading about history.'
   ],
   missionTitle: "PROFESSIONAL FOCUS",
   missionHeader: "FOCUS",
-  missionStatement: "To build smarter manufacturing systems by combining mechanical engineering, automation, and continuous improvement.",
+  missionStatement: "Mechanical engineer working in biotech manufacturing with a focus on automation, reliability, and practical systems improvement.",
   educationTitle: "EDUCATION",
   educationHeader: "ACADEMIC BACKGROUND",
   education: [

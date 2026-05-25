@@ -181,7 +181,7 @@ const Home: React.FC = () => {
               </h2>
 
               <p className="max-w-2xl text-sm md:text-base text-white/68 leading-relaxed">
-                Mechanical engineer working in biotech manufacturing with a focus on automation, reliability, and practical systems improvement.
+                To build smarter manufacturing systems by combining mechanical engineering, automation, and continuous improvement.
               </p>
             </div>
           </div>
